@@ -19,8 +19,22 @@ defmodule HelloWeb.Router do
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", HelloWeb do
-  #   pipe_through :api
-  # end
+#   Other scopes may use custom stacks.
+   scope "/api", HelloWeb do
+     pipe_through :api
+
+     scope "/queue", HelloWeb do
+       post "/add", QueueController
+       post "/markPlayed", QueueController
+       post "/changePos", QueueController
+       delete "/remove", QueueController
+       get "/next", QueueController
+     end
+
+     scope "/member", HelloWeb do
+       post "/add", MemberController
+       get "/getSongs", MemberController
+     end
+
+   end
 end
