@@ -1,7 +1,7 @@
 defmodule HelloWeb.QueueController do
   use HelloWeb, :controller
 
-  def add(conn, _params) do
+  def add_song(conn, _params) do
     text(conn, "add ok")
   end
 
@@ -13,8 +13,8 @@ defmodule HelloWeb.QueueController do
     text(conn, "change pos ok")
   end
 
-  def remove(conn, _params) do
-    text(conn, "remove ok")
+  def delete_song(conn, _params) do
+    text(conn, "delete ok")
   end
 
   def next(conn, _params) do

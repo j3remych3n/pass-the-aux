@@ -24,16 +24,20 @@ defmodule HelloWeb.Router do
      pipe_through :api
 
      scope "/queue" do
-       post "/add", QueueController, :add
-       post "/mark_played", QueueController, :mark_played
-       post "/change_pos", QueueController, :change_pos
-       delete "/remove", QueueController, :remove
+       post "/song", QueueController, :add_song
+       put "/mark_played", QueueController, :mark_played
+       put "/change_pos", QueueController, :change_pos
+       delete "/song", QueueController, :delete_song
        get "/next", QueueController, :next
      end
 
      scope "/member" do
-       post "/add", MemberController, :add
        get "/get_songs", MemberController, :get_songs
+     end
+
+     scope "/session" do
+       post "/member", SessionController, :add_member
+       delete "/member", SessionController, :delete_member
      end
 
    end
