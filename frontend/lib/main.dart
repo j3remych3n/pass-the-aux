@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(MyApp());
 
@@ -47,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
   void _incrementCounter() {
+    print(testPost());
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -55,6 +59,11 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  Future<http.Response> testPost() {
+    return http.post(
+      'http://localhost:4000/api/session/create_sess');
   }
 
   @override
