@@ -3,6 +3,7 @@ defmodule Hello.Member do
   import Ecto.Changeset
 
   schema "members" do
+    has_many :qentries, Hello.Qentry
 
     timestamps()
   end

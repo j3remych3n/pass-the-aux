@@ -6,10 +6,8 @@ defmodule Hello.Qentry do
     field :has_played, :boolean, default: false
     field :is_host, :boolean, default: false
     field :song_id, :string
-    field :session_id, :id
-    field :member_id, :id
-    field :next_qentry_id, :id
-    field :prev_qentry_id, :id
+    belongs_to :member, Hello.Member
+    belongs_to :session, Hello.Session
 
     timestamps()
   end

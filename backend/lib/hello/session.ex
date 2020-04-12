@@ -3,7 +3,7 @@ defmodule Hello.Session do
   import Ecto.Changeset
 
   schema "sessions" do
-    field :member_id, :id
+    has_many :qentries, Hello.Qentry
 
     timestamps()
   end
