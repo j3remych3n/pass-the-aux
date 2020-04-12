@@ -10,6 +10,8 @@ defmodule HelloWeb.SessionController do
     end
 
     def create_session(conn, _params) do
+        sess = %Hello.Session{}
+        {:ok, curr_sess} = Hello.Repo.insert(sess)
         text(conn, "create session ok")
     end
 

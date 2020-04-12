@@ -24,10 +24,10 @@ defmodule HelloWeb.Router do
      pipe_through :api
 
      scope "/queue" do
-       post "/song", QueueController, :add_song
+       post "/add_song", QueueController, :add_song
        put "/mark_played", QueueController, :mark_played
        put "/change_pos", QueueController, :change_pos
-       delete "/song", QueueController, :delete_song
+       delete "/delete_song", QueueController, :delete_song
        get "/next", QueueController, :next
      end
 
@@ -36,10 +36,10 @@ defmodule HelloWeb.Router do
      end
 
      scope "/session" do
-       post "/party", SessionController, :create_session
-       delete "/party", SessionController, :delete_session
-       post "/member", SessionController, :add_member
-       delete "/member", SessionController, :delete_member
+       post "/create_sess", SessionController, :create_session
+       delete "/delete_sess", SessionController, :delete_session
+       post "/add_member", SessionController, :add_member
+       delete "/delete_member", SessionController, :delete_member
      end
 
    end
