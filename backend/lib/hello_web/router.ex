@@ -36,6 +36,8 @@ defmodule HelloWeb.Router do
      end
 
      scope "/session" do
+       post "/party", SessionController, :create_session
+       delete "/party", SessionController, :delete_session
        post "/member", SessionController, :add_member
        delete "/member", SessionController, :delete_member
      end
