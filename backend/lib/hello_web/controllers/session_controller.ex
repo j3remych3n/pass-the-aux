@@ -5,7 +5,7 @@ defmodule HelloWeb.SessionController do
         text(conn, "add member ok")
     end
 
-    def delete_song(conn, _params) do
+    def delete_member(conn, _params) do
         text(conn, "delete member ok")
     end
   
