@@ -12,10 +12,11 @@ class SizeConfig {
   static double blockSizeHorizontal;
   static double blockSizeVertical;
   
-  static double _safeAreaHorizontal;
-  static double _safeAreaVertical;
+  static double safeAreaHorizontal;
+  static double safeAreaVertical;
   static double safeBlockHorizontal;
   static double safeBlockVertical;
+  static double notchHeight;
   
   void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);
@@ -24,12 +25,13 @@ class SizeConfig {
     blockSizeHorizontal = screenWidth / 100;
     blockSizeVertical = screenHeight / 100;
     
-    _safeAreaHorizontal = _mediaQueryData.padding.left + 
+    safeAreaHorizontal = _mediaQueryData.padding.left + 
     _mediaQueryData.padding.right;
-    _safeAreaVertical = _mediaQueryData.padding.top +
+    safeAreaVertical = _mediaQueryData.padding.top +
     _mediaQueryData.padding.bottom;
-    safeBlockHorizontal = (screenWidth - _safeAreaHorizontal) / 100;
-    safeBlockVertical = (screenHeight - _safeAreaVertical) / 100;
+    safeBlockHorizontal = (screenWidth - safeAreaHorizontal) / 100;
+    safeBlockVertical = (screenHeight - safeAreaVertical) / 100;
+    notchHeight = safeAreaVertical;
   }
 }
 
@@ -56,52 +58,55 @@ class GuestRegName extends StatefulWidget {
   GuestRegName({Key key, this.title}) : super(key: key);
   final String title;
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _GuestRegState createState() => _GuestRegState();
 }
 
-class _MyHomePageState extends State<GuestRegName> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
+class _GuestRegState extends State<GuestRegName> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: AuxCard(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              const ListTile(
-                leading: Icon(Icons.album),
-                title: Text('The Enchanted Nightingale', style: auxDisp1),
-                subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.', style: auxBody2),
-              ),
-              ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child: const Text('buy'),
-                    onPressed: () { /* ... */ },
-                  ),
-                  FlatButton(
-                    child: const Text('listen'),
-                    onPressed: () { /* ... */ },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    SizeConfig().init(context);
+    return Container(
+      height: SizeConfig.safeBlockVertical * 100,
+      width: SizeConfig.safeBlockHorizontal * 100,
+      color: auxPrimary,
+      child: Padding(
+          padding: EdgeInsets.only(top: SizeConfig.notchHeight),
+          child: AuxCard(
+            borderColor: auxAccent,
+            padding: 30.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 24),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Text(
+                        "first,\nlet's get a name!", 
+                        style: auxDisp3
+                      )
+                    )
+                  )
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 24),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Column(
+                        children: <Widget>[
+                          Text('placeholder 1'),
+                          Text('placeholder 2'),
+                        ],
+                      )
+                    )
+                  )
+                )
+              ], 
+            ),
+          )
+        )
     );
   }
 }
