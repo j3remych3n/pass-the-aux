@@ -43,14 +43,14 @@ flutter:
   fonts:
     - family: Larsseit
       fonts:
-        - asset: lib/theme/fonts/Larsseit.ttf
-        - asset: lib/theme/fonts/Larsseit-Bold.ttf
+        - asset: assets/fonts/Larsseit.ttf
+        - asset: assets/fonts/Larsseit-Bold.ttf
           weight: 700
-        - asset: lib/theme/fonts/Larsseit-Medium.ttf
+        - asset: assets/fonts/Larsseit-Medium.ttf
           weight: 500
-        - asset: lib/theme/fonts/Larsseit-Light.ttf
+        - asset: assets/fonts/Larsseit-Light.ttf
           weight: 300
-        - asset: lib/theme/fonts/Larsseit-Thin.ttf
+        - asset: assets/fonts/Larsseit-Thin.ttf
           weight: 100
         
   # To add assets to your application, add an assets section, like this:
