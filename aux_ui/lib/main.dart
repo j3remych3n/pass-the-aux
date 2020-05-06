@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/colors.dart';
 import 'package:aux_ui/theme/text.dart';
 import './widgets/aux_card.dart';
+import 'dart:io' show Platform;
 
 void main() => runApp(AuxApp());
 
@@ -17,6 +18,7 @@ class SizeConfig {
   static double safeBlockHorizontal;
   static double safeBlockVertical;
   static double notchHeight;
+  static EdgeInsets notchPadding;
   
   void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);
@@ -32,9 +34,9 @@ class SizeConfig {
     safeBlockHorizontal = (screenWidth - safeAreaHorizontal) / 100;
     safeBlockVertical = (screenHeight - safeAreaVertical) / 100;
     notchHeight = safeAreaVertical;
+    notchPadding = ( Platform.isIOS ) ? EdgeInsets.only(top: SizeConfig.notchHeight / 2, bottom: SizeConfig.notchHeight / 2) : EdgeInsets.only(top: SizeConfig.notchHeight); 
   }
 }
-
 
 class AuxApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -70,7 +72,7 @@ class _GuestRegState extends State<GuestRegName> {
       width: SizeConfig.safeBlockHorizontal * 100,
       color: auxPrimary,
       child: Padding(
-          padding: EdgeInsets.only(top: SizeConfig.notchHeight),
+          padding: SizeConfig.notchPadding,
           child: AuxCard(
             borderColor: auxAccent,
             padding: 24.0,
@@ -122,18 +124,28 @@ class _GuestRegState extends State<GuestRegName> {
                             padding: EdgeInsets.all(20),
                             child: Text('or', style: auxAccentButton)
                           ),
-                          SizedBox(
-                            width: double.infinity,
-                            child: FlatButton.icon(
-                            onPressed:() {},
-                            color: auxAccent,
-                            padding: EdgeInsets.all(15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)
+                          ButtonTheme(
+                            minWidth: SizeConfig.safeBlockHorizontal * 100,
+                            child: FlatButton(
+                              onPressed:() {},
+                              color: auxAccent,
+                              padding: EdgeInsets.all(15),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                              ),
+                              child: Stack(
+                                children: <Widget>[
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Image.asset('assets/spotify_logo.png', height: 21, width: 21),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: Text('sign up with spotify', strutStyle: StrutStyle(fontFamily: 'Larsseit', fontSize: 17, height: 1.2) ),
+                                  ),
+                                ],
+                              ) 
                             ),
-                            icon: new Image.asset('assets/spotify_logo.png', height: 21, width: 21),
-                            label: Text('sign up with spotify')
-                          ),
                           )
                         ],
                       )
