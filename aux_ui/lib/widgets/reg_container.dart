@@ -29,13 +29,13 @@ class RegContainer extends StatelessWidget {
               children: <Widget>[
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(bottom: 20),
+                    padding: EdgeInsets.only(bottom: 25),
                     child: this.topWidget,
                   )
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.only(top: 20),
+                    padding: EdgeInsets.only(top: 25),
                     child: this.bottomWidget,
                   )
                 )

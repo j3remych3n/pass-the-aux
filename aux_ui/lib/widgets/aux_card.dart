@@ -10,7 +10,6 @@ class AuxCard extends StatelessWidget {
     }
   );
 
-
   final child;
   final borderColor;
   final padding;

@@ -26,20 +26,21 @@ class _AuxTextFieldState extends State<AuxTextField> {
   Widget build(BuildContext context) {
     return 
       TextField(
-        style: auxAccentButton,
+        style: auxBody2,
         textAlignVertical: TextAlignVertical.bottom,
         decoration: InputDecoration(
-        prefixIcon: widget.icon,
-        labelText: widget.label,
-        labelStyle: auxAccentButton,
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 3),
-          borderRadius: BorderRadius.circular(10), // TODO: scale by screen resolution
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white, width: 3),
-          borderRadius: BorderRadius.circular(10), // TODO: scale by screen resolution
-        ),
+          prefixIcon: widget.icon,
+          labelText: widget.label,
+          labelStyle: auxAccentButton,
+          contentPadding: EdgeInsets.all(11),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white, width: 3),
+            borderRadius: BorderRadius.circular(10), // TODO: scale by screen resolution
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white, width: 3),
+            borderRadius: BorderRadius.circular(10), // TODO: scale by screen resolution
+          ),
       ),
     );
   }
