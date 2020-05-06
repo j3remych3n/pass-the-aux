@@ -1,19 +1,38 @@
-// Copyright 2018 The Flutter team. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
 import 'package:flutter/material.dart';
+import 'package:aux_ui/theme/colors.dart';
+import 'package:aux_ui/theme/text.dart';
+import './widgets/aux_card.dart';
+import './widgets/text_half_screen.dart';
+
+class SizeConfig {
+  static MediaQueryData _mediaQueryData;
+  static double screenWidth;
+  static double screenHeight;
+  static double blockSizeHorizontal;
+  static double blockSizeVertical;
+
+  static double _safeAreaHorizontal;
+  static double _safeAreaVertical;
+  static double safeBlockHorizontal;
+  static double safeBlockVertical;
+
+  void init(BuildContext context) {
+    _mediaQueryData = MediaQuery.of(context);
+    screenWidth = _mediaQueryData.size.width;
+    screenHeight = _mediaQueryData.size.height;
+    blockSizeHorizontal = screenWidth / 100;
+    blockSizeVertical = screenHeight / 100;
+
+    _safeAreaHorizontal = _mediaQueryData.padding.left +
+        _mediaQueryData.padding.right;
+    _safeAreaVertical = _mediaQueryData.padding.top +
+        _mediaQueryData.padding.bottom;
+    safeBlockHorizontal = (screenWidth - _safeAreaHorizontal) / 100;
+    safeBlockVertical = (screenHeight - _safeAreaVertical) / 100;
+  }
+}
 
 void main() => runApp(MyApp());
-
-//class Invite extends StatefulWidget {
-//  @override
-//  InviteState createState() => InviteState();
-//}
-//
-//class InviteState extends State<Invite> {
-//
-//}
 
 class MyApp extends StatelessWidget {
 
@@ -23,10 +42,10 @@ class MyApp extends StatelessWidget {
           child: Text(
             "host\nan aux queue",
             style: TextStyle(
-                color: Colors.white, fontSize: 57, fontWeight: FontWeight.w500),
+                color: auxAccent, fontSize: 57, fontWeight: FontWeight.w500),
             textAlign: TextAlign.left,
           )),
-      color: Colors.black);
+      color: auxPrimary);
 
   Container joinQueue = Container(
       decoration: BoxDecoration(
