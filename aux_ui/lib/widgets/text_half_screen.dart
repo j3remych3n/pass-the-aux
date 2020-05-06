@@ -3,48 +3,54 @@ import 'package:aux_ui/theme/colors.dart';
 import 'package:aux_ui/theme/text.dart';
 
 class TextHalfScreenState extends State<TextHalfScreen> {
-  TextHalfScreen screen;
+  List<Color> bgColorsPlain;
+  List<Color> bgColorsGradient;
+  List<Color> bgCurrent;
+  bool pressed = false;
 
-  Alignment childAlign() {
-    if (screen.orientation == "top") return Alignment.bottomLeft;
+  Alignment childAlign(String orientation) {
+    if (orientation == "top") return Alignment.bottomLeft;
     return Alignment.topRight;
   }
 
-  TextAlign textAlign() {
-    if (screen.orientation == "top") return TextAlign.left;
+  TextAlign textAlign(String orientation) {
+    if (orientation == "top") return TextAlign.left;
     return TextAlign.right;
   }
 
-  List<Color> gradientColors(bool pressed) {
-    if (pressed) {
-      return [screen.background, screen.background];
+  @override
+  void initState() {
+    super.initState();
+    bgColorsPlain = [widget.background, widget.background];
+    if (widget.orientation == "bottom") {
+      bgColorsGradient = [auxBlurple, auxMagenta];
     } else {
-      if (screen.orientation == "bottom") {
-        return [auxBlurple, auxMagenta];
-      }
-      return [auxMagenta, auxBlurple];
+      bgColorsGradient = [auxMagenta, auxBlurple];
     }
+    bgCurrent = bgColorsPlain;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(onTapDown: (TapDownDetails details){setState(() {if (widget.changeOnPressed) bgCurrent = bgColorsGradient;});},
+        onTapUp: (TapUpDetails details){setState(() {bgCurrent = bgColorsPlain;});},
+        child: Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors: this.gradientColors(screen.pressed),
+              colors: bgCurrent,
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter
           )
       ),
       child: Align(
-          alignment: this.childAlign(),
+          alignment: this.childAlign(widget.orientation),
           child: Text(
-            screen.text,
+            widget.text,
             style: TextStyle( // TODO: standardize this with theming
-                color: screen.textColor, fontSize: 57, fontWeight: FontWeight.w500),
-            textAlign: this.textAlign(),
+                color: widget.textColor, fontSize: 57, fontWeight: FontWeight.w500),
+            textAlign: this.textAlign(widget.orientation),
           )),
-    );
+    ));
   }
 }
 
@@ -54,7 +60,6 @@ class TextHalfScreen extends StatefulWidget {
   final Color textColor;
   final bool changeOnPressed;
   final String text;
-
   var pressed = false;
 
   TextHalfScreen({Key key,
@@ -62,7 +67,7 @@ class TextHalfScreen extends StatefulWidget {
     @required this.background,
     @required this.textColor,
     @required this.changeOnPressed,
-    @required this.text, }) : super(key: key);
+    @required this.text}) : super(key: key);
 
   @override
   TextHalfScreenState createState() => TextHalfScreenState();

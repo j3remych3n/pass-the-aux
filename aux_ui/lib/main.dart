@@ -35,36 +35,6 @@ class SizeConfig {
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-
-  Container hostQueue = Container(
-      child: Align(
-          alignment: Alignment.bottomLeft,
-          child: Text(
-            "host\nan aux queue",
-            style: TextStyle(
-                color: auxAccent, fontSize: 57, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.left,
-          )),
-      color: auxPrimary);
-
-  Container joinQueue = Container(
-      decoration: BoxDecoration(
-          gradient: LinearGradient(
-              colors: [Color(0xFFCC00FF), Color(0xFF4200FF)],
-              begin: Alignment.topCenter,
-            end: Alignment.bottomCenter
-          )
-      ),
-      child: Align(
-          alignment: Alignment.topRight,
-          child: Text(
-            "join\nan aux queue",
-            style: TextStyle(
-                color: Colors.black, fontSize: 57, fontWeight: FontWeight.w500),
-            textAlign: TextAlign.right,
-          )),
-      );
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -74,9 +44,19 @@ class MyApp extends StatelessWidget {
           child: Container(
               child: Column(children: <Widget>[
             Expanded(
-                child: hostQueue),
+                child: TextHalfScreen(
+                    orientation: "top",
+                    background: auxPrimary,
+                    textColor: auxAccent,
+                    changeOnPressed: true,
+                    text: "host\nan aux queue")),
             Expanded(
-                child: joinQueue),
+                child: TextHalfScreen(
+                    orientation: "bottom",
+                    background: auxAccent,
+                    textColor: auxPrimary,
+                    changeOnPressed: true,
+                    text: "join\nan aux queue")),
           ])),
         ),
       ),
