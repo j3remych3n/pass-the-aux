@@ -2,27 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/colors.dart';
 
 /*
-  NAME         SIZE  WEIGHT  SPACING
-headline1    96.0  light   -1.5
-headline2    60.0  light   -0.5
-headline3    48.0  normal   0.0
-headline4    34.0  normal   0.25
-headline5    24.0  normal   0.0
-headline6    20.0  medium   0.15
-subtitle1    16.0  normal   0.15
-subtitle2    14.0  medium   0.1
-body1        16.0  normal   0.5
-body2        14.0  normal   0.25
-button       14.0  medium   0.75
-caption      12.0  normal   0.4
-overline     10.0  normal   1.5
+  VANILLA MATERIAL STANDARD FOR REFERENCE
+  ---------------------------------------
+    NAME         SIZE  WEIGHT  SPACING
+    headline1    96.0  light   -1.5
+    headline2    60.0  light   -0.5
+    headline3    48.0  normal   0.0
+    headline4    34.0  normal   0.25
+    headline5    24.0  normal   0.0
+    headline6    20.0  medium   0.15
+    subtitle1    16.0  normal   0.15
+    subtitle2    14.0  medium   0.1
+    body1        16.0  normal   0.5
+    body2        14.0  normal   0.25
+    button       14.0  medium   0.75
+    caption      12.0  normal   0.4
+    overline     10.0  normal   1.5
+  ---------------------------------------
 */
 
 // sign up & splash screens
+const auxDisp3 = const TextStyle(
+  color: auxAccent,
+  fontWeight: FontWeight.w500,
+  fontFamily: 'Larsseit',
+  fontStyle:  FontStyle.normal,
+  fontSize: 56
+);
 
 // queue header
-const primaryH1 = const TextStyle(
-  color: AuxPrimary,
+const auxDisp2 = const TextStyle(
+  color: auxAccent,
   fontWeight: FontWeight.w500,
   fontFamily: 'Larsseit',
   fontStyle:  FontStyle.normal,
@@ -30,8 +40,8 @@ const primaryH1 = const TextStyle(
 );
 
 // section headers
-const primaryH2 = const TextStyle(
-  color: AuxPrimary,
+const auxDisp1 = const TextStyle(
+  color: auxAccent,
   fontWeight: FontWeight.w500,
   fontFamily: 'Larsseit',
   fontStyle:  FontStyle.normal,
@@ -39,52 +49,76 @@ const primaryH2 = const TextStyle(
 );
 
 // top song
-const primaryH3 = const TextStyle(
-  color: AuxPrimary,
+const auxHeadline = const TextStyle(
+  color: auxAccent,
   fontFamily: 'Larsseit',
   fontStyle:  FontStyle.normal,
   fontSize: 21
 );
 
 // song, general text
-const primaryP1 = const TextStyle(
-  color: AuxPrimary,
+const auxBody2 = const TextStyle(
+  color: auxAccent,
   fontWeight: FontWeight.w300,
   fontFamily: 'Larsseit',
   fontStyle:  FontStyle.normal,
   fontSize: 21
 );
 
-// buttons & textfields
-const primaryP2 = const TextStyle(
-  color: AuxPrimary,
+// white on black: buttons & textfields
+const auxAccentButton = const TextStyle(
+  color: auxAccent,
   fontWeight: FontWeight.w500,
   fontFamily: 'Larsseit',
   fontStyle:  FontStyle.normal,
   fontSize: 17
 );
 
-const secondaryP2 = const TextStyle(
-  color: AuxSecondary,
+// black on white: buttons & textfields
+const auxPrimaryButton = const TextStyle(
+  color: auxPrimary,
   fontWeight: FontWeight.w500,
   fontFamily: 'Larsseit',
   fontStyle:  FontStyle.normal,
   fontSize: 17
 );
 
-const tertiaryP2 = const TextStyle(
-  color: AuxLGrey,
+// grey on outline: buttons & textfields
+const auxTertiaryButton = const TextStyle(
+  color: auxLGrey,
   fontWeight: FontWeight.w500,
   fontFamily: 'Larsseit',
   fontStyle:  FontStyle.normal,
   fontSize: 17
 );
 
-// details, small buttons
-const primaryP3 = const TextStyle(
-  color: AuxPrimary,
+// Small buttons & widgets
+const auxCaption = const TextStyle(
+  color: auxAccent,
+  fontWeight: FontWeight.w500,
+  fontFamily: 'Larsseit',
+  fontStyle:  FontStyle.normal,
+  fontSize: 10
+);
+
+// Detail text
+const auxBody1 = const TextStyle(
+  color: auxAccent,
   fontWeight: FontWeight.w300,
   fontFamily: 'Larsseit',
   fontStyle:  FontStyle.normal,
   fontSize: 10
+);
+
+
+// text theme
+const auxTextTheme = TextTheme(
+  display3: auxDisp3, // splash & registration text
+  display2: auxDisp2, // queue header
+  display1: auxDisp1, // section header
+  headline: auxHeadline, // prominent song title
+  body2: auxBody2, // song titles
+  button: auxPrimaryButton, // button text (default black on white background)
+  caption: auxCaption, // small buttons and widgets
+  body1: auxBody1, // detail text (queue details, song details, etc.)
 );
