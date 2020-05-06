@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:aux_ui/theme/colors.dart';
+part of 'aux_theme.dart';
 
 /*
   VANILLA MATERIAL STANDARD FOR REFERENCE

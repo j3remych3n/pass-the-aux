@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'aux_theme.dart';
 
 const auxAccent = Colors.white;
 const auxPrimary = Colors.black;

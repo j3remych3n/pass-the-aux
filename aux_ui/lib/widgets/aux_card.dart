@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:aux_ui/theme/colors.dart';
+import 'package:aux_ui/theme/aux_theme.dart';
 
 class AuxCard extends StatelessWidget {
   AuxCard(
@@ -10,13 +10,10 @@ class AuxCard extends StatelessWidget {
     }
   );
 
-// outer padding = ~12 pix
-// inner = ~ 12 px / 25 px
 
-  var child;
-  var borderColor;
-  var border;
-  var padding;
+  final child;
+  final borderColor;
+  final padding;
 
   @override
   Widget build(BuildContext context) {
