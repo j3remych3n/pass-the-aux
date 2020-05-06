@@ -36,25 +36,29 @@ class GuestIntro extends StatelessWidget {
             padding: SizeConfig.notchPadding,
             child: AuxCard(
               borderColor: auxAccent,
-              child: Column(
+              padding: 0.0,
+              child: Stack(children: <Widget>[
+                Column(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Expanded(
                       child: TextHalfScreen(
                           orientation: "top",
                           background: auxPrimary,
-                          textColor: auxAccent,
-                          changeOnPressed: true,
+                          textStyle: auxDisp3,
                           text: "host\nan aux queue")),
                   Expanded(
                       child: TextHalfScreen(
                           orientation: "bottom",
                           background: auxAccent,
-                          textColor: auxPrimary,
-                          changeOnPressed: true,
+                          textStyle: auxDisp3Inv,
                           text: "join\nan aux queue"))
                 ],
               ),
-            )));
+                Center(child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text('or', style: auxDispMidAccent)
+                )),
+            ]))));
   }
 }
