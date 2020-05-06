@@ -1,5 +1,6 @@
 library aux_theme;
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'dart:io' show Platform;
 
 part 'colors.dart';
