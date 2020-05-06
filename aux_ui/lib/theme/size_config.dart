@@ -26,6 +26,11 @@ class SizeConfig {
     _mediaQueryData.padding.bottom;
     safeBlockHorizontal = (screenWidth - safeAreaHorizontal) / 100;
     safeBlockVertical = (screenHeight - safeAreaVertical) / 100;
-    notchPadding = ( Platform.isIOS ) ? EdgeInsets.only(top: SizeConfig.safeAreaVertical / 2, bottom: SizeConfig.safeAreaVertical / 2) : EdgeInsets.only(top: SizeConfig.safeAreaVertical); 
+    
+    notchPadding = EdgeInsets.only(
+      top: _mediaQueryData.padding.top, 
+      bottom: _mediaQueryData.padding.bottom,
+    );
+
   }
 }
