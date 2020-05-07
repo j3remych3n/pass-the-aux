@@ -29,6 +29,15 @@ const auxDisp3 = const TextStyle(
   fontSize: 56
 );
 
+// sign up & splash screens inverted
+const auxDisp3Inv = const TextStyle(
+    color: auxPrimary,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Larsseit',
+    fontStyle:  FontStyle.normal,
+    fontSize: 56
+);
+
 // queue header
 const auxDisp2 = const TextStyle(
   color: auxAccent,
@@ -45,6 +54,15 @@ const auxDisp1 = const TextStyle(
   fontFamily: 'Larsseit',
   fontStyle:  FontStyle.normal,
   fontSize: 29
+);
+
+// "or" accent
+const auxDispMidAccent = const TextStyle(
+    color: auxAccent,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Larsseit',
+    fontStyle:  FontStyle.normal,
+    fontSize: 32
 );
 
 // top song

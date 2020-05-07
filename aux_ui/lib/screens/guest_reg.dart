@@ -7,7 +7,7 @@ import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/link_spotify_button.dart';
 
 class GuestReg extends StatefulWidget {
-  @override 
+
   _GuestRegState createState() => _GuestRegState();
 }
 

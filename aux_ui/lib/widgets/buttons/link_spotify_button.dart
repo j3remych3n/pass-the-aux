@@ -4,7 +4,7 @@ import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 
 class LinkSpotifyButton extends StatefulWidget {
-  @override 
+  @override
   _LinkSpotifyState createState() => _LinkSpotifyState();
 }
 
@@ -34,7 +34,7 @@ class _LinkSpotifyState extends State<LinkSpotifyButton> {
               ),
             ),
           ],
-        ) 
+        )
       );
   }
 }
