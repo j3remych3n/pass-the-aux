@@ -38,7 +38,6 @@ const auxDisp3Inv = const TextStyle(
     fontSize: 56
 );
 
-
 // queue header
 const auxDisp2 = const TextStyle(
   color: auxAccent,
