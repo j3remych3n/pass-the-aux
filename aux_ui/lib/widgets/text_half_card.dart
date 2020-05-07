@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/colors.dart';
 import '../theme/size_config.dart';
 
-class TextHalfScreenState extends State<TextHalfScreen> {
+class TextHalfCardState extends State<TextHalfCard> {
   List<Color> bgColorsPlain;
   List<Color> bgColorsGradient;
   bool pressed = false;
@@ -115,13 +115,13 @@ class TextHalfScreenState extends State<TextHalfScreen> {
   }
 }
 
-class TextHalfScreen extends StatefulWidget {
+class TextHalfCard extends StatefulWidget {
   final String orientation;
   final Color background;
   final TextStyle textStyle;
   final String text;
 
-  TextHalfScreen(
+  TextHalfCard(
       {Key key,
       @required this.orientation,
       @required this.background,
@@ -130,5 +130,5 @@ class TextHalfScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  TextHalfScreenState createState() => TextHalfScreenState();
+  TextHalfCardState createState() => TextHalfCardState();
 }
