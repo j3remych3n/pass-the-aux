@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:aux_ui/theme/colors.dart';
-import 'package:aux_ui/theme/text.dart';
+import 'package:aux_ui/theme/aux_theme.dart';
 import 'screens/nux_intro.dart';
+import 'screens/guest_reg.dart';
 
 void main() => runApp(AuxApp());
 
@@ -19,6 +19,6 @@ class AuxApp extends StatelessWidget {
           textTheme:
               auxTextTheme, // TODO add secondary text theme for alt buttons?
         ),
-        home: NuxIntro());
+        home: GuestReg());
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:aux_ui/theme/colors.dart';
-import '../theme/size_config.dart';
+import 'package:aux_ui/theme/aux_theme.dart';
 
 class TextHalfCardState extends State<TextHalfCard> {
   List<Color> bgColorsPlain;

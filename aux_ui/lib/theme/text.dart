@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:aux_ui/theme/colors.dart';
+part of 'aux_theme.dart';
 
 /*
   VANILLA MATERIAL STANDARD FOR REFERENCE
@@ -39,6 +38,7 @@ const auxDisp3Inv = const TextStyle(
     fontSize: 56
 );
 
+
 // queue header
 const auxDisp2 = const TextStyle(
   color: auxAccent,
@@ -59,11 +59,11 @@ const auxDisp1 = const TextStyle(
 
 // "or" accent
 const auxDispMidAccent = const TextStyle(
-  color: auxAccent,
-  fontWeight: FontWeight.w500,
-  fontFamily: 'Larsseit',
-  fontStyle:  FontStyle.normal,
-  fontSize: 32
+    color: auxAccent,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Larsseit',
+    fontStyle:  FontStyle.normal,
+    fontSize: 32
 );
 
 // top song

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:aux_ui/theme/colors.dart';
-import 'package:aux_ui/theme/text.dart';
+import 'package:aux_ui/theme/aux_theme.dart';
 import '../widgets/aux_card.dart';
 import '../widgets/text_half_card.dart';
-import '../theme/size_config.dart';
 
 class NuxIntro extends StatelessWidget {
   @override
