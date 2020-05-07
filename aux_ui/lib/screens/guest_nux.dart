@@ -2,25 +2,25 @@
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
-import 'package:aux_ui/widgets/reg_container.dart';
+import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/link_spotify_button.dart';
 
-class GuestReg extends StatefulWidget {
-
-  _GuestRegState createState() => _GuestRegState();
+class GuestNux extends StatefulWidget {
+  _GuestNuxState createState() => _GuestNuxState();
 }
 
-class _GuestRegState extends State<GuestReg> {
+class _GuestNuxState extends State<GuestNux> {
   @override
   Widget build(BuildContext context) {
     return 
-      RegContainer(
+      NuxContainer(
         title: 'aux', 
         topWidget: 
           Align(
             alignment: Alignment.bottomLeft,
-            child: Text("first,\nlet's get a name!", style: auxDisp3)
+            // child: Text("first,\nlet's get a name!", style: auxDisp3),
+            child: Text("join\nan aux queue", style: auxDisp3),
           ),
         bottomWidget:  
           Align(
@@ -28,12 +28,6 @@ class _GuestRegState extends State<GuestReg> {
               child: Column(
                 children: <Widget>[
                   AuxTextField(
-                    icon: Icon(
-                      Icons.short_text, 
-                      color:auxAccent,
-                      size: 26.0,
-                      semanticLabel: "Short text for user nickname",
-                    ),
                     label: 'enter a nickname',
                   ),
                   Padding(
@@ -43,7 +37,7 @@ class _GuestRegState extends State<GuestReg> {
                   ButtonTheme(
                     minWidth: double.infinity,
                     child: LinkSpotifyButton(),
-                  )
+                  ),
                 ],
               )
             ),

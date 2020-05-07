@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/aux_card.dart';
 
-class RegContainer extends StatelessWidget {
-  RegContainer({
+class NuxContainer extends StatelessWidget {
+  NuxContainer({
     Key key, 
     this.title,
     this.topWidget,
