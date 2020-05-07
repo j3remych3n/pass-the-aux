@@ -42,7 +42,7 @@ class _GuestRegState extends State<GuestReg> {
                   ),
                   ButtonTheme(
                     minWidth: double.infinity,
-                    child: LinkSpotifyButton(),
+                    child: LinkSpotifyButton(text: 'sign up with spotify'),
                   )
                 ],
               )

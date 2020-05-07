@@ -4,6 +4,12 @@ import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 
 class LinkSpotifyButton extends StatefulWidget {
+  final String text;
+
+  LinkSpotifyButton(
+      {Key key, @required this.text})
+      : super(key: key);
+
   @override
   _LinkSpotifyState createState() => _LinkSpotifyState();
 }
@@ -26,7 +32,7 @@ class _LinkSpotifyState extends State<LinkSpotifyButton> {
             Align(
               alignment: Alignment.center,
               child: Text(
-                'sign up with spotify', 
+                widget.text,
                 strutStyle: StrutStyle(
                   fontSize: 17, 
                   height: 1.2

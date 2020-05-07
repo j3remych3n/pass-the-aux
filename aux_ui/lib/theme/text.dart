@@ -91,6 +91,15 @@ const auxAccentButton = const TextStyle(
   fontSize: 17
 );
 
+// white on black: disclaimers
+const auxAsterisk = const TextStyle(
+    color: auxAccent,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Larsseit',
+    fontStyle:  FontStyle.normal,
+    fontSize: 12
+);
+
 // black on white: buttons & textfields
 const auxPrimaryButton = const TextStyle(
   color: auxPrimary,
