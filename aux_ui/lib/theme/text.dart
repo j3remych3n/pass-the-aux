@@ -79,7 +79,7 @@ const auxBody2 = const TextStyle(
   fontWeight: FontWeight.w300,
   fontFamily: 'Larsseit',
   fontStyle:  FontStyle.normal,
-  fontSize: 21
+  fontSize: 17
 );
 
 // white on black: buttons & textfields
@@ -89,6 +89,15 @@ const auxAccentButton = const TextStyle(
   fontFamily: 'Larsseit',
   fontStyle:  FontStyle.normal,
   fontSize: 17
+);
+
+// white on black: disclaimers
+const auxAsterisk = const TextStyle(
+    color: auxAccent,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Larsseit',
+    fontStyle:  FontStyle.normal,
+    fontSize: 12
 );
 
 // black on white: buttons & textfields
