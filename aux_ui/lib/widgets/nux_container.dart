@@ -27,12 +27,12 @@ class NuxContainer extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                // Expanded(
-                //   child: Padding(
-                //     padding: EdgeInsets.only(bottom: 25),
-                //     child: this.topWidget,
-                //   )
-                // ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 25),
+                    child: this.topWidget,
+                  )
+                ),
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.only(top: 25),
