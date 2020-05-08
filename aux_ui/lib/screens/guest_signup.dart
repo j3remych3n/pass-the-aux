@@ -4,25 +4,25 @@ import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
-import 'package:aux_ui/widgets/buttons/link_spotify_button.dart';
+import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 
 class GuestNux extends StatefulWidget {
   _GuestNuxState createState() => _GuestNuxState();
 }
 
 class _GuestNuxState extends State<GuestNux> {
-  TextEditingController formController;
+  TextEditingController nicknameController;
   bool _textFieldInput = false;
 
   @override
   void initState() {
-    formController = TextEditingController();
+    nicknameController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    formController.dispose();
+    nicknameController.dispose();
     super.dispose();
   }
 
@@ -46,7 +46,7 @@ class _GuestNuxState extends State<GuestNux> {
           Align(
             alignment: Alignment.bottomLeft,
             // child: Text("first,\nlet's get a name!", style: auxDisp3),
-            child: Text("join\nan aux queue", style: auxDisp3),
+            child: Text("first,\nlet's get a name!", style: auxDisp3),
           ),
         bottomWidget:  
           Align(
@@ -55,7 +55,7 @@ class _GuestNuxState extends State<GuestNux> {
                 children: <Widget>[
                   AuxTextField(
                     label: 'enter a nickname',
-                    controller: formController,
+                    controller: nicknameController,
                     onSubmitted: submitted,
                     onFocusChange: focused,
                   ),
@@ -65,11 +65,15 @@ class _GuestNuxState extends State<GuestNux> {
                       child: Text('or', style: auxAccentButton)
                     ),
                   ),
-                  Visibility(visible: !_textFieldInput, child: ButtonTheme(
-                    minWidth: double.infinity,
-                    child: LinkSpotifyButton(),
+                  Visibility(visible: !_textFieldInput, child: 
+                    ButtonTheme(
+                      minWidth: double.infinity,
+                      child: IconBarButton(
+                          icon: Image.asset('assets/spotify_logo.png', height: 21, width: 21), 
+                          text: 'sign up with spotify'
+                        ),
+                    ),
                   ),
-                ),
                 ],
               )
             ),

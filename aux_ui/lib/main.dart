@@ -1,8 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
-import 'package:aux_ui/screens/guest_signup.dart';
-import 'package:aux_ui/screens/nux_intro.dart';
+// import 'package:aux_ui/screens/guest_signup.dart';
+// import 'package:aux_ui/screens/host_reg.dart';
+import 'package:aux_ui/screens/join_queue.dart';
 
 void main() => runApp(AuxApp());
 
@@ -31,7 +32,7 @@ class AuxApp extends StatelessWidget {
           ),
         ),
       ),
-      home: GuestNux(),
+      home: JoinQueue(),
     );
   }
 } 

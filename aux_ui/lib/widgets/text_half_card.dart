@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 
-class TextHalfCardState extends State<TextHalfCard> {
+class _TextHalfCardState extends State<TextHalfCard> {
   List<Color> bgColorsPlain;
   List<Color> bgColorsGradient;
   bool pressed = false;
-  List<Radius> radii;
+  BorderRadius radii;
   Alignment childAlignment;
   TextAlign textAlignment;
 
@@ -27,19 +27,17 @@ class TextHalfCardState extends State<TextHalfCard> {
 
   void setRadii(String orientation) {
     if (orientation == "top") {
-      radii = [
-        Radius.circular(10),
-        Radius.circular(10),
-        Radius.circular(0),
-        Radius.circular(0)
-      ];
+      radii = BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+          bottomLeft: Radius.circular(0),
+          bottomRight: Radius.circular(0));
     } else {
-      radii = [
-        Radius.circular(0),
-        Radius.circular(0),
-        Radius.circular(10),
-        Radius.circular(10)
-      ];
+      radii = BorderRadius.only(
+          topLeft: Radius.circular(0),
+          topRight: Radius.circular(0),
+          bottomLeft: Radius.circular(10),
+          bottomRight: Radius.circular(10));
     }
   }
 
@@ -64,11 +62,7 @@ class TextHalfCardState extends State<TextHalfCard> {
 
     return Container(
         decoration: new BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topLeft: radii[0],
-              topRight: radii[1],
-              bottomLeft: radii[2],
-              bottomRight: radii[3]),
+          borderRadius: radii,
           gradient: new LinearGradient(
             colors: pressed ? bgColorsGradient : bgColorsPlain,
             begin: FractionalOffset.topCenter,
@@ -129,5 +123,5 @@ class TextHalfCard extends StatefulWidget {
       : super(key: key);
 
   @override
-  TextHalfCardState createState() => TextHalfCardState();
+  _TextHalfCardState createState() => _TextHalfCardState();
 }

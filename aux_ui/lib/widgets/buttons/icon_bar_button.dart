@@ -3,12 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 
-class LinkSpotifyButton extends StatefulWidget {
+class IconBarButton extends StatefulWidget {
+  final String text;
+  final Widget icon;
+
+  IconBarButton(
+      {
+        Key key, 
+        @required this.text,
+        @required this.icon,
+      }
+    ): super(key: key);
+
   @override
-  _LinkSpotifyState createState() => _LinkSpotifyState();
+  _IconBarButton createState() => _IconBarButton();
 }
 
-class _LinkSpotifyState extends State<LinkSpotifyButton> {
+class _IconBarButton extends State<IconBarButton> {
   @override
   Widget build(BuildContext context) {
     return 
@@ -21,12 +32,12 @@ class _LinkSpotifyState extends State<LinkSpotifyButton> {
           children: <Widget>[
             Align(
               alignment: Alignment.centerLeft,
-              child: Image.asset('assets/spotify_logo.png', height: 21, width: 21),
+              child: widget.icon,
             ),
             Align(
               alignment: Alignment.center,
               child: Text(
-                'sign up with spotify', 
+                widget.text,
                 strutStyle: StrutStyle(
                   fontSize: 17, 
                   height: 1.2
