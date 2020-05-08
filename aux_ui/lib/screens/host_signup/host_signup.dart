@@ -6,11 +6,11 @@ import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 import 'package:aux_ui/widgets/buttons/confirmation_nav_button.dart';
 
-class HostReg extends StatefulWidget {
-  _HostRegState createState() => _HostRegState();
+class HostSignup extends StatefulWidget {
+  _HostSignupState createState() => _HostSignupState();
 }
 
-class _HostRegState extends State<HostReg> {
+class _HostSignupState extends State<HostSignup> {
   List<Widget> tops;
   List<Widget> bottoms;
   List<int> topFlexVals;

@@ -2,8 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 // import 'package:aux_ui/screens/guest_signup.dart';
-import 'package:aux_ui/screens/host_reg.dart';
-import 'package:aux_ui/screens/join_queue.dart';
+import 'package:aux_ui/screens/host_signup/host_signup.dart';
+import 'package:aux_ui/screens/host_signup/host_confirmation.dart';
+import 'package:aux_ui/screens/host_signup/host_invite.dart';
+import 'package:aux_ui/screens/host_signup/host_name_queue.dart';
+import 'package:aux_ui/screens/host_signup/host_spotify_link.dart';
+
 
 void main() => runApp(AuxApp());
 
@@ -32,7 +36,7 @@ class AuxApp extends StatelessWidget {
           ),
         ),
       ),
-      home: HostReg(),
+      home: HostSpotifyLink(),
     );
   }
 } 
