@@ -25,7 +25,7 @@ class _GuestRegState extends State<GuestReg> {
           ),
         bottomWidget:  
           Align(
-            alignment: Alignment.center,
+            alignment: Alignment.topCenter,
               child: Column(
                 children: <Widget>[
                   AuxTextField(
