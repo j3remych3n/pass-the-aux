@@ -79,7 +79,7 @@ const auxBody2 = const TextStyle(
   fontWeight: FontWeight.w300,
   fontFamily: 'Larsseit',
   fontStyle:  FontStyle.normal,
-  fontSize: 21
+  fontSize: 17
 );
 
 // white on black: buttons & textfields

@@ -11,6 +11,32 @@ class GuestNux extends StatefulWidget {
 }
 
 class _GuestNuxState extends State<GuestNux> {
+  TextEditingController formController;
+  bool _textFieldInput = false;
+
+  @override
+  void initState() {
+    formController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    formController.dispose();
+    super.dispose();
+  }
+
+  void submitted(String str) {
+    print('submitted ' + str);
+  }
+
+  void focused(bool focused) {
+    print('textbox focused? ' + focused.toString());
+    setState(() {
+      _textFieldInput = focused;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return 
@@ -29,15 +55,21 @@ class _GuestNuxState extends State<GuestNux> {
                 children: <Widget>[
                   AuxTextField(
                     label: 'enter a nickname',
+                    controller: formController,
+                    onSubmitted: submitted,
+                    onFocusChange: focused,
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Text('or', style: auxAccentButton)
+                  Visibility(visible: !_textFieldInput, child: 
+                    Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Text('or', style: auxAccentButton)
+                    ),
                   ),
-                  ButtonTheme(
+                  Visibility(visible: !_textFieldInput, child: ButtonTheme(
                     minWidth: double.infinity,
                     child: LinkSpotifyButton(),
                   ),
+                ),
                 ],
               )
             ),
