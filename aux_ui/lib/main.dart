@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
-import 'package:aux_ui/screens/guest_nux.dart';
+import 'package:aux_ui/screens/guest_signup.dart';
 import 'package:aux_ui/screens/nux_intro.dart';
 
 void main() => runApp(AuxApp());
