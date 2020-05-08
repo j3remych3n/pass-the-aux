@@ -20,7 +20,7 @@ class AuxApp extends StatelessWidget {
         fontFamily: 'Larsseit',
         textTheme: auxTextTheme, // TODO add secondary text theme for alt buttons?
       ),
-      home: GuestReg(),
+      home: HostReg(),
     );
   }
 }
