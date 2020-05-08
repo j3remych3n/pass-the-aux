@@ -16,6 +16,7 @@ class _GuestRegState extends State<GuestReg> {
   Widget build(BuildContext context) {
     return 
       RegContainer(
+        topFlex: 6,
         title: 'aux', 
         topWidget: 
           Align(
@@ -24,7 +25,7 @@ class _GuestRegState extends State<GuestReg> {
           ),
         bottomWidget:  
           Align(
-            alignment: Alignment.topCenter,
+            alignment: Alignment.center,
               child: Column(
                 children: <Widget>[
                   AuxTextField(
