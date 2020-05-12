@@ -3,6 +3,7 @@ import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
+import 'package:aux_ui/named_routing/routing_constants.dart';
 
 class HostSpotifyLink extends StatefulWidget {
   _HostSpotifyLinkState createState() => _HostSpotifyLinkState();
@@ -37,7 +38,8 @@ class _HostSpotifyLinkState extends State<HostSpotifyLink> {
                     IconBarButton(
                         icon: Image.asset(
                             'assets/spotify_logo.png', height: 21, width: 21),
-                        text: 'link your spotify premium *'
+                        text: 'link your spotify premium *',
+                        onPressed: () => Navigator.pushNamed(context, HostNameQueueRoute),
                     )
                 ),
                 Align(

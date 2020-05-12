@@ -6,12 +6,14 @@ import 'package:flutter/rendering.dart';
 class IconBarButton extends StatefulWidget {
   final String text;
   final Widget icon;
+  final Function onPressed;
 
   IconBarButton(
       {
         Key key, 
         @required this.text,
         @required this.icon,
+        this.onPressed,
       }
     ): super(key: key);
 
@@ -24,7 +26,7 @@ class _IconBarButton extends State<IconBarButton> {
   Widget build(BuildContext context) {
     return 
       FlatButton(
-        onPressed:() {},
+        onPressed: widget.onPressed,
         color: auxAccent,
         padding: EdgeInsets.all(15),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

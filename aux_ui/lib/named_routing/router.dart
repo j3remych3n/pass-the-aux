@@ -3,7 +3,9 @@ import 'package:aux_ui/screens/host_signup/host_queue_confirmation.dart';
 import 'package:aux_ui/screens/host_signup/host_invite.dart';
 import 'package:aux_ui/screens/host_signup/host_name_queue.dart';
 import 'package:aux_ui/screens/host_signup/host_spotify_link.dart';
-import 'package:aux_ui/screens/nux_intro.dart';
+import 'package:aux_ui/screens/guest_signup/guest_signup.dart';
+import 'package:aux_ui/screens/guest_signup/guest_join_queue.dart';
+import 'package:aux_ui/screens/alt_nux_intro.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -23,6 +25,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case HostConfirmationRoute:
       String backPage = HostNameQueueRoute; // TODO: is this the right flow?
       return MaterialPageRoute(builder: (context) => HostQueueConfirmation(backPage: backPage));
+    case GuestSignupRoute:
+      return MaterialPageRoute(builder: (context) => GuestSignup());
+    case GuestJoinQueueRoute:
+      return MaterialPageRoute(builder: (context) => GuestJoinQueue());
+    case NuxIntroRoute:
+      return MaterialPageRoute(builder: (context) => NuxIntro());
     default:
       return MaterialPageRoute(builder: (context) => NuxIntro());
   }

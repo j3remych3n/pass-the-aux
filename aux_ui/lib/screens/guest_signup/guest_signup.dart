@@ -5,32 +5,34 @@ import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
+import 'package:aux_ui/named_routing/routing_constants.dart';
 
-class JoinQueue extends StatefulWidget {
-  _JoinQueueState createState() => _JoinQueueState();
+class GuestSignup extends StatefulWidget {
+  _GuestSignupState createState() => _GuestSignupState();
 }
 
-class _JoinQueueState extends State<JoinQueue> {
-  TextEditingController formController;
-  bool _textFieldInput = false;
+class _GuestSignupState extends State<GuestSignup> {
+  TextEditingController nicknameController;
+  bool _textFieldInput;
 
   @override
   void initState() {
-    formController = TextEditingController();
+    _textFieldInput = false;
+    nicknameController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    formController.dispose();
+    nicknameController.dispose();
     super.dispose();
   }
 
-  void submitted(String str) {
-    print('submitted ' + str);
+  void txtSubmitted(String str) {
+    Navigator.pushNamed(context, GuestJoinQueueRoute);
   }
 
-  void focused(bool focused) {
+  void txtFocused(bool focused) {
     print('textbox focused? ' + focused.toString());
     setState(() {
       _textFieldInput = focused;
@@ -46,7 +48,7 @@ class _JoinQueueState extends State<JoinQueue> {
           Align(
             alignment: Alignment.bottomLeft,
             // child: Text("first,\nlet's get a name!", style: auxDisp3),
-            child: Text("join\nan aux queue", style: auxDisp3),
+            child: Text("first,\nlet's get a name!", style: auxDisp3),
           ),
         bottomWidget:  
           Align(
@@ -54,10 +56,10 @@ class _JoinQueueState extends State<JoinQueue> {
               child: Column(
                 children: <Widget>[
                   AuxTextField(
-                    label: 'enter a secret code / link',
-                    controller: formController,
-                    onSubmitted: submitted,
-                    onFocusChange: focused,
+                    label: 'enter a nickname',
+                    controller: nicknameController,
+                    onSubmitted: txtSubmitted,
+                    onFocusChange: txtFocused,
                   ),
                   Visibility(visible: !_textFieldInput, child: 
                     Padding(
@@ -65,13 +67,14 @@ class _JoinQueueState extends State<JoinQueue> {
                       child: Text('or', style: auxAccentButton)
                     ),
                   ),
-                  Visibility(visible: !_textFieldInput, child: 
-                      ButtonTheme(
+                  Visibility(visible: true, child: 
+                    ButtonTheme(
                       minWidth: double.infinity,
                       child: IconBarButton(
-                        icon: Icon( Icons.camera_alt, color:auxPrimary, size: 26.0, semanticLabel: "Short text input"),
-                        text: 'scan qr code',
-                      ),
+                          icon: Image.asset('assets/spotify_logo.png', height: 21, width: 21), 
+                          text: 'sign up with spotify',
+                          onPressed: () => Navigator.pushNamed(context, GuestJoinQueueRoute),
+                        ),
                     ),
                   ),
                 ],

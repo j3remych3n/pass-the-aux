@@ -6,31 +6,31 @@ import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 
-class GuestNux extends StatefulWidget {
-  _GuestNuxState createState() => _GuestNuxState();
+class GuestJoinQueue extends StatefulWidget {
+  _GuestJoinQueueState createState() => _GuestJoinQueueState();
 }
 
-class _GuestNuxState extends State<GuestNux> {
-  TextEditingController nicknameController;
+class _GuestJoinQueueState extends State<GuestJoinQueue> {
+  TextEditingController formController;
   bool _textFieldInput = false;
 
   @override
   void initState() {
-    nicknameController = TextEditingController();
+    formController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
-    nicknameController.dispose();
+    formController.dispose();
     super.dispose();
   }
 
-  void submitted(String str) {
+  void txtSubmitted(String str) {
     print('submitted ' + str);
   }
 
-  void focused(bool focused) {
+  void txtFocused(bool focused) {
     print('textbox focused? ' + focused.toString());
     setState(() {
       _textFieldInput = focused;
@@ -46,7 +46,7 @@ class _GuestNuxState extends State<GuestNux> {
           Align(
             alignment: Alignment.bottomLeft,
             // child: Text("first,\nlet's get a name!", style: auxDisp3),
-            child: Text("first,\nlet's get a name!", style: auxDisp3),
+            child: Text("join\nan aux queue", style: auxDisp3),
           ),
         bottomWidget:  
           Align(
@@ -54,10 +54,10 @@ class _GuestNuxState extends State<GuestNux> {
               child: Column(
                 children: <Widget>[
                   AuxTextField(
-                    label: 'enter a nickname',
-                    controller: nicknameController,
-                    onSubmitted: submitted,
-                    onFocusChange: focused,
+                    label: 'enter a secret code / link',
+                    controller: formController,
+                    onSubmitted: txtSubmitted,
+                    onFocusChange: txtFocused,
                   ),
                   Visibility(visible: !_textFieldInput, child: 
                     Padding(
@@ -66,12 +66,13 @@ class _GuestNuxState extends State<GuestNux> {
                     ),
                   ),
                   Visibility(visible: !_textFieldInput, child: 
-                    ButtonTheme(
+                      ButtonTheme(
                       minWidth: double.infinity,
                       child: IconBarButton(
-                          icon: Image.asset('assets/spotify_logo.png', height: 21, width: 21), 
-                          text: 'sign up with spotify'
-                        ),
+                        icon: Icon( Icons.camera_alt, color:auxPrimary, size: 26.0, semanticLabel: "Short text input"),
+                        text: 'scan qr code',
+                        onPressed: () => Navigator.pushNamed(context, '/'),
+                      ),
                     ),
                   ),
                 ],
