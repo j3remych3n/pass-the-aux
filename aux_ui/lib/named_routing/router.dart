@@ -1,5 +1,5 @@
 import 'package:aux_ui/named_routing/routing_constants.dart';
-import 'package:aux_ui/screens/host_signup/host_confirmation.dart';
+import 'package:aux_ui/screens/host_signup/host_queue_confirmation.dart';
 import 'package:aux_ui/screens/host_signup/host_invite.dart';
 import 'package:aux_ui/screens/host_signup/host_name_queue.dart';
 import 'package:aux_ui/screens/host_signup/host_spotify_link.dart';
@@ -22,7 +22,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => HostInvite(queueName: queueName, nextPage: nextPage));
     case HostConfirmationRoute:
       String backPage = HostNameQueueRoute; // TODO: is this the right flow?
-      return MaterialPageRoute(builder: (context) => HostConfirmation(backPage: backPage));
+      return MaterialPageRoute(builder: (context) => HostQueueConfirmation(backPage: backPage));
     default:
       return MaterialPageRoute(builder: (context) => NuxIntro());
   }

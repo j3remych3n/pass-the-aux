@@ -4,21 +4,21 @@ import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/confirmation_nav_button.dart';
 
-class HostConfirmation extends StatefulWidget {
+class HostQueueConfirmation extends StatefulWidget {
   final String backPage;
 
-  const HostConfirmation({Key key, this.backPage}) : super(key: key);
+  const HostQueueConfirmation({Key key, this.backPage}) : super(key: key);
 
-  _HostConfirmationState createState() => _HostConfirmationState(backPage);
+  _HostQueueConfirmationState createState() => _HostQueueConfirmationState(backPage);
 }
 
-class _HostConfirmationState extends State<HostConfirmation> {
+class _HostQueueConfirmationState extends State<HostQueueConfirmation> {
   bool _initialized = false;
   Widget _confirmationText;
   Widget _queueCreateConfirmation;
   final String backPage;
 
-  _HostConfirmationState(this.backPage);
+  _HostQueueConfirmationState(this.backPage);
 
   void _initializeWidgets() {
     if (_initialized)
