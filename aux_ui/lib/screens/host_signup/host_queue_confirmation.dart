@@ -1,24 +1,19 @@
+import 'package:aux_ui/widgets/sequential_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/confirmation_nav_button.dart';
 
-class HostQueueConfirmation extends StatefulWidget {
-  final String backPage;
-
-  const HostQueueConfirmation({Key key, this.backPage}) : super(key: key);
-
-  _HostQueueConfirmationState createState() => _HostQueueConfirmationState(backPage);
+class HostQueueConfirmation extends SequentialWidget {
+  const HostQueueConfirmation({Key key, String nextPage, String prevPage}) : super(key: key);
+  _HostQueueConfirmationState createState() => _HostQueueConfirmationState();
 }
 
 class _HostQueueConfirmationState extends State<HostQueueConfirmation> {
   bool _initialized = false;
   Widget _confirmationText;
   Widget _queueCreateConfirmation;
-  final String backPage;
-
-  _HostQueueConfirmationState(this.backPage);
 
   void _initializeWidgets() {
     if (_initialized)
@@ -50,9 +45,7 @@ class _HostQueueConfirmationState extends State<HostQueueConfirmation> {
             child: ConfirmationNavButton(
                 height: 32,
                 width: SizeConfig.screenWidth * 3 / 5,
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, backPage);
-                },
+                onPressed: () => widget.back(context),
                 color: auxPrimary,
                 borderColor: auxAccent,
                 text: "this isn't it, take me back",

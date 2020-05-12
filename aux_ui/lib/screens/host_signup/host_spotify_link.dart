@@ -1,3 +1,4 @@
+import 'package:aux_ui/widgets/sequential_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
@@ -5,7 +6,8 @@ import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 import 'package:aux_ui/named_routing/routing_constants.dart';
 
-class HostSpotifyLink extends StatefulWidget {
+class HostSpotifyLink extends SequentialWidget {
+  const HostSpotifyLink({Key key, String nextPage}) : super(key: key);
   _HostSpotifyLinkState createState() => _HostSpotifyLinkState();
 }
 
@@ -18,11 +20,9 @@ class _HostSpotifyLinkState extends State<HostSpotifyLink> {
     if (_initialized)
       return; // don't waste time reinitializing widgets on rebuild
     _initialized = true;
-
     _accountSetupText = Align(
         alignment: Alignment.bottomLeft,
         child: Text("let's set up your account", style: auxDisp3));
-
     _spotifyLink = Align(
         alignment: Alignment.center,
         child: Padding(
@@ -39,7 +39,7 @@ class _HostSpotifyLinkState extends State<HostSpotifyLink> {
                         icon: Image.asset(
                             'assets/spotify_logo.png', height: 21, width: 21),
                         text: 'link your spotify premium *',
-                        onPressed: () => Navigator.pushNamed(context, HostNameQueueRoute),
+                        onPressed: () => widget.next(context),
                     )
                 ),
                 Align(
@@ -52,7 +52,6 @@ class _HostSpotifyLinkState extends State<HostSpotifyLink> {
                             style: auxAsterisk))),
               ],
             )));
-
   }
 
   @override

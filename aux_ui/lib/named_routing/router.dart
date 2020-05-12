@@ -14,21 +14,22 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case AuxHomeRoute:
       return MaterialPageRoute(builder: (context) => NuxIntro());
     case HostSpotifyLinkRoute:
-      return MaterialPageRoute(builder: (context) => HostSpotifyLink());
+      return MaterialPageRoute(builder: (context) => HostSpotifyLink(nextPage: HostNameQueueRoute));
     case HostNameQueueRoute:
-      String nextPage = HostInviteRoute;
-      return MaterialPageRoute(builder: (context) => HostNameQueue(nextPage: nextPage));
+      return MaterialPageRoute(builder: (context) => HostNameQueue(nextPage: HostInviteRoute));
     case HostInviteRoute:
       String queueName = settings.arguments;
-      String nextPage = HostConfirmationRoute;
-      return MaterialPageRoute(builder: (context) => HostInvite(queueName: queueName, nextPage: nextPage));
+      return MaterialPageRoute(builder: (context) => HostInvite(
+        queueName: queueName, 
+        nextPage: HostConfirmationRoute
+        )
+      );
     case HostConfirmationRoute:
-      String backPage = HostNameQueueRoute; // TODO: is this the right flow?
-      return MaterialPageRoute(builder: (context) => HostQueueConfirmation(backPage: backPage));
+      return MaterialPageRoute(builder: (context) => HostQueueConfirmation(prevPage: HostNameQueueRoute));
     case GuestSignupRoute:
-      return MaterialPageRoute(builder: (context) => GuestSignup());
+      return MaterialPageRoute(builder: (context) => GuestSignup(nextPage: GuestJoinQueueRoute));
     case GuestJoinQueueRoute:
-      return MaterialPageRoute(builder: (context) => GuestJoinQueue());
+      return MaterialPageRoute(builder: (context) => GuestJoinQueue(nextPage: '/'));
     case NuxIntroRoute:
       return MaterialPageRoute(builder: (context) => NuxIntro());
     default:

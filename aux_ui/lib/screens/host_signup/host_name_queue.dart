@@ -1,15 +1,13 @@
+import 'package:aux_ui/widgets/sequential_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 
-class HostNameQueue extends StatefulWidget {
-  final String nextPage;
-
-  const HostNameQueue({Key key, this.nextPage}) : super(key: key);
-
-  _HostNameQueueState createState() => _HostNameQueueState(nextPage);
+class HostNameQueue extends SequentialWidget {
+  const HostNameQueue({Key key, String nextPage}) : super(key: key);
+  _HostNameQueueState createState() => _HostNameQueueState();
 }
 
 class _HostNameQueueState extends State<HostNameQueue> {
@@ -18,9 +16,6 @@ class _HostNameQueueState extends State<HostNameQueue> {
   Widget _nameQueueTextField;
   String queueName = "";
   TextEditingController queueNameController;
-  final String nextPage;
-
-  _HostNameQueueState(this.nextPage);
 
   @override
   void initState() {
@@ -34,9 +29,8 @@ class _HostNameQueueState extends State<HostNameQueue> {
     queueNameController.dispose();
   }
 
-  void submitted(String text) {
-    queueName = text;
-    Navigator.pushReplacementNamed(context, nextPage, arguments: queueName);
+  void submitted(String queueName) {
+    widget.nextReplace(context, arguments: queueName);
   }
 
   void changed(String text) {

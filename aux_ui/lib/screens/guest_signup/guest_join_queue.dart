@@ -1,4 +1,5 @@
 
+import 'package:aux_ui/widgets/sequential_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
@@ -6,7 +7,8 @@ import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 
-class GuestJoinQueue extends StatefulWidget {
+class GuestJoinQueue extends SequentialWidget {
+  const GuestJoinQueue({Key key, String nextPage}) : super(key: key);
   _GuestJoinQueueState createState() => _GuestJoinQueueState();
 }
 
@@ -71,7 +73,7 @@ class _GuestJoinQueueState extends State<GuestJoinQueue> {
                       child: IconBarButton(
                         icon: Icon( Icons.camera_alt, color:auxPrimary, size: 26.0, semanticLabel: "Short text input"),
                         text: 'scan qr code',
-                        onPressed: () => Navigator.pushNamed(context, '/'),
+                        onPressed: () => widget.next(context),
                       ),
                     ),
                   ),

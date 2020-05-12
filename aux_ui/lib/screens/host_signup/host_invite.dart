@@ -1,16 +1,14 @@
+import 'package:aux_ui/widgets/sequential_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/confirmation_nav_button.dart';
 
-class HostInvite extends StatefulWidget {
+class HostInvite extends SequentialWidget {
   final String queueName;
-  final String nextPage;
-
-  const HostInvite({Key key, this.queueName, this.nextPage}) : super(key: key);
-
-  _HostInviteState createState() => _HostInviteState(queueName, nextPage);
+  const HostInvite({Key key, String nextPage, this.queueName}) : super(key: key);
+  _HostInviteState createState() => _HostInviteState(queueName);
 }
 
 class _HostInviteState extends State<HostInvite> {
@@ -20,9 +18,8 @@ class _HostInviteState extends State<HostInvite> {
   String _qrAssetLink;
   bool _initialized = false;
   final String queueName;
-  final String nextPage;
 
-  _HostInviteState(this.queueName, this.nextPage);
+  _HostInviteState(this.queueName);
 
   void _createBitlyLink() {
     _bitlyURL = "bit.ly/2VqnC3B";
@@ -114,9 +111,7 @@ class _HostInviteState extends State<HostInvite> {
             child: ConfirmationNavButton(
                 height: 40,
                 width: SizeConfig.screenWidth * 3 / 5,
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, nextPage);
-                },
+                onPressed: () => widget.nextReplace(context),
                 color: auxAccent,
                 borderColor: auxAccent,
                 text: "done",

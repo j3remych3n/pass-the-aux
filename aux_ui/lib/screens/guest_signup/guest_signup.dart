@@ -1,4 +1,5 @@
 
+import 'package:aux_ui/widgets/sequential_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
@@ -7,7 +8,8 @@ import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 import 'package:aux_ui/named_routing/routing_constants.dart';
 
-class GuestSignup extends StatefulWidget {
+class GuestSignup extends SequentialWidget {
+  const GuestSignup({Key key, String nextPage}) : super(key: key);
   _GuestSignupState createState() => _GuestSignupState();
 }
 
@@ -73,7 +75,7 @@ class _GuestSignupState extends State<GuestSignup> {
                       child: IconBarButton(
                           icon: Image.asset('assets/spotify_logo.png', height: 21, width: 21), 
                           text: 'sign up with spotify',
-                          onPressed: () => Navigator.pushNamed(context, GuestJoinQueueRoute),
+                          onPressed: () => widget.next(context),
                         ),
                     ),
                   ),
