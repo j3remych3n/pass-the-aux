@@ -5,13 +5,43 @@ import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 
 class HostNameQueue extends StatefulWidget {
-  _HostNameQueueState createState() => _HostNameQueueState();
+  final String nextPage;
+
+  const HostNameQueue({Key key, this.nextPage}) : super(key: key);
+
+  _HostNameQueueState createState() => _HostNameQueueState(nextPage);
 }
 
 class _HostNameQueueState extends State<HostNameQueue> {
   bool _initialized = false;
   Widget _namePromptText;
   Widget _nameQueueTextField;
+  String queueName = "";
+  TextEditingController queueNameController;
+  final String nextPage;
+
+  _HostNameQueueState(this.nextPage);
+
+  @override
+  void initState() {
+    super.initState();
+    queueNameController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    queueNameController.dispose();
+  }
+
+  void submitted(String text) {
+    queueName = text;
+    Navigator.pushReplacementNamed(context, nextPage, arguments: queueName);
+  }
+
+  void changed(String text) {
+    queueName = text;
+  }
 
   void _initializeWidgets() {
     if (_initialized)
@@ -30,7 +60,10 @@ class _HostNameQueueState extends State<HostNameQueue> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  AuxTextField( //TODO: conf = screenCounter increment + gen bitly/qr, cancel = go back
+                  AuxTextField(
+                    controller: queueNameController,
+                    onSubmitted: submitted,
+                    onChanged: changed,
                     icon: Icon(
                       Icons.short_text,
                       color: auxAccent,

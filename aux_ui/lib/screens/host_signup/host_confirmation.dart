@@ -5,13 +5,20 @@ import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/confirmation_nav_button.dart';
 
 class HostConfirmation extends StatefulWidget {
-  _HostConfirmationState createState() => _HostConfirmationState();
+  final String backPage;
+
+  const HostConfirmation({Key key, this.backPage}) : super(key: key);
+
+  _HostConfirmationState createState() => _HostConfirmationState(backPage);
 }
 
 class _HostConfirmationState extends State<HostConfirmation> {
   bool _initialized = false;
   Widget _confirmationText;
   Widget _queueCreateConfirmation;
+  final String backPage;
+
+  _HostConfirmationState(this.backPage);
 
   void _initializeWidgets() {
     if (_initialized)
@@ -31,7 +38,9 @@ class _HostConfirmationState extends State<HostConfirmation> {
             child: ConfirmationNavButton(
                 height: 32,
                 width: SizeConfig.screenWidth * 3 / 5,
-                onPressed: () {},
+                onPressed: () {
+                  // TODO: add next page
+                },
                 color: auxAccent,
                 borderColor: auxAccent,
                 text: "join",
@@ -41,7 +50,9 @@ class _HostConfirmationState extends State<HostConfirmation> {
             child: ConfirmationNavButton(
                 height: 32,
                 width: SizeConfig.screenWidth * 3 / 5,
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacementNamed(context, backPage);
+                },
                 color: auxPrimary,
                 borderColor: auxAccent,
                 text: "this isn't it, take me back",

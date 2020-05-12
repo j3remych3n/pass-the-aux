@@ -5,15 +5,41 @@ import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/confirmation_nav_button.dart';
 
 class HostInvite extends StatefulWidget {
-  _HostInviteState createState() => _HostInviteState();
+  final String queueName;
+  final String nextPage;
+
+  const HostInvite({Key key, this.queueName, this.nextPage}) : super(key: key);
+
+  _HostInviteState createState() => _HostInviteState(queueName, nextPage);
 }
 
 class _HostInviteState extends State<HostInvite> {
   Widget _namePromptText;
   Widget _inviteGeneration;
-  String _bitlyURL = "bit.ly/2VqnC3B";
-  String _qrAssetLink = "assets/qr_example.png";
+  String _bitlyURL;
+  String _qrAssetLink;
   bool _initialized = false;
+  final String queueName;
+  final String nextPage;
+
+  _HostInviteState(this.queueName, this.nextPage);
+
+  void _createBitlyLink() {
+    _bitlyURL = "bit.ly/2VqnC3B";
+    // TODO: write actual generation with queueName
+  }
+
+  void _createQRCode() {
+    _qrAssetLink = "assets/qr_example.png";
+    // TODO: write actual generation; with queueName
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _createBitlyLink();
+    _createQRCode();
+  }
 
   Widget _createCaption(String text, EdgeInsets padding) {
     return Padding(
@@ -27,7 +53,7 @@ class _HostInviteState extends State<HostInvite> {
             )));
   }
 
-  Widget _createBitlyLink(String url) {
+  Widget _createBitlyLinkComponent(String url) {
     return Card(
         color: Colors.transparent,
         borderOnForeground: true,
@@ -43,11 +69,11 @@ class _HostInviteState extends State<HostInvite> {
             dense: true,
             title: Text(url, style: auxBody2),
             trailing: IconTheme(
-                data: IconThemeData(color: auxAccent),
+                data: IconThemeData(color: auxAccent), // TODO: pull up share methods
                 child: Icon(Icons.share))));
   }
 
-  Widget _createQRCode(String imageAssetLink) {
+  Widget _createQRCodeComponent(String imageAssetLink) {
     return Container(
         width:
         SizeConfig.screenWidth - 83, // TODO: un-hardcode, square won't work
@@ -79,17 +105,17 @@ class _HostInviteState extends State<HostInvite> {
       child: Column(children: <Widget>[
         _createCaption(
             "with a secret link", EdgeInsets.only(left: 5, bottom: 12)),
-        _createBitlyLink(_bitlyURL),
+        _createBitlyLinkComponent(_bitlyURL),
         _createCaption(
             "with a QR code", EdgeInsets.only(left: 5, bottom: 12, top: 24)),
-        _createQRCode(_qrAssetLink),
+        _createQRCodeComponent(_qrAssetLink),
         Padding(
             padding: EdgeInsets.only(top: 10),
             child: ConfirmationNavButton(
                 height: 40,
                 width: SizeConfig.screenWidth * 3 / 5,
                 onPressed: () {
-                  // TODO: implement
+                  Navigator.pushReplacementNamed(context, nextPage);
                 },
                 color: auxAccent,
                 borderColor: auxAccent,
@@ -101,7 +127,9 @@ class _HostInviteState extends State<HostInvite> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     _initializeWidgets();
+
     return NuxContainer(
         topFlex: 3,
         title: 'aux',

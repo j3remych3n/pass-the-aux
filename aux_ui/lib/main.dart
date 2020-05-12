@@ -1,4 +1,5 @@
 
+import 'package:aux_ui/named_routing/routing_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 // import 'package:aux_ui/screens/guest_signup.dart';
@@ -7,6 +8,7 @@ import 'package:aux_ui/screens/host_signup/host_confirmation.dart';
 import 'package:aux_ui/screens/host_signup/host_invite.dart';
 import 'package:aux_ui/screens/host_signup/host_name_queue.dart';
 import 'package:aux_ui/screens/host_signup/host_spotify_link.dart';
+import 'package:aux_ui/named_routing/router.dart' as router;
 
 
 void main() => runApp(AuxApp());
@@ -17,6 +19,8 @@ class AuxApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'aux',
+      onGenerateRoute: router.generateRoute,
+      initialRoute: HostNameQueueRoute,
       theme: ThemeData(
         primaryColor: auxPrimary,
         accentColor: auxAccent,
@@ -36,7 +40,7 @@ class AuxApp extends StatelessWidget {
           ),
         ),
       ),
-      home: HostSpotifyLink(),
+//      home: HostSpotifyLink(),
     );
   }
 } 
