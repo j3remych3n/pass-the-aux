@@ -25,7 +25,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
         )
       );
     case HostConfirmationRoute:
-      return MaterialPageRoute(builder: (context) => HostQueueConfirmation(prevPage: HostNameQueueRoute));
+      return MaterialPageRoute(builder: (context) => HostQueueConfirmation(backPage: HostNameQueueRoute));
     case GuestSignupRoute:
       return MaterialPageRoute(builder: (context) => GuestSignup(nextPage: GuestJoinQueueRoute));
     case GuestJoinQueueRoute:

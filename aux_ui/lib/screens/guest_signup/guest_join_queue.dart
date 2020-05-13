@@ -8,7 +8,7 @@ import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 
 class GuestJoinQueue extends SequentialWidget {
-  const GuestJoinQueue({Key key, String nextPage}) : super(key: key);
+  const GuestJoinQueue({Key key, String nextPage}) : super(key: key, nextPage: nextPage);
   _GuestJoinQueueState createState() => _GuestJoinQueueState();
 }
 

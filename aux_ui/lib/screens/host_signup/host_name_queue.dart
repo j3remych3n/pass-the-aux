@@ -6,7 +6,7 @@ import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 
 class HostNameQueue extends SequentialWidget {
-  const HostNameQueue({Key key, String nextPage}) : super(key: key);
+  const HostNameQueue({Key key, String nextPage}) : super(key: key, nextPage: nextPage);
   _HostNameQueueState createState() => _HostNameQueueState();
 }
 

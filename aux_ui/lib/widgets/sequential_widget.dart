@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
 abstract class SequentialWidget extends StatefulWidget {
-  String nextPage;
-  String prevPage;
+  final String nextPage;
+  final String backPage;
 
-  const SequentialWidget({
-    Key key, 
-    String nextPage,
-    String prevPage,
-  }) : super(key: key);
+  const SequentialWidget({Key key, this.nextPage, this.backPage}) : super(key: key);
 
   void next(BuildContext ctx, {Object arguments}) {
     if (this.nextPage != null) Navigator.pushNamed(ctx, nextPage, arguments: arguments);
@@ -19,6 +15,6 @@ abstract class SequentialWidget extends StatefulWidget {
   }
   
   void back(BuildContext ctx, {Object arguments}) {
-    if (this.prevPage != null) Navigator.pushNamed(ctx, prevPage, arguments: arguments);
+    if (this.backPage != null) Navigator.pushNamed(ctx, backPage, arguments: arguments);
   }
 }

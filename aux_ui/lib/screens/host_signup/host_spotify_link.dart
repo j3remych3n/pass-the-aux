@@ -7,7 +7,7 @@ import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 import 'package:aux_ui/named_routing/routing_constants.dart';
 
 class HostSpotifyLink extends SequentialWidget {
-  const HostSpotifyLink({Key key, String nextPage}) : super(key: key);
+  const HostSpotifyLink({Key key, String nextPage}) : super(key: key, nextPage: nextPage);
   _HostSpotifyLinkState createState() => _HostSpotifyLinkState();
 }
 

@@ -9,7 +9,7 @@ import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 import 'package:aux_ui/named_routing/routing_constants.dart';
 
 class GuestSignup extends SequentialWidget {
-  const GuestSignup({Key key, String nextPage}) : super(key: key);
+  const GuestSignup({Key key, String nextPage}) : super(key: key, nextPage: nextPage);
   _GuestSignupState createState() => _GuestSignupState();
 }
 

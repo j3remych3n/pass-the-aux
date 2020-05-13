@@ -6,7 +6,11 @@ import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/confirmation_nav_button.dart';
 
 class HostQueueConfirmation extends SequentialWidget {
-  const HostQueueConfirmation({Key key, String nextPage, String prevPage}) : super(key: key);
+  const HostQueueConfirmation({
+      Key key, 
+      String nextPage, 
+      String backPage
+    }) : super(key: key, nextPage: nextPage, backPage: backPage);
   _HostQueueConfirmationState createState() => _HostQueueConfirmationState();
 }
 
