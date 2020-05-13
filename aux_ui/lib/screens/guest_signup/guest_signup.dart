@@ -1,21 +1,25 @@
 
+import 'package:aux_ui/widgets/sequential_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
+import 'package:aux_ui/named_routing/routing_constants.dart';
 
-class GuestNux extends StatefulWidget {
-  _GuestNuxState createState() => _GuestNuxState();
+class GuestSignup extends SequentialWidget {
+  const GuestSignup({Key key, String nextPage}) : super(key: key, nextPage: nextPage);
+  _GuestSignupState createState() => _GuestSignupState();
 }
 
-class _GuestNuxState extends State<GuestNux> {
+class _GuestSignupState extends State<GuestSignup> {
   TextEditingController nicknameController;
-  bool _textFieldInput = false;
+  bool _textFieldInput;
 
   @override
   void initState() {
+    _textFieldInput = false;
     nicknameController = TextEditingController();
     super.initState();
   }
@@ -26,11 +30,11 @@ class _GuestNuxState extends State<GuestNux> {
     super.dispose();
   }
 
-  void submitted(String str) {
-    print('submitted ' + str);
+  void txtSubmitted(String str) {
+    Navigator.pushNamed(context, GuestJoinQueueRoute);
   }
 
-  void focused(bool focused) {
+  void txtFocused(bool focused) {
     print('textbox focused? ' + focused.toString());
     setState(() {
       _textFieldInput = focused;
@@ -56,8 +60,8 @@ class _GuestNuxState extends State<GuestNux> {
                   AuxTextField(
                     label: 'enter a nickname',
                     controller: nicknameController,
-                    onSubmitted: submitted,
-                    onFocusChange: focused,
+                    onSubmitted: txtSubmitted,
+                    onFocusChange: txtFocused,
                   ),
                   Visibility(visible: !_textFieldInput, child: 
                     Padding(
@@ -65,12 +69,13 @@ class _GuestNuxState extends State<GuestNux> {
                       child: Text('or', style: auxAccentButton)
                     ),
                   ),
-                  Visibility(visible: !_textFieldInput, child: 
+                  Visibility(visible: true, child: 
                     ButtonTheme(
                       minWidth: double.infinity,
                       child: IconBarButton(
                           icon: Image.asset('assets/spotify_logo.png', height: 21, width: 21), 
-                          text: 'sign up with spotify'
+                          text: 'sign up with spotify',
+                          onPressed: () => widget.next(context),
                         ),
                     ),
                   ),

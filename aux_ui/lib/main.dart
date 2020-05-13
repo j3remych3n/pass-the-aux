@@ -3,10 +3,11 @@ import 'package:aux_ui/named_routing/routing_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 // import 'package:aux_ui/screens/guest_signup.dart';
-import 'package:aux_ui/screens/host_signup/host_queue_confirmation.dart';
-import 'package:aux_ui/screens/host_signup/host_invite.dart';
-import 'package:aux_ui/screens/host_signup/host_name_queue.dart';
-import 'package:aux_ui/screens/host_signup/host_spotify_link.dart';
+// import 'package:aux_ui/screens/host_signup/host_queue_confirmation.dart';
+// import 'package:aux_ui/screens/host_signup/host_invite.dart';
+// import 'package:aux_ui/screens/host_signup/host_name_queue.dart';
+// import 'package:aux_ui/screens/host_signup/host_spotify_link.dart';
+// import 'package:aux_ui/screens/alt_nux_intro.dart';
 import 'package:aux_ui/named_routing/router.dart' as router;
 
 
@@ -19,7 +20,7 @@ class AuxApp extends StatelessWidget {
     return MaterialApp(
       title: 'aux',
       onGenerateRoute: router.generateRoute,
-      initialRoute: HostNameQueueRoute,
+      initialRoute: NuxIntroRoute,
       theme: ThemeData(
         primaryColor: auxPrimary,
         accentColor: auxAccent,

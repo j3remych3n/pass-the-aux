@@ -1,4 +1,5 @@
 
+import 'package:aux_ui/widgets/sequential_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
@@ -6,11 +7,12 @@ import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 
-class JoinQueue extends StatefulWidget {
-  _JoinQueueState createState() => _JoinQueueState();
+class GuestJoinQueue extends SequentialWidget {
+  const GuestJoinQueue({Key key, String nextPage}) : super(key: key, nextPage: nextPage);
+  _GuestJoinQueueState createState() => _GuestJoinQueueState();
 }
 
-class _JoinQueueState extends State<JoinQueue> {
+class _GuestJoinQueueState extends State<GuestJoinQueue> {
   TextEditingController formController;
   bool _textFieldInput = false;
 
@@ -26,11 +28,11 @@ class _JoinQueueState extends State<JoinQueue> {
     super.dispose();
   }
 
-  void submitted(String str) {
+  void txtSubmitted(String str) {
     print('submitted ' + str);
   }
 
-  void focused(bool focused) {
+  void txtFocused(bool focused) {
     print('textbox focused? ' + focused.toString());
     setState(() {
       _textFieldInput = focused;
@@ -56,8 +58,8 @@ class _JoinQueueState extends State<JoinQueue> {
                   AuxTextField(
                     label: 'enter a secret code / link',
                     controller: formController,
-                    onSubmitted: submitted,
-                    onFocusChange: focused,
+                    onSubmitted: txtSubmitted,
+                    onFocusChange: txtFocused,
                   ),
                   Visibility(visible: !_textFieldInput, child: 
                     Padding(
@@ -71,6 +73,7 @@ class _JoinQueueState extends State<JoinQueue> {
                       child: IconBarButton(
                         icon: Icon( Icons.camera_alt, color:auxPrimary, size: 26.0, semanticLabel: "Short text input"),
                         text: 'scan qr code',
+                        onPressed: () => widget.next(context),
                       ),
                     ),
                   ),
