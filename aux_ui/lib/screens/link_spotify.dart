@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 import 'package:aux_ui/named_routing/routing_constants.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
 
 class LinkSpotify extends SequentialWidget {
   const LinkSpotify({Key key, String nextPage}) : super(key: key, nextPage: nextPage);

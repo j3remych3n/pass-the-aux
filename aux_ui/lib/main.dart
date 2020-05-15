@@ -9,9 +9,23 @@ import 'package:aux_ui/theme/aux_theme.dart';
 // import 'package:aux_ui/screens/host_signup/host_spotify_link.dart';
 // import 'package:aux_ui/screens/alt_nux_intro.dart';
 import 'package:aux_ui/named_routing/router.dart' as router;
+import 'package:spotify_sdk/spotify_sdk.dart';
+import 'dart:async';
 
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:spotify_sdk/models/crossfade_state.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
+import 'package:spotify_sdk/models/player_state.dart';
+import 'package:spotify_sdk/models/player_context.dart';
+import 'package:spotify_sdk/models/connection_status.dart';
+import 'package:spotify_sdk/models/image_uri.dart';
+import 'package:logger/logger.dart';
 
-void main() => runApp(AuxApp());
+Future<void> main() async {
+  await DotEnv().load('.env');
+  runApp(AuxApp());
+}
 
 class AuxApp extends StatelessWidget {
   // This widget is the root of your application.
