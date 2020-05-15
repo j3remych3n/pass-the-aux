@@ -7,7 +7,12 @@ import 'package:aux_ui/widgets/buttons/confirmation_nav_button.dart';
 
 class HostInvite extends SequentialWidget {
   final String queueName;
-  const HostInvite({Key key, String nextPage, this.queueName}) : super(key: key, nextPage: nextPage);
+  const HostInvite(
+    {
+      Key key, 
+      String nextPage, 
+      String backPage, 
+      this.queueName}) : super(key: key, nextPage: nextPage, backPage: backPage);
   _HostInviteState createState() => _HostInviteState(queueName);
 }
 

@@ -31,7 +31,7 @@ class _GuestSignupState extends State<GuestSignup> {
   }
 
   void txtSubmitted(String str) {
-    Navigator.pushNamed(context, GuestJoinQueueRoute);
+    Navigator.pushNamed(context, JoinQueueRoute);
   }
 
   void txtFocused(bool focused) {
