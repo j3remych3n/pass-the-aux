@@ -23,18 +23,11 @@ class _GuestJoinQueueState extends State<GuestJoinQueue> {
 
   @override
   void initState() {
-    formController = TextEditingController();
-    
-    // dummy
+    formController = TextEditingController();    
     secretLinkInput = AuxTextField(
       label: secretLinkLabel,
       controller: formController,
       onFocusChange: txtFocused,
-    );
-
-    dummyInput = AuxTextField(
-      label: secretLinkLabel,
-      controller: formController,
     );
 
     super.initState();
@@ -61,16 +54,6 @@ class _GuestJoinQueueState extends State<GuestJoinQueue> {
     });
   }
 
-  Widget textFieldOverlay(BuildContext context) {
-    return 
-      NuxContainer(bottomWidget: Spacer(), topWidget: 
-        Hero(
-          child: secretLinkInput, 
-          tag: secretLinkLabel
-        )
-      );
-  }
-
   @override
   Widget build(BuildContext context) {
     return 
@@ -86,13 +69,7 @@ class _GuestJoinQueueState extends State<GuestJoinQueue> {
             alignment: Alignment.topCenter,
               child: Column(
                 children: <Widget>[
-                  Hero(
-                    tag: secretLinkLabel,
-                    child: GestureDetector( 
-                      onTap: () => Navigator.push(context, MaterialPageRoute<void>(builder: textFieldOverlay)),
-                      child: dummyInput,
-                  )
-                  ),
+                  secretLinkInput,
                   Padding(
                     padding: EdgeInsets.all(20),
                     child: Text('or', style: auxAccentButton)
