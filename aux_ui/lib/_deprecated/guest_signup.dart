@@ -3,7 +3,7 @@ import 'package:aux_ui/widgets/sequential_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
-import 'package:aux_ui/widgets/nux_container.dart';
+import 'package:aux_ui/widgets/layout/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 import 'package:aux_ui/named_routing/routing_constants.dart';
