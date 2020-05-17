@@ -4,16 +4,15 @@ import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
-import 'package:aux_ui/named_routing/routing_constants.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:spotify_sdk/models/crossfade_state.dart';
-import 'package:spotify_sdk/spotify_sdk.dart';
-import 'package:spotify_sdk/models/player_state.dart';
-import 'package:spotify_sdk/models/player_context.dart';
-import 'package:spotify_sdk/models/connection_status.dart';
-import 'package:spotify_sdk/models/image_uri.dart';
+//import 'package:spotify_sdk/models/crossfade_state.dart';
+//import 'package:spotify_sdk/spotify_sdk.dart';
+//import 'package:spotify_sdk/models/player_state.dart';
+//import 'package:spotify_sdk/models/player_context.dart';
+//import 'package:spotify_sdk/models/connection_status.dart';
+//import 'package:spotify_sdk/models/image_uri.dart';
 import 'package:logger/logger.dart';
 import 'dart:async';
 
@@ -30,17 +29,17 @@ class _LinkSpotifyState extends State<LinkSpotify> {
   Widget _accountSetupText;
   Widget _spotifyLink;
   final Logger _logger = Logger();
+  var _authToken;
+  bool _connected;
 
   Future<void> connectToSpotifyRemote() async {
-    print("HERE!!!!");
-    print(DotEnv().env['CLIENT_ID']);
     try {
       var result = await SpotifySdk.connectToSpotifyRemote(
           clientId: DotEnv().env['CLIENT_ID'],
           redirectUrl: DotEnv().env['REDIRECT_URL']);
-      print("===RESULT===");
-      print(result);
-      print("===RESULT===");
+      setState(() {
+        _connected = result;
+      });
     } on PlatformException catch (e) {
       setStatus(e.code, message: e.message);
     } on MissingPluginException {
@@ -53,7 +52,9 @@ class _LinkSpotifyState extends State<LinkSpotify> {
       var authenticationToken = await SpotifySdk.getAuthenticationToken(
           clientId: DotEnv().env['CLIENT_ID'],
           redirectUrl: DotEnv().env['REDIRECT_URL']);
-      setStatus("Got a token: $authenticationToken");
+      setState(() {
+        _authToken = authenticationToken;
+      });
     } on PlatformException catch (e) {
       setStatus(e.code, message: e.message);
     } on MissingPluginException {
@@ -66,10 +67,10 @@ class _LinkSpotifyState extends State<LinkSpotify> {
     _logger.i("$code$text");
   }
 
-  void login() {
-    connectToSpotifyRemote();
-    getAuthenticationToken();
-    //widget.next(context); //TODO: only next if successful login
+  login() async {
+    await connectToSpotifyRemote();
+    await getAuthenticationToken();
+    if (_connected) widget.next(context); //TODO: subscription connection vs remote connection?
   }
 
   void _initializeWidgets() {
@@ -118,7 +119,7 @@ class _LinkSpotifyState extends State<LinkSpotify> {
         builder: (context, snapshot) {
         bool _connected = false;
         if (snapshot.data != null) {
-          _connected = snapshot.data.connected;
+          _connected = snapshot.data.connected; // TODO: figure out what to do with this/can remove?
         }
       return NuxContainer(
           topFlex: 6,
