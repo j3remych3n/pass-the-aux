@@ -13,7 +13,7 @@ class HostInvite extends SequentialWidget {
       String nextPage, 
       String backPage, 
       this.queueName}) : super(key: key, nextPage: nextPage, backPage: backPage);
-  _HostInviteState createState() => _HostInviteState(queueName);
+  _HostInviteState createState() => _HostInviteState();
 }
 
 class _HostInviteState extends State<HostInvite> {
@@ -22,9 +22,6 @@ class _HostInviteState extends State<HostInvite> {
   String _bitlyURL;
   String _qrAssetLink;
   bool _initialized = false;
-  final String queueName;
-
-  _HostInviteState(this.queueName);
 
   void _createBitlyLink() {
     _bitlyURL = "bit.ly/2VqnC3B";

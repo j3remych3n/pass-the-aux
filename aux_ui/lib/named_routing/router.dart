@@ -4,6 +4,7 @@ import 'package:aux_ui/screens/link_spotify.dart';
 import 'package:aux_ui/screens/join_queue/join_queue.dart';
 import 'package:aux_ui/screens/join_queue/join_queue_confirmation.dart';
 import 'package:aux_ui/screens/nux_intro.dart';
+import 'package:aux_ui/screens/tester.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -36,6 +37,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case NuxIntroRoute:
       return MaterialPageRoute(builder: (context) => NuxIntro());
+
+    case TesterRoute:
+      return MaterialPageRoute(builder: (context) => Tester());
     
     default:
       return MaterialPageRoute(builder: (context) => NuxIntro());
