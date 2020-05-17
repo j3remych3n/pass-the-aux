@@ -16,7 +16,6 @@ class GuestJoinQueue extends SequentialWidget {
 class _GuestJoinQueueState extends State<GuestJoinQueue> {
   TextEditingController formController;
   AuxTextField secretLinkInput;
-  AuxTextField dummyInput;
   bool _textfieldInput = false;
 
   final String secretLinkLabel = 'enter a secret code / link';
@@ -25,16 +24,10 @@ class _GuestJoinQueueState extends State<GuestJoinQueue> {
   void initState() {
     formController = TextEditingController();
     
-    // dummy
     secretLinkInput = AuxTextField(
       label: secretLinkLabel,
       controller: formController,
       onFocusChange: txtFocused,
-    );
-
-    dummyInput = AuxTextField(
-      label: secretLinkLabel,
-      controller: formController,
     );
 
     super.initState();
@@ -61,21 +54,12 @@ class _GuestJoinQueueState extends State<GuestJoinQueue> {
     });
   }
 
-  Widget textFieldOverlay(BuildContext context) {
-    return 
-      NuxContainer(bottomWidget: Spacer(), topWidget: 
-        Hero(
-          child: secretLinkInput, 
-          tag: secretLinkLabel
-        )
-      );
-  }
-
   @override
   Widget build(BuildContext context) {
     return 
       NuxContainer(
         title: 'aux', 
+        topFlex: 3,
         topWidget: 
           Align(
             alignment: Alignment.bottomLeft,
@@ -86,26 +70,10 @@ class _GuestJoinQueueState extends State<GuestJoinQueue> {
             alignment: Alignment.topCenter,
               child: Column(
                 children: <Widget>[
-                  Hero(
-                    tag: secretLinkLabel,
-                    child: GestureDetector( 
-                      onTap: () => Navigator.push(context, MaterialPageRoute<void>(builder: textFieldOverlay)),
-                      child: dummyInput,
-                  )
-                  ),
+                  secretLinkInput,
                   Padding(
                     padding: EdgeInsets.all(20),
                     child: Text('or', style: auxAccentButton)
-                  ),
-                  Visibility(visible: !_textfieldInput, child:   
-                    ButtonTheme(
-                      minWidth: double.infinity,
-                      child: IconBarButton(
-                        icon: Icon( Icons.camera_alt, color:auxPrimary, size: 26.0, semanticLabel: "Short text input"),
-                        text: 'scan qr code',
-                        onPressed: () => widget.next(context),
-                      ),
-                    ),
                   ),
                 ],
               )
