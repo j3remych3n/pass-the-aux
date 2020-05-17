@@ -2,7 +2,7 @@ import 'package:aux_ui/widgets/sequential_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
-import 'package:aux_ui/widgets/nux_container.dart';
+import 'package:aux_ui/widgets/layout/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/confirmation_nav_button.dart';
 
 class JoinQueueConfirmation extends SequentialWidget {
