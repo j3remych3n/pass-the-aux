@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
-import 'package:aux_ui/widgets/aux_card.dart';
+import 'package:aux_ui/widgets/layout/aux_card.dart';
 
 class NuxContainer extends StatelessWidget {
   final String title;
