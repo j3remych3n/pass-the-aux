@@ -5,16 +5,16 @@ import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/confirmation_nav_button.dart';
 
-class HostQueueConfirmation extends SequentialWidget {
-  const HostQueueConfirmation({
+class JoinQueueConfirmation extends SequentialWidget {
+  const JoinQueueConfirmation({
       Key key, 
       String nextPage, 
       String backPage
     }) : super(key: key, nextPage: nextPage, backPage: backPage);
-  _HostQueueConfirmationState createState() => _HostQueueConfirmationState();
+  _JoinQueueConfirmationState createState() => _JoinQueueConfirmationState();
 }
 
-class _HostQueueConfirmationState extends State<HostQueueConfirmation> {
+class _JoinQueueConfirmationState extends State<JoinQueueConfirmation> {
   bool _initialized = false;
   Widget _confirmationText;
   Widget _queueCreateConfirmation;

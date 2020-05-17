@@ -6,12 +6,12 @@ import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 import 'package:aux_ui/named_routing/routing_constants.dart';
 
-class HostSpotifyLink extends SequentialWidget {
-  const HostSpotifyLink({Key key, String nextPage}) : super(key: key, nextPage: nextPage);
-  _HostSpotifyLinkState createState() => _HostSpotifyLinkState();
+class LinkSpotify extends SequentialWidget {
+  const LinkSpotify({Key key, String nextPage}) : super(key: key, nextPage: nextPage);
+  _LinkSpotifyState createState() => _LinkSpotifyState();
 }
 
-class _HostSpotifyLinkState extends State<HostSpotifyLink> {
+class _LinkSpotifyState extends State<LinkSpotify> {
   bool _initialized = false;
   Widget _accountSetupText;
   Widget _spotifyLink;

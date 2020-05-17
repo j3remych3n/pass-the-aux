@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
+// import 'package:aux_ui/widgets/nux_overlay.dart';
 
 class GuestJoinQueue extends SequentialWidget {
   const GuestJoinQueue({Key key, String nextPage}) : super(key: key, nextPage: nextPage);
@@ -14,12 +15,26 @@ class GuestJoinQueue extends SequentialWidget {
 
 class _GuestJoinQueueState extends State<GuestJoinQueue> {
   TextEditingController formController;
-  bool _textFieldInput = false;
+  AuxTextField secretLinkInput;
+  AuxTextField dummyInput;
+  bool _textfieldInput = false;
+
+  final String secretLinkLabel = 'enter a secret code / link';
 
   @override
   void initState() {
-    formController = TextEditingController();
+    formController = TextEditingController();    
+    secretLinkInput = AuxTextField(
+      label: secretLinkLabel,
+      controller: formController,
+      onFocusChange: txtFocused,
+    );
+
     super.initState();
+  }
+
+  void closeOverlay(BuildContext context) {
+    Navigator.pop(context);
   }
 
   @override
@@ -35,7 +50,7 @@ class _GuestJoinQueueState extends State<GuestJoinQueue> {
   void txtFocused(bool focused) {
     print('textbox focused? ' + focused.toString());
     setState(() {
-      _textFieldInput = focused;
+      _textfieldInput = focused;
     });
   }
 
@@ -47,7 +62,6 @@ class _GuestJoinQueueState extends State<GuestJoinQueue> {
         topWidget: 
           Align(
             alignment: Alignment.bottomLeft,
-            // child: Text("first,\nlet's get a name!", style: auxDisp3),
             child: Text("join\nan aux queue", style: auxDisp3),
           ),
         bottomWidget:  
@@ -55,20 +69,13 @@ class _GuestJoinQueueState extends State<GuestJoinQueue> {
             alignment: Alignment.topCenter,
               child: Column(
                 children: <Widget>[
-                  AuxTextField(
-                    label: 'enter a secret code / link',
-                    controller: formController,
-                    onSubmitted: txtSubmitted,
-                    onFocusChange: txtFocused,
+                  secretLinkInput,
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text('or', style: auxAccentButton)
                   ),
-                  Visibility(visible: !_textFieldInput, child: 
-                    Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Text('or', style: auxAccentButton)
-                    ),
-                  ),
-                  Visibility(visible: !_textFieldInput, child: 
-                      ButtonTheme(
+                  Visibility(visible: !_textfieldInput, child:   
+                    ButtonTheme(
                       minWidth: double.infinity,
                       child: IconBarButton(
                         icon: Icon( Icons.camera_alt, color:auxPrimary, size: 26.0, semanticLabel: "Short text input"),
