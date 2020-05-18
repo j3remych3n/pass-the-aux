@@ -5,14 +5,16 @@ import 'package:aux_ui/screens/join_queue/join_queue.dart';
 import 'package:aux_ui/screens/join_queue/join_queue_confirmation.dart';
 import 'package:aux_ui/screens/nux_intro.dart';
 import 'package:aux_ui/screens/tester.dart';
+import 'package:aux_ui/screens/main/main_queue.dart';
 import 'package:flutter/material.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   Object args = settings.arguments;
   // TODO: confirm where we replace the route and where we push/pop, decide where to have default null next/back
   switch (settings.name) {
-    case AuxHomeRoute:
-      return MaterialPageRoute(builder: (context) => NuxIntro());
+  
+    case MainQueueRoute:
+      return MaterialPageRoute(builder: (context) => MainQueue());
     
     case LinkSpotifyRoute:
       if (args.toString() == 'host') {
@@ -23,9 +25,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case HostInviteRoute:
       String queueName = settings.arguments;
       return MaterialPageRoute(builder: (context) => HostInvite(
-        queueName: queueName, 
-        nextPage: AuxHomeRoute,
-        backPage: AuxHomeRoute,
+          queueName: queueName, 
+          nextPage: MainQueueRoute,
+          backPage: NuxIntroRoute,
         )
       );
     
@@ -33,7 +35,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => GuestJoinQueue(nextPage: JoinQueueConfirmationRoute));
 
     case JoinQueueConfirmationRoute:
-      return MaterialPageRoute(builder: (context) => JoinQueueConfirmation(backPage: JoinQueueRoute));    
+      return MaterialPageRoute(builder: (context) => JoinQueueConfirmation(
+        nextPage: MainQueueRoute,
+        backPage: JoinQueueRoute,
+        )
+      );    
 
     case NuxIntroRoute:
       return MaterialPageRoute(builder: (context) => NuxIntro());
