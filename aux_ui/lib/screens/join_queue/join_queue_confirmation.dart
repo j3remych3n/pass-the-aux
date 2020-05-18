@@ -37,9 +37,7 @@ class _JoinQueueConfirmationState extends State<JoinQueueConfirmation> {
             child: ConfirmationNavButton(
                 height: 32,
                 width: SizeConfig.screenWidth * 3 / 5,
-                onPressed: () {
-                  // TODO: add next page
-                },
+                onPressed: () => widget.next(context),
                 color: auxAccent,
                 borderColor: auxAccent,
                 text: "join",
