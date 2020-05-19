@@ -4,9 +4,12 @@ import 'package:aux_ui/screens/link_spotify.dart';
 import 'package:aux_ui/screens/join_queue/join_queue.dart';
 import 'package:aux_ui/screens/join_queue/join_queue_confirmation.dart';
 import 'package:aux_ui/screens/nux_intro.dart';
+import 'package:aux_ui/screens/session_manager.dart';
 import 'package:aux_ui/screens/tester.dart';
 import 'package:aux_ui/screens/main/main_queue.dart';
 import 'package:flutter/material.dart';
+
+var sessionManager = SessionManager();
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   Object args = settings.arguments;
@@ -18,9 +21,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     
     case LinkSpotifyRoute:
       if (args.toString() == 'host') {
-        return MaterialPageRoute(builder: (context) => LinkSpotify(nextPage: HostInviteRoute));
+        return MaterialPageRoute(builder: (context) => LinkSpotify(nextPage: HostInviteRoute, sessionManager: sessionManager));
       }
-      return MaterialPageRoute(builder: (context) => LinkSpotify(nextPage: JoinQueueRoute));
+      return MaterialPageRoute(builder: (context) => LinkSpotify(nextPage: JoinQueueRoute, sessionManager: sessionManager));
     
     case HostInviteRoute:
       String queueName = settings.arguments;
