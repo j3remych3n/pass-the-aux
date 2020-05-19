@@ -4,7 +4,7 @@ import 'package:aux_ui/screens/link_spotify.dart';
 import 'package:aux_ui/screens/join_queue/join_queue.dart';
 import 'package:aux_ui/screens/join_queue/join_queue_confirmation.dart';
 import 'package:aux_ui/screens/nux_intro.dart';
-import 'package:aux_ui/screens/session_manager.dart';
+import 'package:aux_ui/generic_classes/session_manager.dart';
 import 'package:aux_ui/screens/tester.dart';
 import 'package:aux_ui/screens/main/main_queue.dart';
 import 'package:flutter/material.dart';
