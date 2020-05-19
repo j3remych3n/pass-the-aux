@@ -66,19 +66,24 @@ class _LinkSpotifyState extends State<LinkSpotify> {
     SizeConfig().init(context);
     _initializeWidgets();
 
-    return StreamBuilder(
-        stream: SpotifySdk.subscribeConnectionStatus(),
-        builder: (context, snapshot) {
+//    return StreamBuilder(
+//        stream: SpotifySdk.subscribeConnectionStatus(),
+//        builder: (context, snapshot) {
 //          bool _connected = false;
 //          if (snapshot.data != null) {
 //            _connected = snapshot.data
 //                .connected; // TODO: figure out what to do with this/can remove streambuilder?
 //          }
-          return NuxContainer(
-              topFlex: 6,
-              title: 'aux',
-              topWidget: _accountSetupText,
-              bottomWidget: _spotifyLink);
-        });
+//          return NuxContainer(
+//              topFlex: 6,
+//              title: 'aux',
+//              topWidget: _accountSetupText,
+//              bottomWidget: _spotifyLink);
+//        });
+    return NuxContainer(
+        topFlex: 6,
+        title: 'aux',
+        topWidget: _accountSetupText,
+        bottomWidget: _spotifyLink);
   }
 }
