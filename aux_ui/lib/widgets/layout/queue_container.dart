@@ -20,7 +20,6 @@ class QueueContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return AuxCard(
       borderColor: auxAccent,
       padding: 15.0,

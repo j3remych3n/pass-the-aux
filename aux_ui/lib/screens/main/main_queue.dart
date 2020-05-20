@@ -1,3 +1,4 @@
+import 'package:aux_ui/widgets/layout/song_countdown.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
@@ -8,37 +9,40 @@ class MainQueue extends StatefulWidget {
 }
 
 class _MainQueueState extends State<MainQueue> {
-  List<String> songs = [];
-  List<String> artists = [];
-  List<String> albumCoverLinks = [];
+  List<String> yourSongs = [];
+  List<String> yourArtists = [];
+  List<String> yourAlbumCoverLinks = [];
 
   @override
   void initState() {
     super.initState();
-    _initSongList();
+    _initYourSongList();
   }
 
-  void _initSongList() {
-    _getSongs();
-    _getArtists();
-    _getAlbumCoverLinks();
+  void _initYourSongList() {
+    _getYourSongs();
+    _getYourArtists();
+    _getYourAlbumCoverLinks();
   }
 
-  void _getSongs() { // TODO: fetch for real
+  void _getYourSongs() {
+    // TODO: fetch for real
     setState(() {
-      songs = List.filled(20, "Tommy's Party");
+      yourSongs = List.filled(20, "Tommy's Party");
     });
   }
 
-  void _getArtists() { // TODO: fetch for real
+  void _getYourArtists() {
+    // TODO: fetch for real
     setState(() {
-      artists = List.filled(20, "Peach Pit");
+      yourArtists = List.filled(20, "Peach Pit");
     });
   }
 
-  void _getAlbumCoverLinks() { // TODO: fetch for real
+  void _getYourAlbumCoverLinks() {
+    // TODO: fetch for real
     setState(() {
-      albumCoverLinks = List.filled(20, "assets/album_cover_example.jpg");
+      yourAlbumCoverLinks = List.filled(20, "assets/album_cover_example.jpg");
     });
   }
 
@@ -46,9 +50,8 @@ class _MainQueueState extends State<MainQueue> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Material(
-      type: MaterialType.transparency,
-      child:
-        Container(
+        type: MaterialType.transparency,
+        child: Container(
           padding: SizeConfig.notchPadding,
           color: auxPrimary,
           child: Padding(
@@ -56,25 +59,22 @@ class _MainQueueState extends State<MainQueue> {
             child: Column(
               children: <Widget>[
                 Container(
-                  padding: EdgeInsets.only(left:12, right:12, top:42, bottom: 8),
-                  child: 
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Text('too queue for u', style: auxDisp2)
-                    )
-                ),
+                    padding: EdgeInsets.only(
+                        left: 12, right: 12, top: 42, bottom: 8),
+                    child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Text('too queue for u', style: auxDisp2))),
                 QueueContainer(
                   title: 'your songs',
                   child: SongList(
-                      songs: songs,
-                      artists: artists,
-                      albumCoverLinks: albumCoverLinks),
-                  titleWidget: Text('title widget'),
+                      songs: yourSongs,
+                      artists: yourArtists,
+                      albumCoverLinks: yourAlbumCoverLinks),
+                  titleWidget: SongCountdown(),
                 ),
               ],
             ),
-        ),
-      )
-    );
+          ),
+        ));
   }
 }
