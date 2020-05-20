@@ -107,13 +107,23 @@ class _MainQueueState extends State<MainQueue> {
     );
   }
 
+  int getNumInParty() { // TODO: implement
+    return 12;
+  }
+
+  String getHost() { // TODO: implement
+    return "Diane";
+  }
+
   Widget _getHeaderChip(IconData iconName, String text, Color color) {
     return Container(
-      padding: EdgeInsets.only(right: 20), // TODO: scale or finalize
+      padding: EdgeInsets.only(right: 16), // TODO: scale or finalize
         child: Row(
           children: <Widget>[
             Icon(iconName, color: color, size: 10),
-            Text(text, style: auxBody1)
+            Padding(
+              padding: EdgeInsets.only(left: 1),
+                child: Text(text, style: auxBody1))
       ],
     ));
   }
@@ -128,8 +138,8 @@ class _MainQueueState extends State<MainQueue> {
               child: Row(
             children: <Widget>[
               _getHeaderChip(Icons.fiber_manual_record, "LIVE", Colors.red),
-              _getHeaderChip(Icons.group, "people in group", auxAccent),
-              _getHeaderChip(Icons.person_outline, "hosted by Diane", auxAccent)
+              _getHeaderChip(Icons.group, "${getNumInParty()} people in group", auxAccent),
+              _getHeaderChip(Icons.person_outline, "hosted by ${getHost()}", auxAccent)
             ],
           ))
         ]);
