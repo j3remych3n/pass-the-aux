@@ -39,7 +39,7 @@ class _MainQueueState extends State<MainQueue> {
     });
   }
 
-  Widget getCurrPlaying() {
+  Widget _getCurrPlaying() {
     // TODO actually fetch and animate, possibly pull out into another component
     Widget right = QueueItemAction(onPressed: () {}, icons: [
       Icon(
@@ -77,25 +77,22 @@ class _MainQueueState extends State<MainQueue> {
         ));
   }
 
-  Widget getExpandQueue() {
+  Widget _getExpandQueue() {
     return ButtonTheme(
         height: SizeConfig.blockSizeVertical * 3,
         child: OutlineButton(
-            padding: EdgeInsets.only(
-                top: 5, bottom: 5, right: 7, left: 7),
+            padding: EdgeInsets.only(top: 5, bottom: 5, right: 7, left: 7),
             borderSide: BorderSide(color: auxAccent),
             onPressed: () {},
             color: Colors.transparent,
             child: Row(children: <Widget>[
               Icon(Icons.unfold_more,
-                  color: auxAccent,
-                  size: 10.0,
-                  semanticLabel: "expand queue"),
+                  color: auxAccent, size: 10.0, semanticLabel: "expand queue"),
               Text("view full queue", style: auxCaption)
             ])));
   }
 
-  Widget getSongUpNext() {
+  Widget _getSongUpNext() {
     Widget right = QueueItemAction(onPressed: () {}, icons: [
       Icon(Icons.more_vert,
           color: auxAccent,
@@ -108,6 +105,34 @@ class _MainQueueState extends State<MainQueue> {
       showContributor: true,
       rightPress: right,
     );
+  }
+
+  Widget _getHeaderChip(IconData iconName, String text, Color color) {
+    return Container(
+      padding: EdgeInsets.only(right: 20), // TODO: scale or finalize
+        child: Row(
+          children: <Widget>[
+            Icon(iconName, color: color, size: 10),
+            Text(text, style: auxBody1)
+      ],
+    ));
+  }
+
+  Widget _getHeader() {
+    return Column(children: <Widget>[
+          Align(
+              alignment: Alignment.bottomLeft,
+              child: Text('too queue for u', style: auxDisp2)),
+          Padding(
+            padding: EdgeInsets.only(top: 3), // TODO: scale or finalize
+              child: Row(
+            children: <Widget>[
+              _getHeaderChip(Icons.fiber_manual_record, "LIVE", Colors.red),
+              _getHeaderChip(Icons.group, "people in group", auxAccent),
+              _getHeaderChip(Icons.person_outline, "hosted by Diane", auxAccent)
+            ],
+          ))
+        ]);
   }
 
   @override
@@ -125,14 +150,12 @@ class _MainQueueState extends State<MainQueue> {
                 Container(
                     padding: EdgeInsets.only(
                         left: 12, right: 12, top: 42, bottom: 8),
-                    child: Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Text('too queue for u', style: auxDisp2))),
-                getCurrPlaying(),
+                    child: _getHeader()),
+                _getCurrPlaying(),
                 QueueContainer(
                     title: 'up next',
-                    child: getSongUpNext(),
-                    titleWidget: getExpandQueue()),
+                    child: _getSongUpNext(),
+                    titleWidget: _getExpandQueue()),
                 QueueContainer(
                   title: 'your songs',
                   child: SongList(songs: yourSongs, onPress: () {}),
