@@ -1,15 +1,14 @@
+import 'package:aux_ui/generic_classes/song.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
 import 'package:aux_ui/widgets/layout/queue_item.dart';
 import 'package:flutter/material.dart';
 
 class SongList extends StatefulWidget {
-  final List<String> songs;
-  final List<String> artists;
-  final List<String> albumCoverLinks;
+  final List<Song> songs;
   final Function onPress;
 
-  const SongList({Key key, this.songs, this.artists, this.albumCoverLinks, this.onPress}) : super(key: key);
+  const SongList({Key key, this.songs, this.onPress}) : super(key: key);
 
   _SongListState createState() => _SongListState();
 }
@@ -35,9 +34,9 @@ class _SongListState extends State<SongList> {
                   size: 16.0, // TODO: scale
                   semanticLabel: "aux item action",
                 )),
-            song: widget.songs[index],
-            artist: widget.artists[index],
-            albumCoverLink: widget.albumCoverLinks[index],
+            song: widget.songs[index].name,
+            artist: widget.songs[index].artist,
+            albumCoverLink: widget.songs[index].albumCoverLink,
           );
         }));
   }
