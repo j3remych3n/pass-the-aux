@@ -44,25 +44,23 @@ class _MainQueueState extends State<MainQueue> {
     });
   }
 
-//  Widget getSongUpNext() {
-//    Widget right = QueueItemAction(
-//      onPressed: () {},
-//      icon: Icon(
-//        Icons.radio_button_unchecked,
-//        color: auxAccent,
-//        size: 16.0, // TODO: scale
-//        semanticLabel: "aux item action",
-//      )
-//    );
-//
-//    return QueueItem(
-//      song: queueSongs[0],
-//      artist: queueArtists[0],
-//      albumCoverLink: queueAlbumCoverLinks[0],
-//      contributor: queueContributors[0],
-//      showContributor: true,
-//    );
-//  }
+  Widget getSongUpNext() {
+    Widget right = QueueItemAction(
+      onPressed: () {},
+      icon: Icon(
+        Icons.more_vert,
+        color: auxAccent,
+        size: 16.0, // TODO: scale
+        semanticLabel: "aux item action",
+      )
+    );
+
+    return QueueItem(
+      song: queueSongs[0],
+      showContributor: true,
+      rightPress: right,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,12 +80,11 @@ class _MainQueueState extends State<MainQueue> {
                     child: Align(
                         alignment: Alignment.bottomLeft,
                         child: Text('too queue for u', style: auxDisp2))),
-//                QueueContainer(
-//                  title: 'up next',
-//                  child: QueueItem(
-//
-//                  )
-//                ),
+                QueueContainer(
+                  title: 'up next',
+                  child: getSongUpNext(),
+                  titleWidget: Text("temp")
+                ),
                 QueueContainer(
                   title: 'your songs',
                   child: SongList(
