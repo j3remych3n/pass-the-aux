@@ -50,7 +50,7 @@ class _QueueItemState extends State<QueueItem> {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(3),
                       child: Image.asset(widget.albumCoverLink,
-                          width: 47, height: 47))),
+                          width: 47, height: 47))), //TODO: scale
               Expanded(child: Padding(
                   padding: EdgeInsets.only(left: 13), // TODO: scale
                   child: Column(

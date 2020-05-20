@@ -19,9 +19,11 @@ class _SongListState extends State<SongList> {
     SizeConfig().init(context);
     return Container(
       height: SizeConfig.safeBlockVertical*55, // TODO: finalize this
-        child: ListView.builder(
+        child: ListView.separated(
         shrinkWrap: true,
         itemCount: widget.songs.length,
+            separatorBuilder: (BuildContext context, int index) => Divider(thickness: 0,
+            height: 8, color: Colors.transparent),
         itemBuilder: (BuildContext context, int index) {
           return QueueItem(
             rightPress: QueueItemAction(
