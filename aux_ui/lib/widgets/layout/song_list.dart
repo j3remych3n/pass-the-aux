@@ -34,9 +34,7 @@ class _SongListState extends State<SongList> {
                   size: 16.0, // TODO: scale
                   semanticLabel: "aux item action",
                 )),
-            song: widget.songs[index].name,
-            artist: widget.songs[index].artist,
-            albumCoverLink: widget.songs[index].albumCoverLink,
+            song: widget.songs[index],
           );
         }));
   }

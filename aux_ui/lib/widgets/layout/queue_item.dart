@@ -1,21 +1,16 @@
+import 'package:aux_ui/generic_classes/song.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/material.dart';
 
 class QueueItem extends StatefulWidget {
   final Widget rightPress;
-  final String song;
-  final String artist;
-  final String albumCoverLink;
-  final String contributor;
+  final Song song;
   final bool showContributor;
 
   const QueueItem(
       {Key key,
       this.rightPress,
       this.song,
-      this.artist,
-      this.albumCoverLink,
-      this.contributor = "",
       this.showContributor = false})
       : super(key: key);
 
@@ -25,9 +20,9 @@ class QueueItem extends StatefulWidget {
 class _QueueItemState extends State<QueueItem> {
   String bottomText() {
     if (widget.showContributor) {
-      return widget.artist + " | added by " + widget.contributor;
+      return widget.song.artist + " | added by " + widget.song.contributor;
     } else {
-      return widget.artist;
+      return widget.song.artist;
     }
   }
 
@@ -49,14 +44,14 @@ class _QueueItemState extends State<QueueItem> {
                       borderRadius: BorderRadius.circular(3)),
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(3),
-                      child: Image.asset(widget.albumCoverLink,
+                      child: Image.asset(widget.song.albumCoverLink,
                           width: 47, height: 47))), //TODO: scale
               Expanded(child: Padding(
                   padding: EdgeInsets.only(left: 13), // TODO: scale
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(widget.song,
+                        Text(widget.song.name,
                             style: auxBody2, textAlign: TextAlign.left),
                         Text(bottomText(),
                             style: auxBody1, textAlign: TextAlign.left)
