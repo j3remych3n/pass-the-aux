@@ -12,37 +12,30 @@ class _MainQueueState extends State<MainQueue> {
   List<String> yourSongs = [];
   List<String> yourArtists = [];
   List<String> yourAlbumCoverLinks = [];
+  List<String> queueSongs = [];
+  List<String> queueArtists = [];
+  List<String> queueAlbumCoverLinks = [];
 
   @override
   void initState() {
     super.initState();
     _initYourSongList();
+    _initQueueSongList();
   }
 
-  void _initYourSongList() {
-    _getYourSongs();
-    _getYourArtists();
-    _getYourAlbumCoverLinks();
-  }
-
-  void _getYourSongs() {
-    // TODO: fetch for real
+  void _initYourSongList() { // TODO: implement
     setState(() {
       yourSongs = List.filled(20, "Tommy's Party");
-    });
-  }
-
-  void _getYourArtists() {
-    // TODO: fetch for real
-    setState(() {
       yourArtists = List.filled(20, "Peach Pit");
+      yourAlbumCoverLinks = List.filled(20, "assets/album_cover_example.jpg");
     });
   }
 
-  void _getYourAlbumCoverLinks() {
-    // TODO: fetch for real
+  void _initQueueSongList() { //TODO: implement
     setState(() {
-      yourAlbumCoverLinks = List.filled(20, "assets/album_cover_example.jpg");
+      queueSongs = List.filled(20, "Tommy's Party");
+      queueArtists = List.filled(20, "Peach Pit");
+      queueAlbumCoverLinks = List.filled(20, "assets/album_cover_example.jpg");
     });
   }
 
