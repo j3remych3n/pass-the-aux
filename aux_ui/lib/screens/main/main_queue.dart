@@ -1,3 +1,5 @@
+import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
+import 'package:aux_ui/widgets/layout/queue_item.dart';
 import 'package:aux_ui/widgets/layout/song_countdown.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
 import 'package:flutter/material.dart';
@@ -15,28 +17,46 @@ class _MainQueueState extends State<MainQueue> {
   List<String> queueSongs = [];
   List<String> queueArtists = [];
   List<String> queueAlbumCoverLinks = [];
+  List<String> queueContributors = [];
 
   @override
   void initState() {
     super.initState();
-    _initYourSongList();
-    _initQueueSongList();
+    _initSongList();
   }
 
-  void _initYourSongList() { // TODO: implement
+  void _initSongList() { //TODO: implement
     setState(() {
+      queueSongs = List.filled(20, "Tommy's Party");
+      queueArtists = List.filled(20, "Peach Pit");
+      queueAlbumCoverLinks = List.filled(20, "assets/album_cover_example.jpg");
+      queueContributors = List.filled(20, "Diane");
+
+      // your songs would be a filter over queue for where contributor == you
       yourSongs = List.filled(20, "Tommy's Party");
       yourArtists = List.filled(20, "Peach Pit");
       yourAlbumCoverLinks = List.filled(20, "assets/album_cover_example.jpg");
     });
   }
 
-  void _initQueueSongList() { //TODO: implement
-    setState(() {
-      queueSongs = List.filled(20, "Tommy's Party");
-      queueArtists = List.filled(20, "Peach Pit");
-      queueAlbumCoverLinks = List.filled(20, "assets/album_cover_example.jpg");
-    });
+  Widget getSongUpNext() {
+    Widget right = QueueItemAction(
+      onPressed: () {},
+      icon: Icon(
+        Icons.radio_button_unchecked,
+        color: auxAccent,
+        size: 16.0, // TODO: scale
+        semanticLabel: "aux item action",
+      )
+    );
+
+    return QueueItem(
+      song: queueSongs[0],
+      artist: queueArtists[0],
+      albumCoverLink: queueAlbumCoverLinks[0],
+      contributor: queueContributors[0],
+      showContributor: true,
+    );
   }
 
   @override
@@ -57,12 +77,20 @@ class _MainQueueState extends State<MainQueue> {
                     child: Align(
                         alignment: Alignment.bottomLeft,
                         child: Text('too queue for u', style: auxDisp2))),
+//                QueueContainer(
+//                  title: 'up next',
+//                  child: QueueItem(
+//
+//                  )
+//                ),
                 QueueContainer(
                   title: 'your songs',
                   child: SongList(
                       songs: yourSongs,
                       artists: yourArtists,
-                      albumCoverLinks: yourAlbumCoverLinks),
+                      albumCoverLinks: yourAlbumCoverLinks,
+                    onPress: () {}
+                  ),
                   titleWidget: SongCountdown(),
                 ),
               ],

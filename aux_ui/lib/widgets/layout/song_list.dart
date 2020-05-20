@@ -7,8 +7,9 @@ class SongList extends StatefulWidget {
   final List<String> songs;
   final List<String> artists;
   final List<String> albumCoverLinks;
+  final Function onPress;
 
-  const SongList({Key key, this.songs, this.artists, this.albumCoverLinks}) : super(key: key);
+  const SongList({Key key, this.songs, this.artists, this.albumCoverLinks, this.onPress}) : super(key: key);
 
   _SongListState createState() => _SongListState();
 }
@@ -27,7 +28,7 @@ class _SongListState extends State<SongList> {
         itemBuilder: (BuildContext context, int index) {
           return QueueItem(
             rightPress: QueueItemAction(
-                onPressed: () {},
+                onPressed: widget.onPress,
                 icon: Icon(
                   Icons.radio_button_unchecked,
                   color: auxAccent,
