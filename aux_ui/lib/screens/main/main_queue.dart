@@ -1,4 +1,5 @@
 import 'package:aux_ui/generic_classes/song.dart';
+import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
 import 'package:aux_ui/widgets/layout/aux_card.dart';
 import 'package:aux_ui/widgets/layout/queue_item.dart';
@@ -45,13 +46,13 @@ class _MainQueueState extends State<MainQueue> {
         Icons.favorite_border,
         color: auxAccent,
         size: 16.0, // TODO: scale
-        semanticLabel: "aux item action",
+        semanticLabel: "original song",
       ),
       Icon(
         Icons.favorite,
         color: auxAccent,
         size: 16.0, // TODO: scale
-        semanticLabel: "aux item action",
+        semanticLabel: "liked song",
       )
     ]);
 
@@ -76,12 +77,30 @@ class _MainQueueState extends State<MainQueue> {
         ));
   }
 
+  Widget getExpandQueue() {
+    return ButtonTheme(
+        height: SizeConfig.blockSizeVertical * 3,
+        child: OutlineButton(
+            padding: EdgeInsets.only(
+                top: 5, bottom: 5, right: 7, left: 7),
+            borderSide: BorderSide(color: auxAccent),
+            onPressed: () {},
+            color: Colors.transparent,
+            child: Row(children: <Widget>[
+              Icon(Icons.unfold_more,
+                  color: auxAccent,
+                  size: 10.0,
+                  semanticLabel: "expand queue"),
+              Text("view full queue", style: auxCaption)
+            ])));
+  }
+
   Widget getSongUpNext() {
     Widget right = QueueItemAction(onPressed: () {}, icons: [
       Icon(Icons.more_vert,
           color: auxAccent,
           size: 20.0, // TODO: scale
-          semanticLabel: "aux item action")
+          semanticLabel: "get next song")
     ]);
 
     return QueueItem(
@@ -113,7 +132,7 @@ class _MainQueueState extends State<MainQueue> {
                 QueueContainer(
                     title: 'up next',
                     child: getSongUpNext(),
-                    titleWidget: Text("temp")),
+                    titleWidget: getExpandQueue()),
                 QueueContainer(
                   title: 'your songs',
                   child: SongList(songs: yourSongs, onPress: () {}),

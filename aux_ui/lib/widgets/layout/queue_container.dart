@@ -43,7 +43,7 @@ class QueueContainer extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: EdgeInsets.only(left: 5, right: 5, top: 15),
+            padding: EdgeInsets.only(left: 5, right: 5),
             child: this.child,
           )
         ],
