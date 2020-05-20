@@ -19,21 +19,28 @@ samples, guidance on mobile development, and a full API reference.
 
 This project comes with the Spotify SDK bundled. In order to get up and running, please follow the steps below:
 
-* Run flutter pub get in order to grab dependencies.
-* Open android/app under this project in Android Studio
-* Under the build.gradle file that specifies spotify_sdk, change the dependencies to read:
+* create .env file that looks like:
 
 ```
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    // -- spotify
-    implementation project(':spotify-auth-release-1.2.3')
-    implementation project(':spotify-app-remote-release-0.7.0')
-    implementation "com.google.code.gson:gson:2.8.5"
-    // -- events
-    implementation "com.github.stuhlmeier:kotlin-events:v2.0"
-}
+CLIENT_ID=[Spotify app client id]
+REDIRECT_URL=[Spotify app callback url]
 ```
+
+# * Run flutter pub get in order to grab dependencies.
+# * Open android/app under this project in Android Studio
+# * Under the build.gradle file that specifies spotify_sdk, change the dependencies to read:
+
+# ```
+# dependencies {
+#     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+#     // -- spotify
+#     implementation project(':spotify-auth-release-1.2.3')
+#     implementation project(':spotify-app-remote-release-0.7.0')
+#     implementation "com.google.code.gson:gson:2.8.5"
+#     // -- events
+#     implementation "com.github.stuhlmeier:kotlin-events:v2.0"
+# }
+# ```
 
 
 
