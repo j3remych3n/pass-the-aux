@@ -15,8 +15,8 @@ class QueueItem extends StatefulWidget {
       this.song,
       this.artist,
       this.albumCoverLink,
-      this.contributor,
-      this.showContributor})
+      this.contributor = "",
+      this.showContributor = false})
       : super(key: key);
 
   _QueueItemState createState() => _QueueItemState();
