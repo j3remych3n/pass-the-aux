@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/layout/nux_container.dart';
-import 'package:aux_ui/widgets/buttons/confirmation_nav_button.dart';
+import 'package:aux_ui/widgets/buttons/rounded_action_button.dart';
 
 class HostInvite extends SequentialWidget {
   final String queueName;
@@ -110,7 +110,7 @@ class _HostInviteState extends State<HostInvite> {
         _createQRCodeComponent(_qrAssetLink),
         Padding(
             padding: EdgeInsets.only(top: 10),
-            child: ConfirmationNavButton(
+            child: RoundedActionButton(
                 height: 40,
                 width: SizeConfig.screenWidth * 3 / 5,
                 onPressed: () => widget.nextReplace(context),

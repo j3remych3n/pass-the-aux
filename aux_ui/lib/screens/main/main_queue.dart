@@ -1,6 +1,7 @@
 import 'package:aux_ui/generic_classes/song.dart';
 import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
 import 'package:aux_ui/widgets/layout/aux_card.dart';
+import 'package:aux_ui/widgets/layout/playback_controls.dart';
 import 'package:aux_ui/widgets/layout/queue_item.dart';
 import 'package:aux_ui/widgets/layout/song_countdown.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
@@ -181,11 +182,12 @@ class _MainQueueState extends State<MainQueue> {
                     title: 'up next',
                     child: _songUpNext,
                     titleWidget: _expandQueue),
-                QueueContainer(
-                  title: 'your songs',
-                  child: SongList(songs: yourSongs, onPress: () {}),
-                  titleWidget: SongCountdown(),
-                ),
+                PlaybackControls(isHost: false)
+//                QueueContainer(
+//                  title: 'your songs',
+//                  child: SongList(songs: yourSongs, onPress: () {}),
+//                  titleWidget: SongCountdown(),
+//                ),
               ],
             ),
           ),
