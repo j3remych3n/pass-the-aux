@@ -18,6 +18,7 @@ environment:
 
 dependencies:
   page_transition: ^1.1.5
+  spotify_sdk: ^0.3.4
   flutter:
     sdk: flutter
 
