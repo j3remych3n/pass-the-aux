@@ -1,10 +1,14 @@
-
-  import 'package:aux_ui/routing/routing_constants.dart';
+import 'package:aux_ui/routing/routing_constants.dart';
+import 'package:aux_ui/routing/router.dart' as router;
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
-import 'package:aux_ui/routing/router.dart' as router;
+import 'dart:async';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() => runApp(AuxApp());
+Future<void> main() async {
+  await DotEnv().load('.env');
+  runApp(AuxApp());
+}
 
 class AuxApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -36,4 +40,4 @@ class AuxApp extends StatelessWidget {
 //      home: HostSpotifyLink(),
     );
   }
-} 
+}

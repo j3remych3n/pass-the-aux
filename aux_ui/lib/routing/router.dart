@@ -9,7 +9,7 @@ import 'package:aux_ui/screens/tester.dart';
 import 'package:aux_ui/screens/main/main_queue.dart';
 import 'package:flutter/material.dart';
 
-var spotifySession = SpotifySession();
+final SpotifySession spotifySession = SpotifySession();
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   Object args = settings.arguments;

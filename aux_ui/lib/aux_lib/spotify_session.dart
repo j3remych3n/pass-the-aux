@@ -1,16 +1,16 @@
 import 'package:flutter/services.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:logger/logger.dart';
+import 'dart:developer';
 
 class SpotifySession {
   var _authToken;
   var _connected;
-  final Logger _logger = Logger();
+  // final Logger _logger = Logger();
 
   void setStatus(String code, {String message = ""}) {
     var text = message.isEmpty ? "" : " : $message";
-    _logger.i("$code$text");
+    // _logger.i("$code$text");
   }
 
   Future<void> connectToSpotifyRemote() async {
@@ -28,10 +28,11 @@ class SpotifySession {
   }
 
   Future<void> getAuthenticationToken() async {
+    log(DotEnv().env['CLIENT_ID'].toString());
     try {
       var authenticationToken = await SpotifySdk.getAuthenticationToken(
-          clientId: DotEnv().env['CLIENT_ID'],
-          redirectUrl: DotEnv().env['REDIRECT_URL']);
+          clientId: DotEnv().env['CLIENT_ID'].toString(),
+          redirectUrl: DotEnv().env['REDIRECT_URL']).toString();
       _authToken = authenticationToken;
     } on PlatformException catch (e) {
       setStatus(e.code, message: e.message);
@@ -43,8 +44,8 @@ class SpotifySession {
   Future<bool> login() async {
     await connectToSpotifyRemote();
     await getAuthenticationToken();
-   setStatus("token is", message: _authToken);
-   setStatus("connected is", message: _connected.toString());
+//    setStatus("token is", message: _authToken);
+//    setStatus("connected is", message: _connected.toString());
     return _connected;
   }
 }
