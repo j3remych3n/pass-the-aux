@@ -40,9 +40,9 @@ class _PlaybackControlsState extends State<PlaybackControls> {
   }
 
   Widget _getRoundButton(IconData iconName, double iconSize, Function onPressed,
-      bool isTransparent) {
+      bool isTransparent, int flexVal) {
     return
-      FlatButton(
+      Expanded(flex: flexVal, child: FlatButton(
           onPressed: onPressed,
           color: isTransparent ? Colors.transparent : auxAccent,
           splashColor: auxLGrey,
@@ -50,40 +50,62 @@ class _PlaybackControlsState extends State<PlaybackControls> {
           shape: CircleBorder(),
           child: Icon(iconName,
               size: iconSize,
-              color: isTransparent ? auxAccent : auxPrimary));
+              color: isTransparent ? auxAccent : auxPrimary)));
+//    return FloatingActionButton(
+//      mini: true,
+//      shape: CircleBorder(),
+//      onPressed: onPressed,
+//      child: Icon(iconName,
+//          size: iconSize, color: isTransparent ? auxAccent : auxPrimary),
+//      backgroundColor: isTransparent ? Colors.transparent : auxAccent,
+//    );
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
+  Widget build(BuildContext context) { // TODO: scale everything
+    return
+        Container(
+          width: SizeConfig.screenWidth,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.bottomCenter,
+                  end: Alignment.topCenter,
+                  colors: [auxPrimary, auxPrimary, Colors.transparent],
+                  stops: [0, 0.60, 1],
+                )
+            ),
         child: Row(
-          children: <Widget>[
-            Expanded(
-                flex: 3,
-                child: _getRoundButton(Icons.person_add, 17, () {}, false)),
-            Expanded(
-                flex: 6,
-                child: Column(
-                  children: <Widget>[
-                    RoundedActionButton(
-                        height: 41,
-                        width: SizeConfig.screenWidth * 3 / 5, // TODO: scale
-                        onPressed: () {},
-                        text: "add a song"),
-                    Row(
+      children: <Widget>[
+        _getRoundButton(Icons.person_add, 17, () {}, false, 3),
+        Expanded(
+            flex: 6,
+            child: Column(
+              children: <Widget>[
+                RoundedActionButton(
+                    height: 41,
+                    width: SizeConfig.screenWidth * 1/2, // TODO: scale
+                    onPressed: () {},
+                    text: "add a song"),
+                Padding(
+//                    padding: EdgeInsets.only(left: 40, right: 40),
+                padding: EdgeInsets.all(0),
+                    child: Row(
                       children: <Widget>[
-                        Expanded(flex: 4, child: _getRoundButton(Icons.skip_previous, 21, () {}, true)),
-                        Expanded(flex: 4, child: _getStadiumButton(
-                            _pausePressed ? Icons.play_arrow : Icons.pause, 27, () {_playPause();}, true, 100, 54)),
-                        Expanded(flex: 4, child: _getRoundButton(Icons.skip_next, 21, () {}, true))
+                        _getRoundButton(Icons.skip_previous, 21, () {}, true, 4),
+                        Expanded(
+                            flex: 4,
+                            child: _getStadiumButton(
+                                _pausePressed ? Icons.play_arrow : Icons.pause,
+                                27, () {
+                              _playPause();
+                            }, true, 100, 54)),
+                        _getRoundButton(Icons.skip_next, 21, () {}, true, 4)
                       ],
-                    )
-                  ],
-                )),
-            Expanded(
-                flex: 3, child: _getRoundButton(Icons.settings, 17, () {}, false))
-          ],
-        )
-    );
+                    ))
+              ],
+            )),
+        _getRoundButton(Icons.settings, 17, () {}, false, 3)
+      ],
+    ));
   }
 }

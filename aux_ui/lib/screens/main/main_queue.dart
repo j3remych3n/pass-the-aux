@@ -45,8 +45,7 @@ class _MainQueueState extends State<MainQueue> {
   }
 
   void _initializeWidgets() {
-    if (_initialized)
-      return;
+    if (_initialized) return;
     _initialized = true;
     _setCurrPlaying();
     _setSongUpNext();
@@ -122,42 +121,46 @@ class _MainQueueState extends State<MainQueue> {
     );
   }
 
-  int getNumInParty() { // TODO: implement
+  int getNumInParty() {
+    // TODO: implement
     return 12;
   }
 
-  String getHost() { // TODO: implement
+  String getHost() {
+    // TODO: implement
     return "Diane";
   }
 
   Widget _getHeaderChip(IconData iconName, String text, Color color) {
     return Container(
-      padding: EdgeInsets.only(right: 16), // TODO: scale or finalize
+        padding: EdgeInsets.only(right: 16), // TODO: scale or finalize
         child: Row(
           children: <Widget>[
             Icon(iconName, color: color, size: 10),
             Padding(
-              padding: EdgeInsets.only(left: 1),
+                padding: EdgeInsets.only(left: 1),
                 child: Text(text, style: auxBody1))
-      ],
-    ));
+          ],
+        ));
   }
 
   void _setHeader() {
     _header = Column(children: <Widget>[
-          Align(
-              alignment: Alignment.bottomLeft,
-              child: Text('too queue for u', style: auxDisp2)),
-          Padding(
-            padding: EdgeInsets.only(top: 3), // TODO: scale or finalize
-              child: Row(
+      Align(
+          alignment: Alignment.bottomLeft,
+          child: Text('too queue for u', style: auxDisp2)),
+      Padding(
+          padding: EdgeInsets.only(top: 3), // TODO: scale or finalize
+          child: Row(
             children: <Widget>[
               _getHeaderChip(Icons.fiber_manual_record, "LIVE", Colors.red),
-              _getHeaderChip(Icons.group, "${getNumInParty()} people in group", auxAccent),
-              _getHeaderChip(Icons.person_outline, "hosted by ${getHost()}", auxAccent)
+              _getHeaderChip(
+                  Icons.group, "${getNumInParty()} people in group", auxAccent),
+              _getHeaderChip(
+                  Icons.person_outline, "hosted by ${getHost()}", auxAccent)
             ],
           ))
-        ]);
+    ]);
   }
 
   @override
@@ -167,30 +170,34 @@ class _MainQueueState extends State<MainQueue> {
     return Material(
         type: MaterialType.transparency,
         child: Container(
-          padding: SizeConfig.notchPadding,
-          color: auxPrimary,
-          child: Padding(
-            padding: EdgeInsets.all(2.0),
-            child: Column(
-              children: <Widget>[
-                Container(
-                    padding: EdgeInsets.only(
-                        left: 12, right: 12, top: 42, bottom: 8),
-                    child: _header),
-                _currPlaying,
-                QueueContainer(
-                    title: 'up next',
-                    child: _songUpNext,
-                    titleWidget: _expandQueue),
-                PlaybackControls(isHost: false)
-//                QueueContainer(
-//                  title: 'your songs',
-//                  child: SongList(songs: yourSongs, onPress: () {}),
-//                  titleWidget: SongCountdown(),
-//                ),
-              ],
-            ),
-          ),
-        ));
+            padding: SizeConfig.notchPadding,
+            color: auxPrimary,
+            child: Stack(children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(2.0),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                        padding: EdgeInsets.only(
+                            left: 12, right: 12, top: 42, bottom: 8),
+                        child: _header),
+                    _currPlaying,
+                    QueueContainer(
+                        title: 'up next',
+                        child: _songUpNext,
+                        titleWidget: _expandQueue),
+                    QueueContainer(
+                      title: 'your songs',
+                      child: SongList(songs: yourSongs, onPress: () {}),
+                      titleWidget: SongCountdown(),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                  bottom: 0,
+                  child: PlaybackControls(isHost: false,))
+            ],
+            )));
   }
 }

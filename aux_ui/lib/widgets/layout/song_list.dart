@@ -18,7 +18,7 @@ class _SongListState extends State<SongList> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
-        height: SizeConfig.safeBlockVertical * 55, // TODO: finalize this
+        height: SizeConfig.safeBlockVertical * 30, // TODO: finalize this
         child: ListView.separated(
             shrinkWrap: true,
             itemCount: widget.songs.length,
