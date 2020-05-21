@@ -43,8 +43,8 @@ class SpotifySession {
   Future<bool> login() async {
     await connectToSpotifyRemote();
     await getAuthenticationToken();
-//    setStatus("token is", message: _authToken);
-//    setStatus("connected is", message: _connected.toString());
+   setStatus("token is", message: _authToken);
+   setStatus("connected is", message: _connected.toString());
     return _connected;
   }
 }

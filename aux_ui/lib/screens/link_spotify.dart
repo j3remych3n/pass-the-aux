@@ -4,7 +4,6 @@ import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/layout/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
-import 'package:spotify_sdk/spotify_sdk.dart';
 
 class LinkSpotify extends SequentialWidget {
   final sessionManager;
