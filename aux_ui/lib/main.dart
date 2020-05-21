@@ -1,8 +1,8 @@
 
-import 'package:aux_ui/named_routing/routing_constants.dart';
+  import 'package:aux_ui/routing/routing_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
-import 'package:aux_ui/named_routing/router.dart' as router;
+import 'package:aux_ui/routing/router.dart' as router;
 
 void main() => runApp(AuxApp());
 

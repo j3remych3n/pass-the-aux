@@ -1,4 +1,4 @@
-import 'package:aux_ui/named_routing/routing_constants.dart';
+import 'package:aux_ui/routing/routing_constants.dart';
 import 'package:aux_ui/screens/create_queue/host_invite.dart';
 import 'package:aux_ui/screens/link_spotify.dart';
 import 'package:aux_ui/screens/join_queue/join_queue.dart';

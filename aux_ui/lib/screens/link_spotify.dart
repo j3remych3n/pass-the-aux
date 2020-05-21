@@ -4,9 +4,14 @@ import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/layout/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
 
 class LinkSpotify extends SequentialWidget {
-  const LinkSpotify({Key key, String nextPage}) : super(key: key, nextPage: nextPage);
+  final sessionManager;
+
+  const LinkSpotify({Key key, String nextPage, this.sessionManager})
+      : super(key: key, nextPage: nextPage);
+
   _LinkSpotifyState createState() => _LinkSpotifyState();
 }
 
@@ -14,6 +19,11 @@ class _LinkSpotifyState extends State<LinkSpotify> {
   bool _initialized = false;
   Widget _accountSetupText;
   Widget _spotifyLink;
+
+  login() async {
+    bool authConnected = await widget.sessionManager.login();
+    if (authConnected) widget.next(context);
+  }
 
   void _initializeWidgets() {
     if (_initialized)
@@ -33,14 +43,12 @@ class _LinkSpotifyState extends State<LinkSpotify> {
                 ButtonTheme(
                     height: SizeConfig.safeAreaVertical,
                     minWidth: double.infinity,
-                    child:
-                    IconBarButton(
-                        icon: Image.asset(
-                            'assets/spotify_logo.png', height: 21, width: 21),
-                        text: 'link your spotify premium *',
-                        onPressed: () => widget.next(context),
-                    )
-                ),
+                    child: IconBarButton(
+                      icon: Image.asset('assets/spotify_logo.png',
+                          height: 21, width: 21),
+                      text: 'link your spotify premium *',
+                      onPressed: () => login(),
+                    )),
                 Align(
                     alignment: Alignment.topRight,
                     child: Padding(
