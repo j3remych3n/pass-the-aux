@@ -1,5 +1,4 @@
 import 'package:aux_ui/generic_classes/song.dart';
-import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
 import 'package:aux_ui/widgets/layout/aux_card.dart';
 import 'package:aux_ui/widgets/layout/queue_item.dart';
@@ -16,6 +15,11 @@ class MainQueue extends StatefulWidget {
 class _MainQueueState extends State<MainQueue> {
   List<Song> yourSongs;
   List<Song> queueSongs;
+  Widget _currPlaying;
+  Widget _expandQueue;
+  Widget _songUpNext;
+  Widget _header;
+  bool _initialized = false;
 
   @override
   void initState() {
@@ -39,7 +43,17 @@ class _MainQueueState extends State<MainQueue> {
     });
   }
 
-  Widget _getCurrPlaying() {
+  void _initializeWidgets() {
+    if (_initialized)
+      return;
+    _initialized = true;
+    _setCurrPlaying();
+    _setSongUpNext();
+    _setExpandQueue();
+    _setHeader();
+  }
+
+  void _setCurrPlaying() {
     // TODO actually fetch and animate, possibly pull out into another component
     Widget right = QueueItemAction(onPressed: () {}, icons: [
       Icon(
@@ -56,7 +70,7 @@ class _MainQueueState extends State<MainQueue> {
       )
     ]);
 
-    return AuxCard(
+    _currPlaying = AuxCard(
         borderColor: auxBlurple,
         padding: 15.0,
         child: Column(
@@ -77,8 +91,8 @@ class _MainQueueState extends State<MainQueue> {
         ));
   }
 
-  Widget _getExpandQueue() {
-    return ButtonTheme(
+  void _setExpandQueue() {
+    _expandQueue = ButtonTheme(
         height: SizeConfig.blockSizeVertical * 3,
         child: OutlineButton(
             padding: EdgeInsets.only(top: 5, bottom: 5, right: 7, left: 7),
@@ -92,7 +106,7 @@ class _MainQueueState extends State<MainQueue> {
             ])));
   }
 
-  Widget _getSongUpNext() {
+  void _setSongUpNext() {
     Widget right = QueueItemAction(onPressed: () {}, icons: [
       Icon(Icons.more_vert,
           color: auxAccent,
@@ -100,7 +114,7 @@ class _MainQueueState extends State<MainQueue> {
           semanticLabel: "get next song")
     ]);
 
-    return QueueItem(
+    _songUpNext = QueueItem(
       song: queueSongs[0],
       showContributor: true,
       rightPress: right,
@@ -128,8 +142,8 @@ class _MainQueueState extends State<MainQueue> {
     ));
   }
 
-  Widget _getHeader() {
-    return Column(children: <Widget>[
+  void _setHeader() {
+    _header = Column(children: <Widget>[
           Align(
               alignment: Alignment.bottomLeft,
               child: Text('too queue for u', style: auxDisp2)),
@@ -148,6 +162,7 @@ class _MainQueueState extends State<MainQueue> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    _initializeWidgets();
     return Material(
         type: MaterialType.transparency,
         child: Container(
@@ -160,12 +175,12 @@ class _MainQueueState extends State<MainQueue> {
                 Container(
                     padding: EdgeInsets.only(
                         left: 12, right: 12, top: 42, bottom: 8),
-                    child: _getHeader()),
-                _getCurrPlaying(),
+                    child: _header),
+                _currPlaying,
                 QueueContainer(
                     title: 'up next',
-                    child: _getSongUpNext(),
-                    titleWidget: _getExpandQueue()),
+                    child: _songUpNext,
+                    titleWidget: _expandQueue),
                 QueueContainer(
                   title: 'your songs',
                   child: SongList(songs: yourSongs, onPress: () {}),
