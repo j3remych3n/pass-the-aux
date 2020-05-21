@@ -68,38 +68,43 @@ class _PlaybackControlsState extends State<PlaybackControls> {
         )),
         child: Row(
           children: <Widget>[
-            _getRoundButton(Icons.person_add, 17, () {}, false, 3),
+                _getRoundButton(Icons.person_add, 17, () {}, false, 3),
             Expanded(
                 flex: 6,
                 child: Column(
                   children: <Widget>[
-                    RoundedActionButton(
+                    Align(
+                    alignment: widget.isHost ? Alignment.center : Alignment.centerLeft,
+                        child: RoundedActionButton(
                         height: 41,
                         width: SizeConfig.screenWidth * 1 / 2, // TODO: scale
                         onPressed: () {},
-                        text: "add a song"),
-                    Padding(
-//                    padding: EdgeInsets.only(left: 40, right: 40),
-                        padding: EdgeInsets.all(0),
-                        child: Row(
-                          children: <Widget>[
-                            _getRoundButton(
-                                Icons.skip_previous, 21, () {}, true, 4),
-                            Expanded(
-                                flex: 4,
-                                child: _getStadiumButton(
-                                    _pausePressed
-                                        ? Icons.play_arrow
-                                        : Icons.pause,
-                                    27, () {
-                                  _playPause();
-                                }, true, 100, 54)),
-                            _getRoundButton(Icons.skip_next, 21, () {}, true, 4)
-                          ],
-                        ))
+                        text: "add a song")),
+                    Visibility(
+                        visible: widget.isHost,
+                        child: Padding(
+                            padding: EdgeInsets.all(0),
+                            child: Row(
+                              children: <Widget>[
+                                _getRoundButton(
+                                    Icons.skip_previous, 21, () {}, true, 4),
+                                Expanded(
+                                    flex: 4,
+                                    child: _getStadiumButton(
+                                        _pausePressed
+                                            ? Icons.play_arrow
+                                            : Icons.pause,
+                                        27, () {
+                                      _playPause();
+                                    }, true, 100, 54)),
+                                _getRoundButton(
+                                    Icons.skip_next, 21, () {}, true, 4)
+                              ],
+                            )))
                   ],
                 )),
-            _getRoundButton(Icons.settings, 17, () {}, false, 3)
+            Visibility(visible: widget.isHost,
+                child: _getRoundButton(Icons.settings, 17, () {}, false, 3))
           ],
         ));
   }

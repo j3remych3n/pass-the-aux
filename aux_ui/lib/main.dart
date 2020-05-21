@@ -17,7 +17,7 @@ class AuxApp extends StatelessWidget {
     return MaterialApp(
       title: 'aux',
       onGenerateRoute: router.generateRoute,
-      initialRoute: MainQueueRoute,
+      initialRoute: NuxIntroRoute,
       theme: ThemeData(
         primaryColor: auxPrimary,
         accentColor: auxAccent,

@@ -10,6 +10,10 @@ import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/queue_container.dart';
 
 class MainQueue extends StatefulWidget {
+  final sessionManager;
+
+  const MainQueue({Key key, this.sessionManager}) : super(key: key);
+
   _MainQueueState createState() => _MainQueueState();
 }
 
@@ -196,7 +200,7 @@ class _MainQueueState extends State<MainQueue> {
                   ),
                 ),
                 Positioned(
-                    bottom: 0,
+                    bottom: 10,
                     child: PlaybackControls(
                       isHost: false,
                     ))
