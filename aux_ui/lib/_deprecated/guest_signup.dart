@@ -6,7 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/layout/nux_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
-import 'package:aux_ui/named_routing/routing_constants.dart';
+import 'package:aux_ui/routing/routing_constants.dart';
 
 class GuestSignup extends SequentialWidget {
   const GuestSignup({Key key, String nextPage}) : super(key: key, nextPage: nextPage);
