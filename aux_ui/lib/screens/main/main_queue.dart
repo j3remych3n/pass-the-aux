@@ -172,32 +172,35 @@ class _MainQueueState extends State<MainQueue> {
         child: Container(
             padding: SizeConfig.notchPadding,
             color: auxPrimary,
-            child: Stack(children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(2.0),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                        padding: EdgeInsets.only(
-                            left: 12, right: 12, top: 42, bottom: 8),
-                        child: _header),
-                    _currPlaying,
-                    QueueContainer(
-                        title: 'up next',
-                        child: _songUpNext,
-                        titleWidget: _expandQueue),
-                    QueueContainer(
-                      title: 'your songs',
-                      child: SongList(songs: yourSongs, onPress: () {}),
-                      titleWidget: SongCountdown(),
-                    ),
-                  ],
+            child: Stack(
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.all(2.0),
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.only(
+                              left: 12, right: 12, top: 42, bottom: 8),
+                          child: _header),
+                      _currPlaying,
+                      QueueContainer(
+                          title: 'up next',
+                          child: _songUpNext,
+                          titleWidget: _expandQueue),
+                      QueueContainer(
+                        title: 'your songs',
+                        child: SongList(songs: yourSongs, onPress: () {}),
+                        titleWidget: SongCountdown(),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Positioned(
-                  bottom: 0,
-                  child: PlaybackControls(isHost: false,))
-            ],
+                Positioned(
+                    bottom: 0,
+                    child: PlaybackControls(
+                      isHost: false,
+                    ))
+              ],
             )));
   }
 }
