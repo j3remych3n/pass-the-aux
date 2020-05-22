@@ -5,7 +5,7 @@ import 'package:logger/logger.dart';
 
 class SessionManager {
   var _authToken;
-  var _connected;
+  var _connected = false;
   final Logger _logger = Logger();
 
   void setStatus(String code, {String message = ""}) {
@@ -33,6 +33,17 @@ class SessionManager {
           clientId: DotEnv().env['CLIENT_ID'],
           redirectUrl: DotEnv().env['REDIRECT_URL']);
       _authToken = authenticationToken;
+    } on PlatformException catch (e) {
+      setStatus(e.code, message: e.message);
+    } on MissingPluginException {
+      setStatus("not implemented");
+    }
+  }
+
+  Future<void> queue(String spotifyUri) async {
+    try {
+      await SpotifySdk.queue(
+          spotifyUri: spotifyUri);
     } on PlatformException catch (e) {
       setStatus(e.code, message: e.message);
     } on MissingPluginException {
