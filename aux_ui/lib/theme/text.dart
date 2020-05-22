@@ -22,120 +22,107 @@ part of 'aux_theme.dart';
 
 // sign up & splash screens
 const auxDisp3 = const TextStyle(
-  color: auxAccent,
-  fontWeight: FontWeight.w500,
-  fontFamily: 'Larsseit',
-  fontStyle:  FontStyle.normal,
-  fontSize: 56
-);
+    color: auxAccent,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Larsseit',
+    fontStyle: FontStyle.normal,
+    fontSize: 56);
 
 // sign up & splash screens inverted
 const auxDisp3Inv = const TextStyle(
     color: auxPrimary,
     fontWeight: FontWeight.w500,
     fontFamily: 'Larsseit',
-    fontStyle:  FontStyle.normal,
-    fontSize: 56
-);
+    fontStyle: FontStyle.normal,
+    fontSize: 56);
 
 // queue header
 const auxDisp2 = const TextStyle(
-  color: auxAccent,
-  fontWeight: FontWeight.w500,
-  fontFamily: 'Larsseit',
-  fontStyle:  FontStyle.normal,
-  fontSize: 40
-);
+    color: auxAccent,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Larsseit',
+    fontStyle: FontStyle.normal,
+    fontSize: 40);
 
 // section headers
 const auxDisp1 = const TextStyle(
-  color: auxAccent,
-  fontWeight: FontWeight.w500,
-  fontFamily: 'Larsseit',
-  fontStyle:  FontStyle.normal,
-  fontSize: 29
-);
+    color: auxAccent,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Larsseit',
+    fontStyle: FontStyle.normal,
+    fontSize: 29);
 
 // "or" accent
 const auxDispMidAccent = const TextStyle(
     color: auxAccent,
     fontWeight: FontWeight.w500,
     fontFamily: 'Larsseit',
-    fontStyle:  FontStyle.normal,
-    fontSize: 32
-);
+    fontStyle: FontStyle.normal,
+    fontSize: 32);
 
 // top song
 const auxHeadline = const TextStyle(
-  color: auxAccent,
-  fontFamily: 'Larsseit',
-  fontStyle:  FontStyle.normal,
-  fontSize: 21
-);
+    color: auxAccent,
+    fontFamily: 'Larsseit',
+    fontStyle: FontStyle.normal,
+    fontWeight: FontWeight.w500,
+    fontSize: 21);
 
 // song, general text
 const auxBody2 = const TextStyle(
-  color: auxAccent,
-  fontWeight: FontWeight.w300,
-  fontFamily: 'Larsseit',
-  fontStyle:  FontStyle.normal,
-  fontSize: 17
-);
+    color: auxAccent,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Larsseit',
+    fontStyle: FontStyle.normal,
+    fontSize: 17);
 
 // white on black: buttons & textfields
 const auxAccentButton = const TextStyle(
-  color: auxAccent,
-  fontWeight: FontWeight.w500,
-  fontFamily: 'Larsseit',
-  fontStyle:  FontStyle.normal,
-  fontSize: 17
-);
+    color: auxAccent,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Larsseit',
+    fontStyle: FontStyle.normal,
+    fontSize: 17);
 
 // white on black: disclaimers
 const auxAsterisk = const TextStyle(
     color: auxAccent,
     fontWeight: FontWeight.w500,
     fontFamily: 'Larsseit',
-    fontStyle:  FontStyle.normal,
-    fontSize: 12
-);
+    fontStyle: FontStyle.normal,
+    fontSize: 12);
 
 // black on white: buttons & textfields
 const auxPrimaryButton = const TextStyle(
-  color: auxPrimary,
-  fontWeight: FontWeight.w500,
-  fontFamily: 'Larsseit',
-  fontStyle:  FontStyle.normal,
-  fontSize: 17
-);
+    color: auxPrimary,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Larsseit',
+    fontStyle: FontStyle.normal,
+    fontSize: 17);
 
 // grey on outline: buttons & textfields
 const auxTertiaryButton = const TextStyle(
-  color: auxLGrey,
-  fontWeight: FontWeight.w500,
-  fontFamily: 'Larsseit',
-  fontStyle:  FontStyle.normal,
-  fontSize: 17
-);
+    color: auxLGrey,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Larsseit',
+    fontStyle: FontStyle.normal,
+    fontSize: 17);
 
 // Small buttons & widgets
 const auxCaption = const TextStyle(
-  color: auxAccent,
-  fontWeight: FontWeight.w500,
-  fontFamily: 'Larsseit',
-  fontStyle:  FontStyle.normal,
-  fontSize: 10
-);
+    color: auxAccent,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Larsseit',
+    fontStyle: FontStyle.normal,
+    fontSize: 10);
 
 // Detail text
 const auxBody1 = const TextStyle(
-  color: auxAccent,
-  fontWeight: FontWeight.w300,
-  fontFamily: 'Larsseit',
-  fontStyle:  FontStyle.normal,
-  fontSize: 10
-);
-
+    color: auxAccent,
+    fontWeight: FontWeight.w300,
+    fontFamily: 'Larsseit',
+    fontStyle: FontStyle.normal,
+    fontSize: 10);
 
 // text theme
 const auxTextTheme = TextTheme(

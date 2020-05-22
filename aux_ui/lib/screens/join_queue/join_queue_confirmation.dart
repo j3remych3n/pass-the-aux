@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/layout/nux_container.dart';
-import 'package:aux_ui/widgets/buttons/confirmation_nav_button.dart';
+import 'package:aux_ui/widgets/buttons/rounded_action_button.dart';
 
 class JoinQueueConfirmation extends SequentialWidget {
   const JoinQueueConfirmation({
@@ -34,7 +34,7 @@ class _JoinQueueConfirmationState extends State<JoinQueueConfirmation> {
         Padding(
             padding: EdgeInsets.only(
                 top: 35), // TODO: change after putting in queue preview
-            child: ConfirmationNavButton(
+            child: RoundedActionButton(
                 height: 32,
                 width: SizeConfig.screenWidth * 3 / 5,
                 onPressed: () => widget.next(context),
@@ -44,7 +44,7 @@ class _JoinQueueConfirmationState extends State<JoinQueueConfirmation> {
                 textStyle: auxPrimaryButton)),
         Padding(
             padding: EdgeInsets.only(top: 35),
-            child: ConfirmationNavButton(
+            child: RoundedActionButton(
                 height: 32,
                 width: SizeConfig.screenWidth * 3 / 5,
                 onPressed: () => widget.back(context),

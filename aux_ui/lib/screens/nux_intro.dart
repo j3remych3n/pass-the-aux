@@ -4,7 +4,7 @@ import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/layout/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
-import 'package:aux_ui/named_routing/routing_constants.dart';
+import 'package:aux_ui/routing/routing_constants.dart';
 
 class NuxIntro extends StatelessWidget {
 

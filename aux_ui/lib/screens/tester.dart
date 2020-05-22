@@ -19,20 +19,6 @@ class Tester extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  QueueItem(
-                    rightPress: QueueItemAction(onPressed: () {},
-                    icon: Icon(
-                      Icons.radio_button_unchecked,
-                      color: auxAccent,
-                      size: 16.0, // TODO: scale
-                      semanticLabel: "aux item action",
-                    )),
-                    song: "Tommy's Party",
-                    artist: "Peach Pit",
-                    albumCoverLink: "assets/album_cover_example.jpg",
-                    contributor: "Diane",
-                    showContributor: false,
-                  )
                 ],
               ),
             )

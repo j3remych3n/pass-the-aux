@@ -1,6 +1,7 @@
+import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/material.dart';
 
-class ConfirmationNavButton extends StatelessWidget {
+class RoundedActionButton extends StatelessWidget {
   final double height;
   final double width;
   final onPressed;
@@ -9,8 +10,14 @@ class ConfirmationNavButton extends StatelessWidget {
   final String text;
   final TextStyle textStyle;
 
-  ConfirmationNavButton(
-      {this.height, this.width, this.onPressed, this.color, this.borderColor, this.text, this.textStyle});
+  RoundedActionButton(
+      {this.height,
+      this.width,
+      this.onPressed,
+      this.color = auxAccent,
+      this.borderColor = Colors.transparent,
+      this.text,
+      this.textStyle = auxPrimaryButton});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +28,8 @@ class ConfirmationNavButton extends StatelessWidget {
         child: FlatButton(
             onPressed: onPressed,
             color: color,
-            shape: StadiumBorder(side: BorderSide(color: borderColor, width: 3)),
+            shape:
+                StadiumBorder(side: BorderSide(color: borderColor, width: 3)),
             child: Text(text, style: textStyle)));
   }
 }
