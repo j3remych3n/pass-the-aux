@@ -1,6 +1,5 @@
 import 'package:aux_ui/aux_lib/song.dart';
-import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
-import 'package:aux_ui/widgets/layout/queue_item.dart';
+import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/layout/song_countdown.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +12,7 @@ class MainSearch extends StatefulWidget {
 }
 
 class _MainSearchState extends State<MainSearch> {
-  List<Song> yourSongs;
-  List<Song> queueSongs;
+  List<Song> searchResults;
 
   @override
   void initState() {
@@ -24,16 +22,7 @@ class _MainSearchState extends State<MainSearch> {
 
   void _initSongList() { //TODO: implement fetch here
     setState(() {
-      queueSongs = List.filled(20,
-        Song(
-          "Tommy's Party",
-          "Peach Pit",
-          "assets/album_cover_example.jpg",
-          "Diane"
-        )
-      );
-      // your songs would be a filter over queue ^ for where contributor == you
-      yourSongs = List.filled(20,
+      searchResults = List.filled(20,
           Song(
               "Tommy's Party",
               "Peach Pit",
@@ -42,18 +31,6 @@ class _MainSearchState extends State<MainSearch> {
           )
       );
     });
-  }
-
-  Widget getSongUpNext() {
-    Widget right = QueueItemAction(
-      onPressed: () {},
-    );
-
-    return QueueItem(
-      song: queueSongs[0],
-      showContributor: true,
-      rightPress: right,
-    );
   }
 
   @override
@@ -74,16 +51,12 @@ class _MainSearchState extends State<MainSearch> {
                           left: 12, right: 12, top: 42, bottom: 8),
                       child: Align(
                           alignment: Alignment.bottomLeft,
-                          child: Text('too queue for u', style: auxDisp2))),
-                  QueueContainer(
-                    title: 'up next',
-                    child: getSongUpNext(),
-                    titleWidget: Text("temp")
-                  ),
+                          child: Text('add a song', style: auxDisp2))),
+                  AuxTextField(label: 'search for a song', icon: Icon(Icons.search)),
                   QueueContainer(
                     title: 'your songs',
                     child: SongList(
-                        songs: yourSongs,
+                        songs: searchResults,
                       onPress: () {}
                     ),
                     titleWidget: SongCountdown(),

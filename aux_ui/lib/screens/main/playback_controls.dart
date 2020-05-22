@@ -58,7 +58,6 @@ class _PlaybackControlsState extends State<PlaybackControls> {
   @override
   Widget build(BuildContext context) {
     // TODO: scale everything
-    SizeConfig().init(context);
     return AuxBottomShelf(
         child: Row(
           children: <Widget>[

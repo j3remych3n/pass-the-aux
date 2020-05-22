@@ -22,7 +22,7 @@ class QueueContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return AuxCard(
       borderColor: auxAccent,
-      padding: 15.0,
+      padding: 10.0,
       child: Column(
         children: <Widget>
         [
@@ -42,9 +42,16 @@ class QueueContainer extends StatelessWidget {
               )
             ],
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 5, right: 5),
-            child: this.child,
+          Row(
+            children:<Widget>[
+            Flexible(
+              fit: FlexFit.loose,
+              child: Padding(
+                padding: EdgeInsets.only(left: 5, right: 5),
+                child: this.child
+                ),
+          )
+            ]
           )
         ],
       ),

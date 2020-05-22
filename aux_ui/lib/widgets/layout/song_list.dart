@@ -17,9 +17,7 @@ class _SongListState extends State<SongList> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Container(
-        height: SizeConfig.safeBlockVertical * 30, // TODO: finalize this
-        child: ListView.separated(
+    return ListView.separated(
             shrinkWrap: true,
             itemCount: widget.songs.length,
             separatorBuilder: (BuildContext context, int index) =>
@@ -42,6 +40,6 @@ class _SongListState extends State<SongList> {
                 ]),
                 song: widget.songs[index],
               );
-            }));
+            });
   }
 }

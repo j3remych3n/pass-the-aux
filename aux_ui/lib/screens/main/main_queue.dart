@@ -7,7 +7,8 @@ import 'package:aux_ui/widgets/layout/song_list.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/queue_container.dart';
-import 'package:aux_ui/widgets/layout/playback_controls.dart';
+import 'package:aux_ui/screens/main/playback_controls.dart';
+import 'dart:developer';
 
 class MainQueue extends StatefulWidget {
   final sessionManager;
@@ -25,11 +26,23 @@ class _MainQueueState extends State<MainQueue> {
   Widget _songUpNext;
   Widget _header;
   bool _initialized = false;
+  int _times = 0;
+  int _fucks = 2;
 
   @override
-  void initState() {
-    super.initState();
-    _initSongList();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    log('fuck my ass ' + _times.toString() + ' times');
+    _times ++;
+    SizeConfig().init(context);
+    if (!_initialized) {
+      _initialized = true;
+      _initSongList();
+      _setCurrPlaying();
+      _setSongUpNext();
+      _setExpandQueue();
+      _setHeader();
+    }
   }
 
   void _initSongList() {
@@ -48,18 +61,13 @@ class _MainQueueState extends State<MainQueue> {
     });
   }
 
-  void _initializeWidgets() {
-    if (_initialized) return;
-    _initialized = true;
-    _setCurrPlaying();
-    _setSongUpNext();
-    _setExpandQueue();
-    _setHeader();
-  }
+  
 
   void _setCurrPlaying() {
     // TODO actually fetch and animate, possibly pull out into another component
-    Widget right = QueueItemAction(onPressed: () {}, icons: [
+    Widget right = QueueItemAction(onPressed: () {setState(() {
+      _fucks++;
+    });}, icons: [
       Icon(
         Icons.favorite_border,
         color: auxAccent,
@@ -169,8 +177,9 @@ class _MainQueueState extends State<MainQueue> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    _initializeWidgets();
+    // SizeConfig().init(context);
+    // _initializeWidgets();
+    log(_fucks.toString() + ' fucks');
     return Material(
         type: MaterialType.transparency,
         child: Container(
@@ -181,6 +190,7 @@ class _MainQueueState extends State<MainQueue> {
                 Padding(
                   padding: EdgeInsets.all(0.0),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Container(
                           padding: EdgeInsets.only(
@@ -191,17 +201,17 @@ class _MainQueueState extends State<MainQueue> {
                           title: 'up next',
                           child: _songUpNext,
                           titleWidget: _expandQueue),
-                      QueueContainer(
+                      Expanded(child: QueueContainer(
                         title: 'your songs',
-                        child: SongList(songs: yourSongs, onPress: () {}),
+                        child: SongList(songs: yourSongs, onPress: (){}) ,
                         titleWidget: SongCountdown(),
-                      ),
+                      )),
                     ],
                   ),
                 ),
                 Positioned(
                     bottom:50,
-                    child: PlaybackControls(isHost: false,)
+                    child: PlaybackControls(isHost: true,)
                 )
               ],
             )));
