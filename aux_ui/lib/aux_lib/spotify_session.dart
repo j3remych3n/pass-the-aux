@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'dart:developer';
+import 'package:logger/logger.dart';
 
 class SpotifySession {
   var _authToken;
@@ -9,11 +9,11 @@ class SpotifySession {
 
   final String CLIENT_ID = DotEnv().env['CLIENT_ID'].toString();
   final String REDIRECT_URL = DotEnv().env['REDIRECT_URL'].toString();
-  // final Logger _logger = Logger();
+  final Logger _logger = Logger();
 
   void setStatus(String code, {String message = ""}) {
     var text = message.isEmpty ? "" : " : $message";
-    // _logger.i("$code$text");
+    _logger.i("$code$text");
   }
 
   Future<void> connectToSpotifyRemote() async {
@@ -29,8 +29,7 @@ class SpotifySession {
     }
   }
 
-  Future<void> getAuthenticationToken() async {
-    log(DotEnv().env['CLIENT_ID'].toString());
+  Future<void> authenticate() async {
     try {
       var authenticationToken = await SpotifySdk.getAuthenticationToken(
           clientId: DotEnv().env['CLIENT_ID'].toString(),
@@ -43,9 +42,22 @@ class SpotifySession {
     }
   }
 
+  Future<void> queue(String spotifyUri) async {
+    try {
+      await SpotifySdk.queue(
+          spotifyUri: spotifyUri);
+    } on PlatformException catch (e) {
+      setStatus(e.code, message: e.message);
+    } on MissingPluginException {
+      setStatus("not implemented");
+    }
+  }
+
   Future<bool> login() async {
     await connectToSpotifyRemote();
-    await getAuthenticationToken();
+    await authenticate();
+    setStatus("token is", message: _authToken);
+    setStatus("connected is", message: _connected.toString());
     return _connected;
   }
 }

@@ -23,7 +23,7 @@ dependencies:
 
   page_transition: ^1.1.5
   flutter_dotenv: ^2.1.0
-  # logger: ^0.9.1
+  logger: ^0.8.0
   spotify_sdk: ^0.3.4
 
   # The following adds the Cupertino Icons font to your application.
