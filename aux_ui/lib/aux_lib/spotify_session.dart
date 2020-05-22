@@ -1,8 +1,15 @@
+import 'dart:typed_data';
+
+import 'package:aux_ui/aux_lib/song.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:spotify_sdk/models/image_uri.dart';
 import 'package:spotify_sdk/models/player_state.dart';
+import 'package:spotify_sdk/models/track.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
+import 'dart:ui';
 
 class SpotifySession {
   var _authToken;
@@ -20,6 +27,13 @@ class SpotifySession {
 
   Stream<PlayerState> getPlayerState() {
     return SpotifySdk.subscribePlayerState();
+  }
+
+  Future<Uint8List> getImage(ImageUri imageUri) {
+    return SpotifySdk.getImage(
+      imageUri: imageUri,
+      dimension: ImageDimension.medium,
+    );
   }
 
   Future<void> connectToSpotifyRemote() async {

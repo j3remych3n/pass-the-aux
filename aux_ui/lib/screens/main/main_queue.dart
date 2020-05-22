@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:aux_ui/aux_lib/song.dart';
 import 'package:aux_ui/aux_lib/spotify_session.dart';
+import 'package:aux_ui/routing/router.dart';
 import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
 import 'package:aux_ui/widgets/layout/aux_card.dart';
 import 'package:aux_ui/widgets/layout/queue_item.dart';
@@ -9,6 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/queue_container.dart';
 import 'package:aux_ui/widgets/layout/playback_controls.dart';
+import 'package:spotify_sdk/models/image_uri.dart';
+import 'package:spotify_sdk/models/player_state.dart';
+import 'package:spotify_sdk/models/track.dart';
 
 class MainQueue extends StatefulWidget {
   final SpotifySession spotifySession;
@@ -38,13 +44,13 @@ class _MainQueueState extends State<MainQueue> {
     setState(() {
       queueSongs = List.filled(
           20,
-          Song("Tommy's Party", "Peach Pit", "assets/album_cover_example.jpg",
+          Song("Tommy's Party", "Peach Pit", null,
               "Diane"));
 
       // your songs would be a filter over queue ^ for where contributor == you
       yourSongs = List.filled(
           20,
-          Song("Tommy's Party", "Peach Pit", "assets/album_cover_example.jpg",
+          Song("Tommy's Party", "Peach Pit", null,
               "Diane"));
     });
   }
@@ -52,14 +58,21 @@ class _MainQueueState extends State<MainQueue> {
   void _initializeWidgets() {
     if (_initialized) return;
     _initialized = true;
-    _setCurrPlaying();
     _setSongUpNext();
     _setExpandQueue();
     _setHeader();
   }
 
-  void _setCurrPlaying() {
-    // TODO actually fetch and animate, possibly pull out into another component
+  Widget _getCurrPlaying(PlayerState playerState) {
+    // TODO possibly pull out into another component
+
+    Track track = playerState.track;
+    String name = track.name;
+    String artist = track.artist.name;
+    ImageUri imageUri = track.imageUri;
+    String contributor = "Diane"; // TODO: don't hardcode
+    double progress = playerState.playbackPosition / track.duration;
+
     Widget right = QueueItemAction(onPressed: () {}, icons: [
       Icon(
         Icons.favorite_border,
@@ -75,25 +88,37 @@ class _MainQueueState extends State<MainQueue> {
       )
     ]);
 
-    _currPlaying = AuxCard(
-        borderColor: auxBlurple,
-        padding: 15.0,
-        child: Column(
-          children: <Widget>[
-            QueueItem(
-              song: queueSongs[0],
-              showContributor: true,
-              rightPress: right,
-              isAccent: true,
-            ),
-            Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: LinearProgressIndicator(
-                    value: 0.3,
-                    backgroundColor: auxDDGrey,
-                    valueColor: new AlwaysStoppedAnimation<Color>(auxBlurple)))
-          ],
-        ));
+    return FutureBuilder(
+      future: spotifySession.getImage(imageUri),
+      builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
+        if (snapshot.hasData) {
+          var albumCover = snapshot.data;
+          return AuxCard(
+              borderColor: auxBlurple,
+              padding: 15.0,
+              child: Column(
+                children: <Widget>[
+                  QueueItem(
+                    song: new Song(name, artist, albumCover, contributor),
+                    showContributor: true,
+                    rightPress: right,
+                    isAccent: true,
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: LinearProgressIndicator(
+                          value: progress,
+                          backgroundColor: auxDDGrey,
+                          valueColor: new AlwaysStoppedAnimation<Color>(auxBlurple)))
+                ],
+              ));
+        } else {
+          return Center(
+            child: Text("Getting image"), // TODO: replace
+          );
+        }
+      }
+    );
   }
 
   void _setExpandQueue() {
@@ -172,39 +197,56 @@ class _MainQueueState extends State<MainQueue> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     _initializeWidgets();
-    return Material(
-        type: MaterialType.transparency,
-        child: Container(
-            padding: SizeConfig.notchPadding,
-            color: auxPrimary,
-            child: Stack(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(2.0),
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                          padding: EdgeInsets.only(
-                              left: 12, right: 12, top: 42, bottom: 8),
-                          child: _header),
-                      _currPlaying,
-                      QueueContainer(
-                          title: 'up next',
-                          child: _songUpNext,
-                          titleWidget: _expandQueue),
-                      QueueContainer(
-                        title: 'your songs',
-                        child: SongList(songs: yourSongs, onPress: () {}),
-                        titleWidget: SongCountdown(),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                    bottom: 10,
-                    child: PlaybackControls(isHost: true, spotifySession: widget.spotifySession,)
-                )
-              ],
-            )));
+    return StreamBuilder<PlayerState>(
+        stream: widget.spotifySession.getPlayerState(),
+        initialData: PlayerState(null, true, 1, 1, null, null),
+        builder: (BuildContext context, AsyncSnapshot<PlayerState> snapshot) {
+          if (snapshot.data != null && snapshot.data.track != null) {
+            var playerState = snapshot.data;
+            return Material(
+                type: MaterialType.transparency,
+                child: Container(
+                    padding: SizeConfig.notchPadding,
+                    color: auxPrimary,
+                    child: Stack(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                  padding: EdgeInsets.only(
+                                      left: 12, right: 12, top: 42, bottom: 8),
+                                  child: _header),
+                              _getCurrPlaying(playerState),
+                              QueueContainer(
+                                  title: 'up next',
+                                  child: _songUpNext,
+                                  titleWidget: _expandQueue),
+                              QueueContainer(
+                                title: 'your songs',
+                                child:
+                                    SongList(songs: yourSongs, onPress: () {}),
+                                titleWidget: SongCountdown(),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                            bottom: 10,
+                            child: PlaybackControls(
+                              isHost: true,
+                              spotifySession: widget.spotifySession,
+                              isPaused: playerState.isPaused,
+                            ))
+                      ],
+                    )));
+          } else {
+            // TODO: come up with a better alternative to this
+            return Center(
+              child: Text("Not connected"),
+            );
+          }
+        });
   }
 }

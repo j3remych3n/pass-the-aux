@@ -28,7 +28,7 @@ class _MainSearchState extends State<MainSearch> {
         Song(
           "Tommy's Party",
           "Peach Pit",
-          "assets/album_cover_example.jpg",
+          null,
           "Diane"
         )
       );
@@ -37,7 +37,7 @@ class _MainSearchState extends State<MainSearch> {
           Song(
               "Tommy's Party",
               "Peach Pit",
-              "assets/album_cover_example.jpg",
+              null,
               "Diane"
           )
       );
