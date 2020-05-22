@@ -1,13 +1,13 @@
-import 'package:aux_ui/generic_classes/song.dart';
+import 'package:aux_ui/aux_lib/song.dart';
 import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
 import 'package:aux_ui/widgets/layout/aux_card.dart';
-import 'package:aux_ui/widgets/layout/playback_controls.dart';
 import 'package:aux_ui/widgets/layout/queue_item.dart';
 import 'package:aux_ui/widgets/layout/song_countdown.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/queue_container.dart';
+import 'package:aux_ui/widgets/layout/playback_controls.dart';
 
 class MainQueue extends StatefulWidget {
   final sessionManager;
@@ -201,9 +201,8 @@ class _MainQueueState extends State<MainQueue> {
                 ),
                 Positioned(
                     bottom: 10,
-                    child: PlaybackControls(
-                      isHost: false,
-                    ))
+                    child: PlaybackControls(isHost: false,)
+                )
               ],
             )));
   }

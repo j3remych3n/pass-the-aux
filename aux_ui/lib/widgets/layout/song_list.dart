@@ -1,4 +1,4 @@
-import 'package:aux_ui/generic_classes/song.dart';
+import 'package:aux_ui/aux_lib/song.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
 import 'package:aux_ui/widgets/layout/queue_item.dart';

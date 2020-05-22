@@ -4,10 +4,10 @@ import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/layout/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
-import 'package:spotify_sdk/spotify_sdk.dart';
+import 'package:aux_ui/aux_lib/spotify_session.dart';
 
 class LinkSpotify extends SequentialWidget {
-  final sessionManager;
+  final SpotifySession sessionManager;
 
   const LinkSpotify({Key key, String nextPage, this.sessionManager})
       : super(key: key, nextPage: nextPage);
