@@ -1,5 +1,6 @@
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/buttons/rounded_action_button.dart';
+import 'package:aux_ui/widgets/layout/aux_bottom_shelf.dart';
 import 'package:flutter/material.dart';
 
 class PlaybackControls extends StatefulWidget {
@@ -57,15 +58,8 @@ class _PlaybackControlsState extends State<PlaybackControls> {
   @override
   Widget build(BuildContext context) {
     // TODO: scale everything
-    return Container(
-        width: SizeConfig.screenWidth,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-          colors: [auxPrimary, auxPrimary, Colors.transparent],
-          stops: [0, 0.60, 1],
-        )),
+    SizeConfig().init(context);
+    return AuxBottomShelf(
         child: Row(
           children: <Widget>[
                 _getRoundButton(Icons.person_add, 17, () {}, false, 3),

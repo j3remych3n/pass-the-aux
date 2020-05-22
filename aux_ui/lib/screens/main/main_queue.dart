@@ -179,7 +179,7 @@ class _MainQueueState extends State<MainQueue> {
             child: Stack(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.all(2.0),
+                  padding: EdgeInsets.all(0.0),
                   child: Column(
                     children: <Widget>[
                       Container(
@@ -200,7 +200,7 @@ class _MainQueueState extends State<MainQueue> {
                   ),
                 ),
                 Positioned(
-                    bottom: 10,
+                    bottom:50,
                     child: PlaybackControls(isHost: false,)
                 )
               ],
