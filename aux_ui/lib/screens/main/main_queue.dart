@@ -1,4 +1,5 @@
 import 'package:aux_ui/aux_lib/song.dart';
+import 'package:aux_ui/aux_lib/spotify_session.dart';
 import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
 import 'package:aux_ui/widgets/layout/aux_card.dart';
 import 'package:aux_ui/widgets/layout/queue_item.dart';
@@ -10,9 +11,9 @@ import 'package:aux_ui/widgets/layout/queue_container.dart';
 import 'package:aux_ui/widgets/layout/playback_controls.dart';
 
 class MainQueue extends StatefulWidget {
-  final sessionManager;
+  final SpotifySession spotifySession;
 
-  const MainQueue({Key key, this.sessionManager}) : super(key: key);
+  const MainQueue({Key key, this.spotifySession}) : super(key: key);
 
   _MainQueueState createState() => _MainQueueState();
 }
@@ -201,7 +202,7 @@ class _MainQueueState extends State<MainQueue> {
                 ),
                 Positioned(
                     bottom: 10,
-                    child: PlaybackControls(isHost: false,)
+                    child: PlaybackControls(isHost: true, spotifySession: widget.spotifySession,)
                 )
               ],
             )));

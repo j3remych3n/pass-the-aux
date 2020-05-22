@@ -1,24 +1,47 @@
+import 'package:aux_ui/aux_lib/spotify_session.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/buttons/rounded_action_button.dart';
 import 'package:flutter/material.dart';
 
 class PlaybackControls extends StatefulWidget {
   final bool isHost;
+  final SpotifySession spotifySession;
 
-  const PlaybackControls({Key key, this.isHost}) : super(key: key);
+  const PlaybackControls({Key key, this.isHost, this.spotifySession}) : super(key: key);
 
   @override
   _PlaybackControlsState createState() => _PlaybackControlsState();
 }
 
 class _PlaybackControlsState extends State<PlaybackControls> {
-  bool _pausePressed = false;
+  bool _pausePressed = true;
+  // TODO: this should be a subscribe connection status to whether the host is playing or not or spotify remote get somewhere
 
   void _playPause() {
     setState(() {
       _pausePressed = !_pausePressed;
     });
-    // TODO: implement
+    if (_pausePressed) {
+      widget.spotifySession.pause();
+    } else {
+      widget.spotifySession.resume();
+    }
+  }
+
+  void _skipNext() {
+    widget.spotifySession.skipNext();
+    widget.spotifySession.resume();
+    setState(() {
+      _pausePressed = false;
+    });
+  }
+
+  void _skipPrevious() {
+    widget.spotifySession.skipPrevious();
+    widget.spotifySession.resume();
+    setState(() {
+      _pausePressed = false;
+    });
   }
 
   Widget _getStadiumButton(IconData iconName, double iconSize,
@@ -87,7 +110,7 @@ class _PlaybackControlsState extends State<PlaybackControls> {
                             child: Row(
                               children: <Widget>[
                                 _getRoundButton(
-                                    Icons.skip_previous, 21, () {}, true, 4),
+                                    Icons.skip_previous, 21, () {_skipPrevious();}, true, 4),
                                 Expanded(
                                     flex: 4,
                                     child: _getStadiumButton(
@@ -98,7 +121,7 @@ class _PlaybackControlsState extends State<PlaybackControls> {
                                       _playPause();
                                     }, true, 100, 54)),
                                 _getRoundButton(
-                                    Icons.skip_next, 21, () {}, true, 4)
+                                    Icons.skip_next, 21, () {_skipNext();}, true, 4)
                               ],
                             )))
                   ],

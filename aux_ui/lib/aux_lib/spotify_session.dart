@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 class SpotifySession {
   var _authToken;
   var _connected = false;
+  String currentSongUri = "spotify:track:5OuJTtNve7FxUX82eEBupN";
 
   final String CLIENT_ID = DotEnv().env['CLIENT_ID'].toString();
   final String REDIRECT_URL = DotEnv().env['REDIRECT_URL'].toString();
@@ -52,6 +53,57 @@ class SpotifySession {
       setStatus("not implemented");
     }
   }
+
+  Future<void> play(String spotifyUri) async {
+    try {
+      await SpotifySdk.play(spotifyUri: spotifyUri);
+    } on PlatformException catch (e) {
+      setStatus(e.code, message: e.message);
+    } on MissingPluginException {
+      setStatus("not implemented");
+    }
+  }
+
+  Future<void> pause() async {
+    try {
+      await SpotifySdk.pause();
+    } on PlatformException catch (e) {
+      setStatus(e.code, message: e.message);
+    } on MissingPluginException {
+      setStatus("not implemented");
+    }
+  }
+
+  Future<void> resume() async {
+    try {
+      await SpotifySdk.resume();
+    } on PlatformException catch (e) {
+      setStatus(e.code, message: e.message);
+    } on MissingPluginException {
+      setStatus("not implemented");
+    }
+  }
+
+  Future<void> skipNext() async {
+    try {
+      await SpotifySdk.skipNext();
+    } on PlatformException catch (e) {
+      setStatus(e.code, message: e.message);
+    } on MissingPluginException {
+      setStatus("not implemented");
+    }
+  }
+
+  Future<void> skipPrevious() async {
+    try {
+      await SpotifySdk.skipPrevious();
+    } on PlatformException catch (e) {
+      setStatus(e.code, message: e.message);
+    } on MissingPluginException {
+      setStatus("not implemented");
+    }
+  }
+
 
   Future<bool> login() async {
     await connectToSpotifyRemote();
