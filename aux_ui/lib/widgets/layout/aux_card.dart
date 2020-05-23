@@ -16,23 +16,30 @@ class AuxCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: EdgeInsets.all(this.padding),  // TODO: scale by screen resolution
-        child: this.child,
-      ),
-      margin: EdgeInsets.all(10),  // TODO: scale by screen resolution
-      borderOnForeground: true,
+    SizeConfig().init(context);
+
+    return Material(
       color: Colors.transparent,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10), // TODO: scale by screen resolution
-        side: BorderSide(
-          color: this.borderColor, 
-          width: 3, // TODO: scale by screen resolution
-          style: BorderStyle.solid
+      child: Container(
+        child: Padding(
+          padding: EdgeInsets.all(this.padding),  // TODO: scale by screen resolution
+          child: this.child,
         ),
-      ),
+        margin: const EdgeInsets.all(6),  // TODO: scale by screen resolution
+        constraints: BoxConstraints.loose(
+          Size(
+            SizeConfig.safeAreaHorizontal,
+            SizeConfig.safeAreaVertical
+            )
+          ),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: this.borderColor,
+            width: 3,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        )
+      )
     );
   }
 }

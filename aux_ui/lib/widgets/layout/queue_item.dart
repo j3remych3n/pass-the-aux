@@ -34,14 +34,8 @@ class _QueueItemState extends State<QueueItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(0),
-        child: Card(
-            elevation: 0,
-            color: Colors.transparent,
-            child: Container(
-                child: Row(children: <Widget>[
+    return Row(
+              children: <Widget>[
               Container(
                   foregroundDecoration: BoxDecoration(
                       border: Border.all(
@@ -65,6 +59,6 @@ class _QueueItemState extends State<QueueItem> {
                                 style: widget.isAccent ? auxAsterisk : auxBody1, textAlign: TextAlign.left)
                           ]))),
               Align(alignment: Alignment.centerRight, child: widget.rightPress)
-            ]))));
+            ]);
   }
 }

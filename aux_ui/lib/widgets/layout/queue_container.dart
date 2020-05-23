@@ -24,6 +24,8 @@ class QueueContainer extends StatelessWidget {
       borderColor: auxAccent,
       padding: 10.0,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>
         [
           Row(
@@ -42,18 +44,8 @@ class QueueContainer extends StatelessWidget {
               )
             ],
           ),
-          Row(
-            children:<Widget>[
-            Flexible(
-              fit: FlexFit.loose,
-              child: Padding(
-                padding: EdgeInsets.only(left: 5, right: 5),
-                child: this.child
-                ),
-          )
-            ]
-          )
-        ],
+          Expanded(child: this.child)
+        ]
       ),
     );
   }

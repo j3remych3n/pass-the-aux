@@ -39,6 +39,11 @@ class _MainSearchState extends State<MainSearch> {
     return Material(
         type: MaterialType.transparency,
         child: Container(
+          constraints: BoxConstraints.loose(
+            Size.fromHeight(
+              SizeConfig.safeAreaVertical
+            )
+          ),
           padding: SizeConfig.notchPadding,
           color: auxPrimary,
           child: Stack(children: <Widget>[

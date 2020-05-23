@@ -177,38 +177,38 @@ class _MainQueueState extends State<MainQueue> {
 
   @override
   Widget build(BuildContext context) {
-    // SizeConfig().init(context);
-    // _initializeWidgets();
-    log(_fucks.toString() + ' fucks');
+
     return Material(
-        type: MaterialType.transparency,
         child: Container(
+            constraints: BoxConstraints.loose(
+              Size.fromHeight(
+                SizeConfig.safeAreaVertical
+              )
+            ),
             padding: SizeConfig.notchPadding,
             color: auxPrimary,
             child: Stack(
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(0.0),
-                  child: Column(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Container(
-                          padding: EdgeInsets.only(
+                          padding: const EdgeInsets.only(
                               left: 12, right: 12, top: 42, bottom: 8),
                           child: _header),
                       _currPlaying,
                       QueueContainer(
-                          title: 'up next',
-                          child: _songUpNext,
-                          titleWidget: _expandQueue),
-                      Expanded(child: QueueContainer(
+                        title: 'up next',
+                        child: _songUpNext,
+                        titleWidget: _expandQueue),
+                      QueueContainer(
                         title: 'your songs',
-                        child: SongList(songs: yourSongs, onPress: (){}) ,
+                        child: SongList(songs: yourSongs, onPress: (){}),
                         titleWidget: SongCountdown(),
-                      )),
+                      )
                     ],
                   ),
-                ),
                 Positioned(
                     bottom:50,
                     child: PlaybackControls(isHost: true,)

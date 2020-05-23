@@ -16,7 +16,6 @@ class SongList extends StatefulWidget {
 class _SongListState extends State<SongList> {
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return ListView.separated(
             shrinkWrap: true,
             itemCount: widget.songs.length,
