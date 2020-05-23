@@ -26,14 +26,10 @@ class _MainQueueState extends State<MainQueue> {
   Widget _songUpNext;
   Widget _header;
   bool _initialized = false;
-  int _times = 0;
-  int _fucks = 2;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    log('fuck my ass ' + _times.toString() + ' times');
-    _times ++;
     SizeConfig().init(context);
     if (!_initialized) {
       _initialized = true;
@@ -66,7 +62,6 @@ class _MainQueueState extends State<MainQueue> {
   void _setCurrPlaying() {
     // TODO actually fetch and animate, possibly pull out into another component
     Widget right = QueueItemAction(onPressed: () {setState(() {
-      _fucks++;
     });}, icons: [
       Icon(
         Icons.favorite_border,

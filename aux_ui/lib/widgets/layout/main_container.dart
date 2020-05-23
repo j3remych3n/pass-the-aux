@@ -3,12 +3,14 @@ import 'package:aux_ui/theme/aux_theme.dart';
 
 class MainContainer extends StatelessWidget  {
 
+  final String title;
   final Widget header;
   final List<Widget> children;
 
   const MainContainer(
     {
       Key key,
+      this.title,
       this.header,
       this.children,
     }
@@ -29,7 +31,16 @@ class MainContainer extends StatelessWidget  {
         color: auxPrimary,
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: this.children,
+          children: <Widget>[
+            ConstrainedBox(
+              constraints: ,
+              child: Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(this.title, style: auxDisp2)
+              )
+            )
+            
+          ]
         )
       ),
     );
