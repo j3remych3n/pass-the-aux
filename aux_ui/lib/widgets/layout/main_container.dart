@@ -16,10 +16,11 @@ class MainContainer extends StatelessWidget  {
     }
   ) : super(key: key);
 
+
+
   @override
   build(BuildContext context) {
-    SizeConfig().init(context);
-    
+    // SizeConfig().init(context);
     return Material(
       child: Container(
         constraints: BoxConstraints.loose(
@@ -29,19 +30,35 @@ class MainContainer extends StatelessWidget  {
         ),
         padding: SizeConfig.notchPadding,
         color: auxPrimary,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ConstrainedBox(
-              constraints: ,
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(this.title, style: auxDisp2)
-              )
-            )
-            
+        child: ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: SizeConfig.safeAreaHorizontal, 
+                maxHeight: SizeConfig.safeAreaVertical,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: SizeConfig.blockSizeVertical * 4, 
+                      bottom: SizeConfig.blockSizeVertical * 1,
+                      left: SizeConfig.blockSizeHorizontal * 4,
+                      right: SizeConfig.blockSizeHorizontal * 4,
+                      ),
+                    child: Align(
+                      alignment: Alignment.bottomLeft,
+                      child: Text(this.title, style: auxDisp2)
+                    )
+                  ), 
+                  SizedBox(
+                    width: SizeConfig.safeAreaHorizontal,
+                    height: SizeConfig.blockSizeVertical * 4,
+                    child: this.header,
+                  ),
+                  
           ]
         )
+      )
       ),
     );
   }
