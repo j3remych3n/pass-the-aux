@@ -144,6 +144,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.0"
+  phoenix_wings:
+    dependency: "direct main"
+    description:
+      name: phoenix_wings
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.1"
   quiver:
     dependency: transitive
     description:

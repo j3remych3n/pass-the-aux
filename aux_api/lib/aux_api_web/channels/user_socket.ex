@@ -2,7 +2,7 @@ defmodule AuxApiWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", AuxApiWeb.RoomChannel
+  channel "queue:lobby", AuxApiWeb.QueueChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

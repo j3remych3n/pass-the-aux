@@ -1,15 +1,10 @@
 import 'dart:typed_data';
-
-import 'package:aux_ui/aux_lib/song.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:spotify_sdk/models/image_uri.dart';
 import 'package:spotify_sdk/models/player_state.dart';
-import 'package:spotify_sdk/models/track.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
-import 'dart:ui';
 
 class SpotifySession {
   var _authToken;
@@ -126,8 +121,8 @@ class SpotifySession {
 
   Future<bool> login() async {
     await connectToSpotifyRemote();
-    await authenticate();
-    setStatus("token is", message: _authToken);
+//    await authenticate();
+//    setStatus("token is", message: _authToken);
     setStatus("connected is", message: _connected.toString());
     return _connected;
   }
