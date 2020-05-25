@@ -2,6 +2,7 @@ import 'package:aux_ui/aux_lib/song.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/main_container.dart';
+import 'package:aux_ui/widgets/layout/queue_item.dart';
 
 class MainSearch extends StatefulWidget {
   final spotifySession;
@@ -10,24 +11,21 @@ class MainSearch extends StatefulWidget {
 }
 
 class _MainSearchState extends State<MainSearch> {
-  List<Song> searchResults;
+  List<QueueItem> searchResults;
 
   @override
   void initState() {
     super.initState();
-    _initSongList();
+    searchResults = new List();
   }
 
-  void _initSongList() { //TODO: implement fetch here
+  void _search(String query) {
+    widget.spotifySession.search(query).then(_showResults);
+  }
+
+  void _showResults(List<Song> songs) {
     setState(() {
-      searchResults = List.filled(20,
-          Song(
-              "Tommy's Party",
-              "Peach Pit",
-              "assets/album_cover_example.jpg",
-              "Diane"
-          )
-      );
+      this.searchResults = songs.map((s) => new QueueItem(song: s));
     });
   }
 
@@ -37,3 +35,4 @@ class _MainSearchState extends State<MainSearch> {
     return MainContainer(title: 'add a song', children:[]);
   }
 }
+// text field, with onsubmit --> fn((query))
