@@ -26,6 +26,7 @@ dependencies:
   logger: ^0.8.0
   spotify_sdk: ^0.3.4
   spotify: ^0.3.2
+  keyboard_avoider: ^0.1.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

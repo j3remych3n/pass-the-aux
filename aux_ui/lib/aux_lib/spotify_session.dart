@@ -73,6 +73,8 @@ class SpotifySession {
       String market = 'US',
       bool sorted = true }) async {
 
+      if(query.length == 0) return new List();
+
       Set<Song> resultSet = (await _naiveSearch(query)).toSet();
       var pickySearch = await _naiveSearch('"${query}"');
       resultSet.addAll(pickySearch);
@@ -84,7 +86,7 @@ class SpotifySession {
 
   Future<List<Song>> _naiveSearch(
     String query, 
-    { List<SearchType> types = const [SearchType.track], 
+    {List<SearchType> types = const [SearchType.track], 
       int limit = 20, 
       String market = 'US',
       bool sorted = true }) async {
@@ -97,15 +99,16 @@ class SpotifySession {
       return rawResults
         .map((page) => page.items
             .where((i) => i is Track)
-            .map((track) => _songFromApi(track)))
+            .map((track) => _songFromTrack(track)))
         .expand((i) => i)
         .toList();
     }
 
-  Song _songFromApi(Track track) {
-    String artist = track.artists[0].name;
-    String cover = track.album.images[0].url;
-    return new Song(track.name, artist, cover, track.uri.toString(), popularity: track.popularity);
+  Song _songFromTrack(Track track) {
+    List<String> artists = track.artists.map((a) => a.name).toList();
+    String artist = artists.join(', ');
+    String cover = track.album.images.last.url;
+    return new Song(track.name, artist, cover, track.uri, popularity: track.popularity);
   }
-
+ 
 }

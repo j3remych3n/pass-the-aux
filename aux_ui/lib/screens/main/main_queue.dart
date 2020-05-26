@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/queue_container.dart';
 import 'package:aux_ui/screens/main/playback_controls.dart';
-import 'dart:developer';
 
 class MainQueue extends StatefulWidget {
   final sessionManager;
