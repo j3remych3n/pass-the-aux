@@ -62,10 +62,10 @@ class _MainSearchState extends State<MainSearch> {
         KeyboardAvoider(
           child: QueueContainer(
             title: 'results',
-            child: SongList(songs: this.searchResults, onPress: (){}),
+            child: SongList(songs: this.searchResults, songOnPress: (int x){}),
             constraints: null,
             height: 500.0,
-        ),
+          ),
         )
       ]
     );

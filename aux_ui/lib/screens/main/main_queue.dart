@@ -198,7 +198,7 @@ class _MainQueueState extends State<MainQueue> {
                         titleWidget: _expandQueue),
                       QueueContainer(
                         title: 'your songs',
-                        child: SongList(songs: yourSongs, onPress: (){}),
+                        child: SongList(songs: yourSongs, songOnPress: (int x){}),
                         titleWidget: SongCountdown(),
                       )
                     ],
