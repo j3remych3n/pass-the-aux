@@ -46,7 +46,7 @@ class _MainSearchState extends State<MainSearch> {
     SizeConfig().init(context);
     return MainContainer(
       title: 'add a song', 
-      header: Text('BIIIIIIIG poopy'),
+      header: Align(alignment: Alignment.center, child: Text('BIIIIIIIG poopy')),
       body: [
         AuxTextField( // TODO: add clear input blutton at far right end
           icon: Icon(Icons.search, color:auxAccent, size: 26.0, semanticLabel: "Search for a song"),
@@ -63,7 +63,7 @@ class _MainSearchState extends State<MainSearch> {
           ),
         ),
       ],
-//       footer: SearchControls()
+      footer: PlaybackControls(isHost: true),
     );
   }
 }
