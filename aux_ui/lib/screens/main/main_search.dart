@@ -39,11 +39,7 @@ class _MainSearchState extends State<MainSearch> {
   }
 
   void _throttledSearch(String query) async {
-    await _search(query);
-  }
-
-  void avoidKeyboard(BuildContext context) {
-
+    _search(query);
   }
 
   @override
@@ -57,7 +53,7 @@ class _MainSearchState extends State<MainSearch> {
           label: 'search for a song',
           controller: this.searchController,
           showActions: false,
-          onChanged: this._search, // short search? https://stackoverflow.com/questions/54765307/textfield-on-change-call-api-how-to-throttle-this
+          onChanged: this._throttledSearch, // short search? https://stackoverflow.com/questions/54765307/textfield-on-change-call-api-how-to-throttle-this
           onSubmitted: this._search, // TODO: full search
         ),
         Expanded(child:
@@ -67,7 +63,7 @@ class _MainSearchState extends State<MainSearch> {
           ),
         ),
       ],
-      footer: PlaybackControls(isHost: true)
+      // footer: SearchControls()
     );
   }
 }
