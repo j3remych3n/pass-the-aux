@@ -64,7 +64,7 @@ class _MainSearchState extends State<MainSearch> {
           ),
         ),
       ],
-      // footer: SearchControls()
+      footer: PlaybackControls(isHost: true),
     );
   }
 }

@@ -78,9 +78,9 @@ class MainContainer extends StatelessWidget  {
                       bottomSheet: Container(
                         margin: EdgeInsets.all(0),
                         width: SizeConfig.screenWidth,
-                        height: SizeConfig.blockSizeVertical * 12,
                         constraints: BoxConstraints(
-                          maxHeight: SizeConfig.blockSizeVertical * 12,
+                          maxHeight: SizeConfig.blockSizeVertical * 15,
+                          minHeight: SizeConfig.blockSizeVertical * 12,
                         ),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
