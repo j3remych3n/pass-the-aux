@@ -15,21 +15,23 @@ class QueueHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        HeaderChip(
-            iconName: Icons.fiber_manual_record,
-            text: "LIVE",
-            color: Colors.red),
-        HeaderChip(
-            iconName: Icons.group,
-            text: "${getNumInParty()} people in group",
-            color: auxAccent),
-        HeaderChip(
-            iconName: Icons.person_outline,
-            text: "hosted by ${getHost()}",
-            color: auxAccent)
-      ],
-    );
+    return Container(
+        height: SizeConfig.blockSizeVertical * 2,
+        child: Row(
+          children: <Widget>[
+            HeaderChip(
+                iconName: Icons.fiber_manual_record,
+                text: "LIVE",
+                color: Colors.red),
+            HeaderChip(
+                iconName: Icons.group,
+                text: "${getNumInParty()} people in group",
+                color: auxAccent),
+            HeaderChip(
+                iconName: Icons.person_outline,
+                text: "hosted by ${getHost()}",
+                color: auxAccent)
+          ],
+        ));
   }
 }

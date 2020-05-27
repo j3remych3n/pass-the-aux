@@ -58,7 +58,7 @@ class MainContainer extends StatelessWidget  {
                 SizedBox(
                   width: SizeConfig.safeAreaHorizontal,
                   height: SizeConfig.blockSizeVertical * 1.5,
-                  child: this.header,
+                  child: this.header
                 ),
                 Expanded(
                   child: Scaffold(
