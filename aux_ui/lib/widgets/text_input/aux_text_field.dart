@@ -10,6 +10,7 @@ class AuxTextField extends StatefulWidget {
   final ValueChanged<String> onChanged;
   final ValueChanged<String> onSubmitted;
   final TextEditingController controller;
+  final bool showActions;
 
   AuxTextField(
     {
@@ -20,6 +21,7 @@ class AuxTextField extends StatefulWidget {
       this.onFocusChange,
       this.onChanged,
       this.controller,
+      this.showActions = true,
     }
   ): super(key: key);
 
@@ -86,7 +88,7 @@ class _AuxTextFieldState extends State<AuxTextField> {
 
   void _onChanged(String textInput) {
     if(widget.onChanged != null) widget.onChanged(textInput);
-    if(!_hasInput && textInput.length > 0 || _hasInput && textInput.length == 0) {
+    if((!_hasInput && textInput.length > 0) || (_hasInput && textInput.length == 0)) {
       setState(() {
         _hasInput = !_hasInput;
       });
@@ -119,7 +121,7 @@ class _AuxTextFieldState extends State<AuxTextField> {
               labelText: widget.label,
             ),
           ),
-          Visibility(visible: _showCancel, child: 
+          Visibility(visible: _showCancel && widget.showActions, child: 
             Stack(
               children: <Widget>[
                 Align(

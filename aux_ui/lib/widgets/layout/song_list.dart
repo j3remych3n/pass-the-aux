@@ -4,11 +4,13 @@ import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
 import 'package:aux_ui/widgets/layout/queue_item.dart';
 import 'package:flutter/material.dart';
 
+typedef void IndexArgument(int x);
+
 class SongList extends StatefulWidget {
   final List<Song> songs;
-  final Function onPress;
+  final IndexArgument songOnPress;
 
-  const SongList({Key key, this.songs, this.onPress}) : super(key: key);
+  const SongList({Key key, this.songs, this.songOnPress}) : super(key: key);
 
   _SongListState createState() => _SongListState();
 }
@@ -16,17 +18,15 @@ class SongList extends StatefulWidget {
 class _SongListState extends State<SongList> {
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    return Container(
-        height: SizeConfig.safeBlockVertical * 30, // TODO: finalize this
-        child: ListView.separated(
+    return ListView.separated(
+            padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical),
             shrinkWrap: true,
             itemCount: widget.songs.length,
             separatorBuilder: (BuildContext context, int index) =>
                 Divider(thickness: 0, height: 8, color: Colors.transparent),
             itemBuilder: (BuildContext context, int index) {
               return QueueItem(
-                rightPress: QueueItemAction(onPressed: widget.onPress, icons: [
+                rightPress: QueueItemAction(onPressed: () => widget.songOnPress(index), icons: [
                   Icon(
                     Icons.radio_button_unchecked,
                     color: auxAccent,
@@ -42,6 +42,6 @@ class _SongListState extends State<SongList> {
                 ]),
                 song: widget.songs[index],
               );
-            }));
+            });
   }
 }

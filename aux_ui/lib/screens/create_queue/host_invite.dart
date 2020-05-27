@@ -7,13 +7,82 @@ import 'package:aux_ui/widgets/buttons/rounded_action_button.dart';
 
 class HostInvite extends SequentialWidget {
   final String queueName;
-  const HostInvite(
-    {
-      Key key, 
-      String nextPage, 
-      String backPage, 
-      this.queueName}) : super(key: key, nextPage: nextPage, backPage: backPage);
+  const HostInvite({Key key, String nextPage, String backPage, this.queueName})
+      : super(key: key, nextPage: nextPage, backPage: backPage);
   _HostInviteState createState() => _HostInviteState();
+}
+
+class _Caption extends StatelessWidget {
+  final String text;
+  final EdgeInsets padding;
+
+  const _Caption({Key key, this.text, this.padding}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: padding,
+        child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              text,
+              style: auxAccentButton,
+              textAlign: TextAlign.left,
+            )));
+  }
+}
+
+class _QRCode extends StatelessWidget {
+  final String imageAssetLink;
+
+  const _QRCode({Key key, this.imageAssetLink}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: SizeConfig.screenWidth *
+            0.7, // TODO: un-hardcode, square won't work
+        height: SizeConfig.screenWidth * 0.7,
+        child: Card(
+            child: Image.asset(imageAssetLink),
+            color: auxAccent,
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+                side: BorderSide(
+                    color: auxAccent,
+                    style: BorderStyle.solid,
+                    width: 2 // TODO: scale by screen resolution
+                    ))));
+  }
+}
+
+class _BitlyLink extends StatelessWidget {
+  final String url;
+
+  const _BitlyLink({Key key, this.url}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+        color: Colors.transparent,
+        borderOnForeground: true,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(
+                color: auxAccent,
+                style: BorderStyle.solid,
+                width: 2 // TODO: scale by screen resolution
+                )),
+        child: ListTile(
+            dense: true,
+            title: Text(url, style: auxBody2),
+            trailing: IconTheme(
+                data: IconThemeData(
+                    color: auxAccent), // TODO: pull up share methods
+                child: Icon(Icons.share))));
+  }
 }
 
 class _HostInviteState extends State<HostInvite> {
@@ -40,56 +109,6 @@ class _HostInviteState extends State<HostInvite> {
     _createQRCode();
   }
 
-  Widget _createCaption(String text, EdgeInsets padding) {
-    return Padding(
-        padding: padding,
-        child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              text,
-              style: auxAccentButton,
-              textAlign: TextAlign.left,
-            )));
-  }
-
-  Widget _createBitlyLinkComponent(String url) {
-    return Card(
-        color: Colors.transparent,
-        borderOnForeground: true,
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: BorderSide(
-                color: auxAccent,
-                style: BorderStyle.solid,
-                width: 2 // TODO: scale by screen resolution
-            )),
-        child: ListTile(
-            dense: true,
-            title: Text(url, style: auxBody2),
-            trailing: IconTheme(
-                data: IconThemeData(color: auxAccent), // TODO: pull up share methods
-                child: Icon(Icons.share))));
-  }
-
-  Widget _createQRCodeComponent(String imageAssetLink) {
-    return Container(
-        width:
-        SizeConfig.screenWidth - 83, // TODO: un-hardcode, square won't work
-        height: SizeConfig.screenWidth - 83,
-        child: Card(
-            child: Image.asset(imageAssetLink),
-            color: auxAccent,
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-                side: BorderSide(
-                    color: auxAccent,
-                    style: BorderStyle.solid,
-                    width: 2 // TODO: scale by screen resolution
-                ))));
-  }
-
   void _initializeWidgets() {
     if (_initialized)
       return; // don't waste time reinitializing widgets on rebuild
@@ -102,12 +121,14 @@ class _HostInviteState extends State<HostInvite> {
     _inviteGeneration = Align(
       alignment: Alignment.bottomCenter,
       child: Column(children: <Widget>[
-        _createCaption(
-            "with a secret link", EdgeInsets.only(left: 5, bottom: 12)),
-        _createBitlyLinkComponent(_bitlyURL),
-        _createCaption(
-            "with a QR code", EdgeInsets.only(left: 5, bottom: 12, top: 24)),
-        _createQRCodeComponent(_qrAssetLink),
+        const _Caption(
+            text: "with a secret link",
+            padding: EdgeInsets.only(left: 5, bottom: 12)),
+        _BitlyLink(url: _bitlyURL),
+        const _Caption(
+            text: "with a QR code",
+            padding: EdgeInsets.only(left: 5, bottom: 12, top: 24)),
+        _QRCode(imageAssetLink: _qrAssetLink),
         Padding(
             padding: EdgeInsets.only(top: 10),
             child: RoundedActionButton(
@@ -133,5 +154,4 @@ class _HostInviteState extends State<HostInvite> {
         topWidget: _namePromptText,
         bottomWidget: _inviteGeneration);
   }
-
 }

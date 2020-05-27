@@ -15,57 +15,41 @@ class JoinQueueConfirmation extends SequentialWidget {
 }
 
 class _JoinQueueConfirmationState extends State<JoinQueueConfirmation> {
-  bool _initialized = false;
-  Widget _confirmationText;
-  Widget _queueCreateConfirmation;
-
-  void _initializeWidgets() {
-    if (_initialized)
-      return; // don't waste time reinitializing widgets on rebuild
-    _initialized = true;
-
-    _confirmationText = Align(
-        alignment: Alignment.bottomLeft,
-        child: Text("does this look right?", style: auxDisp3));
-
-    _queueCreateConfirmation = Align(
-      alignment: Alignment.bottomCenter,
-      child: Column(children: <Widget>[
-        Padding(
-            padding: EdgeInsets.only(
-                top: 35), // TODO: change after putting in queue preview
-            child: RoundedActionButton(
-                height: 32,
-                width: SizeConfig.screenWidth * 3 / 5,
-                onPressed: () => widget.next(context),
-                color: auxAccent,
-                borderColor: auxAccent,
-                text: "join",
-                textStyle: auxPrimaryButton)),
-        Padding(
-            padding: EdgeInsets.only(top: 35),
-            child: RoundedActionButton(
-                height: 32,
-                width: SizeConfig.screenWidth * 3 / 5,
-                onPressed: () => widget.back(context),
-                color: auxPrimary,
-                borderColor: auxAccent,
-                text: "this isn't it, take me back",
-                textStyle: auxAccentButton))
-      ]),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    _initializeWidgets();
 
     return NuxContainer(
         topFlex: 6,
         title: 'aux',
-        topWidget: _confirmationText,
-        bottomWidget: _queueCreateConfirmation);
+        topWidget: const Align(
+            alignment: Alignment.bottomLeft,
+            child: Text("does this look right?", style: auxDisp3)),
+        bottomWidget: Align(
+          alignment: Alignment.bottomCenter,
+          child: Column(children: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(
+                    top: 35), // TODO: change after putting in queue preview
+                child: RoundedActionButton(
+                    height: 32,
+                    width: SizeConfig.screenWidth * 3 / 5,
+                    onPressed: () => widget.next(context),
+                    color: auxAccent,
+                    borderColor: auxAccent,
+                    text: "join",
+                    textStyle: auxPrimaryButton)),
+            Padding(
+                padding: EdgeInsets.only(top: 35),
+                child: RoundedActionButton(
+                    height: 32,
+                    width: SizeConfig.screenWidth * 3 / 5,
+                    onPressed: () => widget.back(context),
+                    color: auxPrimary,
+                    borderColor: auxAccent,
+                    text: "this isn't it, take me back",
+                    textStyle: auxAccentButton))
+          ]),
+        ));
   }
-
 }

@@ -1,99 +1,70 @@
 import 'package:aux_ui/aux_lib/song.dart';
-import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
-import 'package:aux_ui/widgets/layout/queue_item.dart';
-import 'package:aux_ui/widgets/layout/song_countdown.dart';
+import 'package:aux_ui/routing/router.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
+import 'package:aux_ui/aux_lib/spotify_session.dart';
+import 'package:aux_ui/widgets/queue_main_display/playback_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
+import 'package:aux_ui/widgets/layout/main_container.dart';
+import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/layout/queue_container.dart';
-import 'package:aux_ui/widgets/layout/aux_bottom_shelf.dart';
+import 'package:flutter/foundation.dart';
 
 class MainSearch extends StatefulWidget {
+  final SpotifySession spotifySession;
+  const MainSearch({Key key, this.spotifySession}) : super(key: key);
   _MainSearchState createState() => _MainSearchState();
 }
 
 class _MainSearchState extends State<MainSearch> {
-  List<Song> yourSongs;
-  List<Song> queueSongs;
+  List<Song> searchResults;
+  TextEditingController searchController;
+  int counter = 0;
+
 
   @override
   void initState() {
     super.initState();
-    _initSongList();
+    searchController = TextEditingController();
+    this.searchResults = new List();
   }
 
-  void _initSongList() { //TODO: implement fetch here
-    setState(() {
-      queueSongs = List.filled(20,
-        Song(
-          "Tommy's Party",
-          "Peach Pit",
-          "assets/album_cover_example.jpg",
-          "Diane"
-        )
-      );
-      // your songs would be a filter over queue ^ for where contributor == you
-      yourSongs = List.filled(20,
-          Song(
-              "Tommy's Party",
-              "Peach Pit",
-              "assets/album_cover_example.jpg",
-              "Diane"
-          )
-      );
-    });
+  void _search(String query) async {
+    widget.spotifySession.search(query).then((results) =>
+      setState(() {
+          this.searchResults = results;
+        }
+      )
+    );
   }
 
-  Widget getSongUpNext() {
-    Widget right = QueueItemAction(
-      onPressed: () {},
-    );
-
-    return QueueItem(
-      song: queueSongs[0],
-      showContributor: true,
-      rightPress: right,
-    );
+  void _throttledSearch(String query) async {
+    _search(query);
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Material(
-        type: MaterialType.transparency,
-        child: Container(
-          padding: SizeConfig.notchPadding,
-          color: auxPrimary,
-          child: Stack(children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(2.0),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                      padding: EdgeInsets.only(
-                          left: 12, right: 12, top: 42, bottom: 8),
-                      child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Text('too queue for u', style: auxDisp2))),
-                  QueueContainer(
-                    title: 'up next',
-                    child: getSongUpNext(),
-                    titleWidget: Text("temp")
-                  ),
-                  QueueContainer(
-                    title: 'your songs',
-                    child: SongList(
-                        songs: yourSongs,
-                      onPress: () {}
-                    ),
-                    titleWidget: SongCountdown(),
-                  ),
-                ],
-              ),
-            ),
-          AuxBottomShelf(),
-          ]
-          )
-        ));
+    return MainContainer(
+      title: 'add a song', 
+      // header: Align(alignment: Alignment.center, child: Text('BIIIIIIIG poopy')),
+      body: [
+        AuxTextField( // TODO: add clear input blutton at far right end
+          icon: Icon(Icons.search, color:auxAccent, size: 26.0, semanticLabel: "Search for a song"),
+          label: 'search for a song',
+          controller: this.searchController,
+          showActions: false,
+          onChanged: this._throttledSearch, // short search? https://stackoverflow.com/questions/54765307/textfield-on-change-call-api-how-to-throttle-this
+          onSubmitted: this._search, // TODO: full search
+        ),
+        Expanded(
+          child: QueueContainer(
+            title: 'results',
+            child: SongList(songs: this.searchResults, songOnPress: (int x){}),
+          ),
+        ),
+      ],
+      footer: PlaybackControls(isHost: true, spotifySession: spotifySession, isPaused: true),
+    );
   }
 }

@@ -15,7 +15,6 @@ class Tester extends StatelessWidget {
             padding: SizeConfig.notchPadding,
             child: AuxCard(
               borderColor: auxAccent,
-              padding: 12.0,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[

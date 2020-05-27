@@ -6,24 +6,43 @@ class QueueContainer extends StatelessWidget {
   final String title;
   final Widget child;
   final Widget titleWidget;
-  final double minHeight;
-  final double maxHeight;
+  final double height;
+  final double width;
+  final BoxConstraints constraints;
+  final EdgeInsets margin;
+  final EdgeInsets padding;
 
   QueueContainer({
     Key key, 
     this.title,
     this.child,
     this.titleWidget,
-    this.minHeight = 0.0,
-    this.maxHeight = double.infinity,
+    this.height,
+    this.width,
+    this.margin,
+    this.constraints,
+    this.padding,
   }) : super(key: key);
+
+  EdgeInsets _defaultPadding() {
+    if(this.padding == null) {
+      return EdgeInsets.all(SizeConfig.blockSizeVertical * 1.5);
+    }
+    return this.padding;
+  }
 
   @override
   Widget build(BuildContext context) {
     return AuxCard(
+      height: this.height,
+      width: this.width,
+      constraints: this.constraints,
+      margin: this.margin,
+      padding: _defaultPadding(),
       borderColor: auxAccent,
-      padding: 15.0,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>
         [
           Row(
@@ -33,7 +52,7 @@ class QueueContainer extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   child: Text(this.title, style: auxDisp1),
-                  padding: EdgeInsets.only(top: 5),
+                  padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * .5),
                 )
               ),
               Align(
@@ -42,11 +61,8 @@ class QueueContainer extends StatelessWidget {
               )
             ],
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 5, right: 5),
-            child: this.child,
-          )
-        ],
+          Expanded(child: this.child)
+        ]
       ),
     );
   }
