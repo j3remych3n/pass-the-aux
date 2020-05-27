@@ -57,7 +57,7 @@ class MainContainer extends StatelessWidget  {
                   height: SizeConfig.blockSizeVertical * 2,
                   child: Flex(
                     direction: Axis.horizontal,
-                      children:<Widget>[
+                    children: <Widget>[
                       Expanded(
                         child: this.header,
                       )
@@ -79,6 +79,9 @@ class MainContainer extends StatelessWidget  {
                         margin: EdgeInsets.all(0),
                         width: SizeConfig.screenWidth,
                         height: SizeConfig.blockSizeVertical * 12,
+                        constraints: BoxConstraints(
+                          maxHeight: SizeConfig.blockSizeVertical * 12,
+                        ),
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             begin: Alignment.bottomCenter,
