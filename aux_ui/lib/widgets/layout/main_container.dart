@@ -8,7 +8,6 @@ class MainContainer extends StatelessWidget  {
   final Widget header;
   final Widget footer;
   final List<Widget> body;
-  final List<bool> expanded;
   static final Divider _bodySpacer = Divider(
     color: Colors.transparent,
     height: SizeConfig.blockSizeVertical);
@@ -20,7 +19,6 @@ class MainContainer extends StatelessWidget  {
       this.header,
       this.body,
       this.footer,
-      this.expanded,
     }
   ) : super(key: key);
 
@@ -45,7 +43,7 @@ class MainContainer extends StatelessWidget  {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(
-                    top: SizeConfig.blockSizeVertical * 5, 
+                    top: SizeConfig.blockSizeVertical * 3.5, 
                     bottom: SizeConfig.blockSizeVertical * 0.5,
                     left: SizeConfig.blockSizeHorizontal * 4,
                     right: SizeConfig.blockSizeHorizontal * 4,
@@ -54,35 +52,38 @@ class MainContainer extends StatelessWidget  {
                     alignment: Alignment.bottomLeft,
                     child: Text(this.title, style: auxDisp2)
                   )
-                ), 
-                SizedBox(
-                  width: SizeConfig.safeAreaHorizontal,
-                  height: SizeConfig.blockSizeVertical * 1.5,
-                  child: this.header
+                ),
+                Container(
+                  height: SizeConfig.blockSizeVertical * 2,
+                  child: Flex(direction: Axis.horizontal,
+                      children: <Widget>[Expanded(child: this.header)])
                 ),
                 Expanded(
-                  child: Scaffold(
-                    body: Column(
-                      children: List<Widget>
-                        .generate(
-                          max(0, this.body.length * 2 - 1), 
-                          (i) => (i.isEven) ? this.body[i ~/ 2] : _bodySpacer
-                      )
-                    ),
-                    bottomSheet: Container(
-                      margin: EdgeInsets.all(0),
-                      width: SizeConfig.screenWidth,
-                      height: SizeConfig.blockSizeVertical * 12,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          colors: [auxPrimary, auxPrimary, Colors.transparent],
-                          stops: [0, 0.55, 1],
-                        ),
+                  child: Padding(
+                    padding:EdgeInsets.only(top: SizeConfig.blockSizeVertical * 0.5),
+                    child: Scaffold(
+                      body: Column(
+                        children: List<Widget>
+                          .generate(
+                            max(0, this.body.length * 2 - 1), 
+                            (i) => (i.isEven) ? this.body[i ~/ 2] : _bodySpacer
+                        )
                       ),
-                      child: this.footer,
-                    ),
+                      bottomSheet: Container(
+                        margin: EdgeInsets.all(0),
+                        width: SizeConfig.screenWidth,
+                        height: SizeConfig.blockSizeVertical * 12,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [auxPrimary, auxPrimary, Colors.transparent],
+                            stops: [0, 0.55, 1],
+                          ),
+                        ),
+                        child: this.footer,
+                      ),
+                    )
                   )
                 ),
               ],

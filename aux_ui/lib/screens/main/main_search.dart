@@ -38,11 +38,7 @@ class _MainSearchState extends State<MainSearch> {
   }
 
   void _throttledSearch(String query) async {
-    await _search(query);
-  }
-
-  void avoidKeyboard(BuildContext context) {
-
+    _search(query);
   }
 
   @override
@@ -50,23 +46,24 @@ class _MainSearchState extends State<MainSearch> {
     SizeConfig().init(context);
     return MainContainer(
       title: 'add a song', 
+      header: Text('BIIIIIIIG poopy'),
       body: [
         AuxTextField( // TODO: add clear input blutton at far right end
           icon: Icon(Icons.search, color:auxAccent, size: 26.0, semanticLabel: "Search for a song"),
           label: 'search for a song',
           controller: this.searchController,
           showActions: false,
-          onChanged: this._search, // short search? https://stackoverflow.com/questions/54765307/textfield-on-change-call-api-how-to-throttle-this
+          onChanged: this._throttledSearch, // short search? https://stackoverflow.com/questions/54765307/textfield-on-change-call-api-how-to-throttle-this
           onSubmitted: this._search, // TODO: full search
         ),
-        Expanded(child:
-          QueueContainer(
+        Expanded(
+          child: QueueContainer(
             title: 'results',
             child: SongList(songs: this.searchResults, songOnPress: (int x){}),
           ),
         ),
       ],
-      footer: PlaybackControls(isHost: true)
+//       footer: SearchControls()
     );
   }
 }

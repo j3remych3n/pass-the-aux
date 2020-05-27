@@ -15,8 +15,9 @@ class QueueHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: SizeConfig.blockSizeVertical * 2,
+    return Padding(
+        padding:
+            EdgeInsets.only(left: 15, bottom: 5), // TODO: don't hardcode probs
         child: Row(
           children: <Widget>[
             HeaderChip(

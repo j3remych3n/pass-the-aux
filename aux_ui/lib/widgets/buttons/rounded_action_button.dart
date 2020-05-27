@@ -11,13 +11,16 @@ class RoundedActionButton extends StatelessWidget {
   final TextStyle textStyle;
 
   RoundedActionButton(
-      {this.height,
+    {
+      this.height,
       this.width,
       this.onPressed,
       this.color = auxAccent,
       this.borderColor = Colors.transparent,
       this.text,
-      this.textStyle = auxPrimaryButton});
+      this.textStyle = auxPrimaryButton
+    }
+  );
 
   @override
   Widget build(BuildContext context) {
