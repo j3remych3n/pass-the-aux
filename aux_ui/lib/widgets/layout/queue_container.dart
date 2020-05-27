@@ -10,6 +10,7 @@ class QueueContainer extends StatelessWidget {
   final double width;
   final BoxConstraints constraints;
   final EdgeInsets margin;
+  final EdgeInsets padding;
 
   QueueContainer({
     Key key, 
@@ -20,7 +21,15 @@ class QueueContainer extends StatelessWidget {
     this.width,
     this.margin,
     this.constraints,
+    this.padding,
   }) : super(key: key);
+
+  EdgeInsets _defaultPadding() {
+    if(this.padding == null) {
+      return EdgeInsets.all(SizeConfig.blockSizeVertical * 1.5);
+    }
+    return this.padding;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +38,8 @@ class QueueContainer extends StatelessWidget {
       width: this.width,
       constraints: this.constraints,
       margin: this.margin,
+      padding: _defaultPadding(),
       borderColor: auxAccent,
-      padding: 10.0,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -43,7 +52,7 @@ class QueueContainer extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   child: Text(this.title, style: auxDisp1),
-                  padding: EdgeInsets.only(top: 5),
+                  padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical * .5),
                 )
               ),
               Align(

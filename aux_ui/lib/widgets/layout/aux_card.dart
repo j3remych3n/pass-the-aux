@@ -6,17 +6,17 @@ class AuxCard extends StatelessWidget {
     { 
       this.child, 
       this.borderColor = auxLGrey,
-      this.padding = 12.0,
+      this.padding = const EdgeInsets.all(12.0),
+      this.margin = const EdgeInsets.all(6.0),
       this.width,
       this.height,
       this.constraints,
-      this.margin = const EdgeInsets.all(6),
     }
   );
 
   final child;
   final borderColor;
-  final padding;
+  final EdgeInsets padding;
   final double width;
   final double height;
   final BoxConstraints constraints;
@@ -28,23 +28,21 @@ class AuxCard extends StatelessWidget {
 
     return Material(
       color: Colors.transparent,
-      child: Container(
-        width: this.width,
-        height: this.height,
-        constraints: this.constraints,
-        child: Padding(
-          padding: EdgeInsets.all(this.padding),  // TODO: scale by screen resolution
+        child: Container(
+          width: this.width,
+          height: this.height,
+          constraints: this.constraints,
+          padding: this.padding,
           child: this.child,
-        ),
-        margin: this.margin,  // TODO: scale by screen resolution
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: this.borderColor,
-            width: 3,
-          ),
-          borderRadius: BorderRadius.circular(10),
+          margin: this.margin,  // TODO: scale by screen resolution
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: this.borderColor,
+              width: 3,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          )
         )
-      )
     );
   }
 }

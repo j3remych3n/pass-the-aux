@@ -78,7 +78,6 @@ class _MainQueueState extends State<MainQueue> {
 
     _currPlaying = AuxCard(
         borderColor: auxBlurple,
-        padding: 15.0,
         child: Column(
           children: <Widget>[
             QueueItem(

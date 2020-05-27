@@ -8,7 +8,6 @@ import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/layout/queue_container.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
 import 'package:flutter/foundation.dart';
-import 'package:keyboard_avoider/keyboard_avoider.dart';
 
 class MainSearch extends StatefulWidget {
   final SpotifySession spotifySession;
@@ -59,14 +58,12 @@ class _MainSearchState extends State<MainSearch> {
           onChanged: this._search, // short search? https://stackoverflow.com/questions/54765307/textfield-on-change-call-api-how-to-throttle-this
           onSubmitted: this._search, // TODO: full search
         ),
-        KeyboardAvoider(
-          child: QueueContainer(
+        Expanded(child:
+          QueueContainer(
             title: 'results',
             child: SongList(songs: this.searchResults, songOnPress: (int x){}),
-            constraints: null,
-            height: 500.0,
           ),
-        )
+        ),
       ]
     );
   }
