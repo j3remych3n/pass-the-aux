@@ -71,17 +71,17 @@ class _PlaybackControlsState extends State<PlaybackControls> {
   @override
   Widget build(BuildContext context) {
     // TODO: scale everything
-//    return AuxBottomShelf(
-    return Container(
-        width: SizeConfig.screenWidth,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [auxPrimary, auxPrimary, Colors.transparent],
-              stops: [0, 0.60, 1],
-            )),
-        child: Row(
+    return AuxBottomShelf(
+//    return Container(
+//        width: SizeConfig.screenWidth,
+//        decoration: BoxDecoration(
+//            gradient: LinearGradient(
+//              begin: Alignment.bottomCenter,
+//              end: Alignment.topCenter,
+//              colors: [auxPrimary, auxPrimary, Colors.transparent],
+//              stops: [0, 0.60, 1],
+//            )),
+        child: Positioned(bottom: 50, child: Row(
           children: <Widget>[
             _getRoundButton(Icons.person_add, 17, () {}, false, 3),
             Expanded(
@@ -127,6 +127,6 @@ class _PlaybackControlsState extends State<PlaybackControls> {
                 visible: widget.isHost,
                 child: _getRoundButton(Icons.settings, 17, () {}, false, 3))
           ],
-        ));
+        )));
   }
 }
