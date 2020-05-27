@@ -21,6 +21,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 //      return MaterialPageRoute(builder: (context) => MainSearch(spotifySession: spotifySession));
        return MaterialPageRoute(builder: (context) => MainQueue(spotifySession: spotifySession));
     
+    case MainSearchRoute:
+      return MaterialPageRoute(builder: (context) => MainSearch(spotifySession: spotifySession));
+
     case LinkSpotifyRoute:
       if (args.toString() == 'host') {
         return MaterialPageRoute(builder: (context) => LinkSpotify(nextPage: HostInviteRoute, sessionManager: spotifySession));

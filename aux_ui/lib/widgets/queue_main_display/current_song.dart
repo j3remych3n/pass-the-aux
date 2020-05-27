@@ -48,7 +48,8 @@ class CurrentSong extends StatelessWidget {
             var albumCover = snapshot.data;
             return AuxCard(
                 borderColor: auxBlurple,
-                padding: 15.0,
+                padding: EdgeInsets.all(15.0),
+                margin: EdgeInsets.all(0),
                 child: Column(
                   children: <Widget>[
                     QueueItem(

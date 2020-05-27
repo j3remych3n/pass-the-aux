@@ -19,13 +19,14 @@ class _SongListState extends State<SongList> {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
+            padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical),
             shrinkWrap: true,
             itemCount: widget.songs.length,
             separatorBuilder: (BuildContext context, int index) =>
                 Divider(thickness: 0, height: 8, color: Colors.transparent),
             itemBuilder: (BuildContext context, int index) {
               return QueueItem(
-                rightPress: QueueItemAction(onPressed: widget.songOnPress, icons: [
+                rightPress: QueueItemAction(onPressed: () => widget.songOnPress(index), icons: [
                   Icon(
                     Icons.radio_button_unchecked,
                     color: auxAccent,

@@ -136,7 +136,7 @@ class SpotifySession {
       String market = 'US',
       bool sorted = true }) async {
 
-      if(query.length == 0) return new List();
+      if(query.length == 0) return new List<Song>();
 
       Set<Song> resultSet = (await _naiveSearch(query)).toSet();
       var pickySearch = await _naiveSearch('"${query}"');

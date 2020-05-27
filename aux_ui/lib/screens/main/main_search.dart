@@ -1,13 +1,13 @@
 import 'package:aux_ui/aux_lib/song.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
 import 'package:aux_ui/aux_lib/spotify_session.dart';
+import 'package:aux_ui/widgets/queue_main_display/playback_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/main_container.dart';
 import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/layout/queue_container.dart';
 import 'package:flutter/foundation.dart';
-import 'package:keyboard_avoider/keyboard_avoider.dart';
 
 class MainSearch extends StatefulWidget {
   final SpotifySession spotifySession;
@@ -48,7 +48,8 @@ class _MainSearchState extends State<MainSearch> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return MainContainer(title: 'add a song', 
+    return MainContainer(
+      title: 'add a song', 
       body: [
         AuxTextField( // TODO: add clear input blutton at far right end
           icon: Icon(Icons.search, color:auxAccent, size: 26.0, semanticLabel: "Search for a song"),
@@ -58,15 +59,14 @@ class _MainSearchState extends State<MainSearch> {
           onChanged: this._search, // short search? https://stackoverflow.com/questions/54765307/textfield-on-change-call-api-how-to-throttle-this
           onSubmitted: this._search, // TODO: full search
         ),
-        KeyboardAvoider(
-          child: QueueContainer(
+        Expanded(child:
+          QueueContainer(
             title: 'results',
             child: SongList(songs: this.searchResults, songOnPress: (int x){}),
-            constraints: null,
-            height: 500.0,
           ),
-        )
-      ]
+        ),
+      ],
+      footer: PlaybackControls(isHost: true)
     );
   }
 }

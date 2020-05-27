@@ -26,7 +26,8 @@ class NuxContainer extends StatelessWidget {
           padding: SizeConfig.notchPadding,
           child: AuxCard(
             borderColor: auxAccent,
-            padding: 24.0,
+            padding: EdgeInsets.all(SizeConfig.blockSizeVertical * 2),
+            margin: EdgeInsets.all(SizeConfig.blockSizeVertical * 0.75),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[

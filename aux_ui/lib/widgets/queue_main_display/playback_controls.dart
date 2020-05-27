@@ -1,7 +1,6 @@
 import 'package:aux_ui/aux_lib/spotify_session.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/buttons/rounded_action_button.dart';
-import 'package:aux_ui/widgets/layout/aux_bottom_shelf.dart';
 import 'package:flutter/material.dart';
 
 class PlaybackControls extends StatefulWidget {
@@ -71,53 +70,52 @@ class _PlaybackControlsState extends State<PlaybackControls> {
   @override
   Widget build(BuildContext context) {
     // TODO: scale everything
-    return AuxBottomShelf(
-        child: Row(
-          children: <Widget>[
-            _getRoundButton(Icons.person_add, 17, () {}, false, 3),
-            Expanded(
-                flex: 6,
-                child: Column(
-                  children: <Widget>[
-                    Align(
-                        alignment: widget.isHost
-                            ? Alignment.center
-                            : Alignment.centerLeft,
-                        child: RoundedActionButton(
-                            height: 41,
-                            width: SizeConfig.screenWidth * 1 / 2,
-                            // TODO: scale
-                            onPressed: () {},
-                            text: "add a song")),
-                    Visibility(
-                        visible: widget.isHost,
-                        child: Padding(
-                            padding: EdgeInsets.all(0),
-                            child: Row(
-                              children: <Widget>[
-                                _getRoundButton(Icons.skip_previous, 21, () {
-                                  _skipPrevious();
-                                }, true, 4),
-                                Expanded(
-                                    flex: 4,
-                                    child: _getStadiumButton(
-                                        widget.isPaused
-                                            ? Icons.play_arrow
-                                            : Icons.pause,
-                                        27, () {
-                                      _playPause(widget.isPaused);
-                                    }, true, 100, 54)),
-                                _getRoundButton(Icons.skip_next, 21, () {
-                                  _skipNext();
-                                }, true, 4)
-                              ],
-                            )))
-                  ],
-                )),
-            Visibility(
-                visible: widget.isHost,
-                child: _getRoundButton(Icons.settings, 17, () {}, false, 3))
-          ],
-        ));
+    return Row(
+      children: <Widget>[
+        _getRoundButton(Icons.person_add, 17, () {}, false, 3),
+        Expanded(
+            flex: 6,
+            child: Column(
+              children: <Widget>[
+                Align(
+                    alignment: widget.isHost
+                        ? Alignment.center
+                        : Alignment.centerLeft,
+                    child: RoundedActionButton(
+                        height: 41,
+                        width: SizeConfig.screenWidth * 1 / 2,
+                        // TODO: scale
+                        onPressed: () {},
+                        text: "add a song")),
+                Visibility(
+                    visible: widget.isHost,
+                    child: Padding(
+                        padding: EdgeInsets.all(0),
+                        child: Row(
+                          children: <Widget>[
+                            _getRoundButton(Icons.skip_previous, 21, () {
+                              _skipPrevious();
+                            }, true, 4),
+                            Expanded(
+                                flex: 4,
+                                child: _getStadiumButton(
+                                    widget.isPaused
+                                        ? Icons.play_arrow
+                                        : Icons.pause,
+                                    27, () {
+                                  _playPause(widget.isPaused);
+                                }, true, 100, 54)),
+                            _getRoundButton(Icons.skip_next, 21, () {
+                              _skipNext();
+                            }, true, 4)
+                          ],
+                        )))
+              ],
+            )),
+        Visibility(
+            visible: widget.isHost,
+            child: _getRoundButton(Icons.settings, 17, () {}, false, 3))
+      ],
+    );
   }
 }
