@@ -15,10 +15,10 @@ class MainContainer extends StatelessWidget  {
   const MainContainer(
     {
       Key key,
-      this.title,
-      this.header,
-      this.body,
-      this.footer,
+      this.title = '',
+      this.header = const Placeholder(color: Colors.transparent),
+      this.body = const <Widget>[],
+      this.footer = const Placeholder(color: Colors.transparent),
     }
   ) : super(key: key);
 
