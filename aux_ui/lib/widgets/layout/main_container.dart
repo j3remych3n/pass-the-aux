@@ -16,9 +16,9 @@ class MainContainer extends StatelessWidget  {
     {
       Key key,
       this.title,
-      this.header,
-      this.body,
-      this.footer,
+      this.header = const Spacer(),
+      this.body = const <Widget>[],
+      this.footer = const Spacer(),
     }
   ) : super(key: key);
 
