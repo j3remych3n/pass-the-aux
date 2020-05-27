@@ -12,7 +12,8 @@ class CurrentSong extends StatelessWidget {
   final PlayerState playerState;
   final SpotifySession spotifySession;
 
-  const CurrentSong({Key key, this.playerState, this.spotifySession}) : super(key: key);
+  const CurrentSong({Key key, this.playerState, this.spotifySession})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,9 @@ class CurrentSong extends StatelessWidget {
     String artist = track.artist.name;
     String trackUri = track.uri;
     String contributor = "Diane"; // TODO: don't hardcode
-    double progress = playerState.playbackPosition / track.duration;
+    double progress = (playerState.playbackPosition == 0 || track.duration == 0)
+        ? 0
+        : playerState.playbackPosition / track.duration;
 
     Widget right = QueueItemAction(onPressed: () {}, icons: [
       Icon(
@@ -49,10 +52,7 @@ class CurrentSong extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     QueueItem(
-                      song: new Song(name,
-                          artist,
-                          albumCover,
-                          trackUri,
+                      song: new Song(name, artist, albumCover, trackUri,
                           contributor: contributor),
                       showContributor: true,
                       rightPress: right,
@@ -63,7 +63,8 @@ class CurrentSong extends StatelessWidget {
                         child: LinearProgressIndicator(
                             value: progress,
                             backgroundColor: auxDDGrey,
-                            valueColor: new AlwaysStoppedAnimation<Color>(auxBlurple)))
+                            valueColor:
+                                new AlwaysStoppedAnimation<Color>(auxBlurple)))
                   ],
                 ));
           } else {
@@ -71,7 +72,6 @@ class CurrentSong extends StatelessWidget {
               child: Text("Getting image"), // TODO: replace
             );
           }
-        }
-    );
+        });
   }
 }
