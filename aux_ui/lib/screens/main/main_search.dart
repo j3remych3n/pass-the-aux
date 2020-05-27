@@ -1,4 +1,5 @@
 import 'package:aux_ui/aux_lib/song.dart';
+import 'package:aux_ui/routing/router.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
 import 'package:aux_ui/aux_lib/spotify_session.dart';
 import 'package:aux_ui/widgets/queue_main_display/playback_controls.dart';
@@ -63,7 +64,7 @@ class _MainSearchState extends State<MainSearch> {
           ),
         ),
       ],
-      footer: PlaybackControls(isHost: true),
+//      footer: PlaybackControls(isHost: true),
     );
   }
 }
