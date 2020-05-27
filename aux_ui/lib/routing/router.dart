@@ -7,6 +7,7 @@ import 'package:aux_ui/screens/nux_intro.dart';
 import 'package:aux_ui/aux_lib/spotify_session.dart';
 import 'package:aux_ui/screens/tester.dart';
 import 'package:aux_ui/screens/main/main_queue.dart';
+import 'package:aux_ui/screens/main/main_search.dart';
 import 'package:flutter/material.dart';
 
 final SpotifySession spotifySession = SpotifySession();
@@ -17,7 +18,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
   
     case MainQueueRoute:
-      return MaterialPageRoute(builder: (context) => MainQueue(spotifySession: spotifySession));
+//      return MaterialPageRoute(builder: (context) => MainSearch(spotifySession: spotifySession));
+       return MaterialPageRoute(builder: (context) => MainQueue(spotifySession: spotifySession));
     
     case LinkSpotifyRoute:
       if (args.toString() == 'host') {

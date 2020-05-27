@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:aux_ui/aux_lib/song.dart';
 import 'package:aux_ui/aux_lib/spotify_session.dart';
 import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
@@ -6,7 +5,6 @@ import 'package:aux_ui/widgets/layout/aux_card.dart';
 import 'package:aux_ui/widgets/layout/queue_item.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
-import 'package:spotify_sdk/models/image_uri.dart';
 import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/models/track.dart';
 
@@ -21,7 +19,7 @@ class CurrentSong extends StatelessWidget {
     Track track = playerState.track;
     String name = track.name;
     String artist = track.artist.name;
-    ImageUri imageUri = track.imageUri;
+    String trackUri = track.uri;
     String contributor = "Diane"; // TODO: don't hardcode
     double progress = playerState.playbackPosition / track.duration;
 
@@ -41,8 +39,8 @@ class CurrentSong extends StatelessWidget {
     ]);
 
     return FutureBuilder(
-        future: spotifySession.getImage(imageUri),
-        builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
+        future: spotifySession.getCover(trackUri),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
             var albumCover = snapshot.data;
             return AuxCard(
@@ -51,7 +49,11 @@ class CurrentSong extends StatelessWidget {
                 child: Column(
                   children: <Widget>[
                     QueueItem(
-                      song: new Song(name, artist, albumCover, contributor),
+                      song: new Song(name,
+                          artist,
+                          albumCover,
+                          trackUri,
+                          contributor: contributor),
                       showContributor: true,
                       rightPress: right,
                       isAccent: true,

@@ -34,14 +34,9 @@ class _QueueItemState extends State<QueueItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(0),
-        child: Card(
-            elevation: 0,
-            color: Colors.transparent,
-            child: Container(
-                child: Row(children: <Widget>[
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
               Container(
                   foregroundDecoration: BoxDecoration(
                       border: Border.all(
@@ -51,9 +46,8 @@ class _QueueItemState extends State<QueueItem> {
                       borderRadius: BorderRadius.circular(3)),
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(3),
-                      child: widget.song.albumCover != null ? Image.memory(widget.song.albumCover,
-                          width: imageSize(), height: imageSize()) :
-                  Image.asset("assets/album_cover_example.jpg", width: imageSize(), height: imageSize()))), //TODO: scale
+                      child: Image.network(widget.song.coverLink,
+                          width: imageSize(), height: imageSize()))), //TODO: scale
               Expanded(
                   child: Padding(
                       padding: EdgeInsets.only(left: 13), // TODO: scale
@@ -66,6 +60,6 @@ class _QueueItemState extends State<QueueItem> {
                                 style: widget.isAccent ? auxAsterisk : auxBody1, textAlign: TextAlign.left)
                           ]))),
               Align(alignment: Alignment.centerRight, child: widget.rightPress)
-            ]))));
+            ]);
   }
 }

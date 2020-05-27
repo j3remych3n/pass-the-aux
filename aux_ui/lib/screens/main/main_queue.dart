@@ -8,8 +8,8 @@ import 'package:aux_ui/widgets/queue_main_display/song_up_next.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/queue_container.dart';
-import 'package:aux_ui/widgets/queue_main_display/playback_controls.dart';
 import 'package:spotify_sdk/models/player_state.dart';
+import 'package:aux_ui/screens/main/playback_controls.dart';
 
 class MainQueue extends StatefulWidget {
   final SpotifySession spotifySession;
@@ -54,19 +54,24 @@ class _MainQueueState extends State<MainQueue> {
     setState(() {
       queueSongs = List.filled(
           20,
-          Song("Tommy's Party", "Peach Pit", null,
-              "Diane"));
+          Song("Tommy's Party", "Peach Pit",
+              "https://images.genius.com/22927a8e14101437686b56ce1103e624.1000x1000x1.jpg",
+              "spotify:track:5OuJTtNve7FxUX82eEBupN",
+              contributor: "Diane"));
 
       // your songs would be a filter over queue ^ for where contributor == you
       yourSongs = List.filled(
           20,
-          Song("Tommy's Party", "Peach Pit", null,
-              "Diane"));
+          Song("Tommy's Party", "Peach Pit",
+              "https://images.genius.com/22927a8e14101437686b56ce1103e624.1000x1000x1.jpg",
+              "spotify:track:5OuJTtNve7FxUX82eEBupN",
+              contributor: "Diane"));
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return StreamBuilder<PlayerState>(
         stream: widget.spotifySession.getPlayerState(),
         initialData: PlayerState(null, true, 1, 1, null, null),
@@ -76,34 +81,41 @@ class _MainQueueState extends State<MainQueue> {
             return Material(
                 type: MaterialType.transparency,
                 child: Container(
+                    constraints: BoxConstraints.loose(
+                        Size.fromHeight(
+                            SizeConfig.safeAreaVertical
+                        )
+                    ),
                     padding: SizeConfig.notchPadding,
                     color: auxPrimary,
                     child: Stack(
                       children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(2.0),
-                          child: Column(
-                            children: <Widget>[
-                              Container(
-                                  padding: EdgeInsets.only(
-                                      left: 12, right: 12, top: 42, bottom: 8),
-                                  child: QueueHeader()),
-                              CurrentSong(playerState: playerState, spotifySession: widget.spotifySession),
-                              QueueContainer(
-                                  title: 'up next',
-                                  child: SongUpNext(song: queueSongs[0]),
-                                  titleWidget: const _ExpandQueueButton()),
-                              QueueContainer(
-                                title: 'your songs',
-                                child:
-                                    SongList(songs: yourSongs, onPress: () {}),
-                                titleWidget: SongCountdown(),
-                              ),
-                            ],
-                          ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Container(
+                                padding: EdgeInsets.only(
+                                    left: 12, right: 12, top: 42, bottom: 8),
+                                child: QueueHeader()),
+                            CurrentSong(playerState: playerState,
+                                spotifySession: widget.spotifySession),
+                            Expanded(child: QueueContainer(
+                                title: 'up next',
+                                child: SongUpNext(song: queueSongs[0]),
+                                titleWidget: const _ExpandQueueButton())),
+                            Expanded(child: QueueContainer(
+
+                              title: 'your songs',
+                              child:
+                              SongList(
+                                  songs: yourSongs, songOnPress: (int x) {}),
+                              titleWidget: SongCountdown()),
+                            ),
+                          ],
                         ),
                         Positioned(
-                            bottom: 10,
+                            bottom: 50,
                             child: PlaybackControls(
                               isHost: true,
                               spotifySession: widget.spotifySession,

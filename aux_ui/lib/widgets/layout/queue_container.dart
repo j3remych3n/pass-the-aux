@@ -6,24 +6,34 @@ class QueueContainer extends StatelessWidget {
   final String title;
   final Widget child;
   final Widget titleWidget;
-  final double minHeight;
-  final double maxHeight;
+  final double height;
+  final double width;
+  final BoxConstraints constraints;
+  final EdgeInsets margin;
 
   QueueContainer({
     Key key, 
     this.title,
     this.child,
     this.titleWidget,
-    this.minHeight = 0.0,
-    this.maxHeight = double.infinity,
+    this.height,
+    this.width,
+    this.margin,
+    this.constraints,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AuxCard(
+      height: this.height,
+      width: this.width,
+      constraints: this.constraints,
+      margin: this.margin,
       borderColor: auxAccent,
-      padding: 15.0,
+      padding: 10.0,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>
         [
           Row(
@@ -42,11 +52,8 @@ class QueueContainer extends StatelessWidget {
               )
             ],
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 5, right: 5),
-            child: this.child,
-          )
-        ],
+          Expanded(child: this.child)
+        ]
       ),
     );
   }

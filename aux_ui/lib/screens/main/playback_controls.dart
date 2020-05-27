@@ -5,15 +5,15 @@ import 'package:aux_ui/widgets/layout/aux_bottom_shelf.dart';
 import 'package:flutter/material.dart';
 
 class PlaybackControls extends StatefulWidget {
-  final bool isHost;
-  final SpotifySession spotifySession;
-  final bool isPaused;
+final bool isHost;
+final SpotifySession spotifySession;
+final bool isPaused;
 
-  const PlaybackControls({Key key, this.isHost, this.spotifySession, this.isPaused})
-      : super(key: key);
+const PlaybackControls({Key key, this.isHost, this.spotifySession, this.isPaused})
+: super(key: key);
 
-  @override
-  _PlaybackControlsState createState() => _PlaybackControlsState();
+@override
+_PlaybackControlsState createState() => _PlaybackControlsState();
 }
 
 class _PlaybackControlsState extends State<PlaybackControls> {
@@ -71,7 +71,16 @@ class _PlaybackControlsState extends State<PlaybackControls> {
   @override
   Widget build(BuildContext context) {
     // TODO: scale everything
-    return AuxBottomShelf(
+//    return AuxBottomShelf(
+    return Container(
+        width: SizeConfig.screenWidth,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+              colors: [auxPrimary, auxPrimary, Colors.transparent],
+              stops: [0, 0.60, 1],
+            )),
         child: Row(
           children: <Widget>[
             _getRoundButton(Icons.person_add, 17, () {}, false, 3),
