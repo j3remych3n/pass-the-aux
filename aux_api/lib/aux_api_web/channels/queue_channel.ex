@@ -13,6 +13,8 @@ defmodule AuxApiWeb.QueueChannel do
   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
   def handle_in("ping", payload, socket) do
+    sess = %AuxApi.Session{}
+    {:ok, curr_sess} = AuxApi.Repo.insert(sess)
     {:reply, {:ok, payload}, socket}
   end
 
