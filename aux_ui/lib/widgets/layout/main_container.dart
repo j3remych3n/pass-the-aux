@@ -44,7 +44,7 @@ class MainContainer extends StatelessWidget  {
                 Padding(
                   padding: EdgeInsets.only(
                     top: SizeConfig.blockSizeVertical * 3.5, 
-                    bottom: SizeConfig.blockSizeVertical * 0.5,
+                    bottom: SizeConfig.blockSizeVertical * 0.25,
                     left: SizeConfig.blockSizeHorizontal * 4,
                     right: SizeConfig.blockSizeHorizontal * 4,
                   ),
@@ -55,8 +55,9 @@ class MainContainer extends StatelessWidget  {
                 ), 
                 Container(
                   height: SizeConfig.blockSizeVertical * 2,
-                  child: Row(
-                    children: <Widget>[
+                  child: Flex(
+                    direction: Axis.horizontal,
+                      children:<Widget>[
                       Expanded(
                         child: this.header,
                       )
