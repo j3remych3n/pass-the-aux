@@ -47,6 +47,7 @@ class _MainSearchState extends State<MainSearch> {
     SizeConfig().init(context);
     return MainContainer(
       title: 'add a song', 
+      header: Text('BIIIIIIIG poopy'),
       body: [
         AuxTextField( // TODO: add clear input blutton at far right end
           icon: Icon(Icons.search, color:auxAccent, size: 26.0, semanticLabel: "Search for a song"),
@@ -56,8 +57,8 @@ class _MainSearchState extends State<MainSearch> {
           onChanged: this._throttledSearch, // short search? https://stackoverflow.com/questions/54765307/textfield-on-change-call-api-how-to-throttle-this
           onSubmitted: this._search, // TODO: full search
         ),
-        Expanded(child:
-          QueueContainer(
+        Expanded(
+          child: QueueContainer(
             title: 'results',
             child: SongList(songs: this.searchResults, songOnPress: (int x){}),
           ),
