@@ -46,7 +46,7 @@ class _MainSearchState extends State<MainSearch> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return MainContainer(
-      title: 'add a song', 
+      // title: 'add a song', 
       // header: Align(alignment: Alignment.center, child: Text('BIIIIIIIG poopy')),
       body: [
         AuxTextField( // TODO: add clear input blutton at far right end
