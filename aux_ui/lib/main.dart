@@ -20,6 +20,7 @@ class AuxApp extends StatelessWidget {
       onGenerateRoute: router.generateRoute,
       initialRoute: NuxIntroRoute,
       theme: ThemeData(
+        canvasColor: Colors.transparent,
         primaryColor: auxPrimary,
         accentColor: auxAccent,
         scaffoldBackgroundColor: auxPrimary,

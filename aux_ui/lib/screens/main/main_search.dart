@@ -1,5 +1,6 @@
 import 'package:aux_ui/aux_lib/song.dart';
 import 'package:aux_ui/aux_lib/spotify_session.dart';
+import 'package:aux_ui/screens/main/playback_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/main_container.dart';
@@ -48,7 +49,8 @@ class _MainSearchState extends State<MainSearch> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return MainContainer(title: 'add a song', 
+    return MainContainer(
+      title: 'add a song', 
       body: [
         AuxTextField( // TODO: add clear input blutton at far right end
           icon: Icon(Icons.search, color:auxAccent, size: 26.0, semanticLabel: "Search for a song"),
@@ -64,7 +66,8 @@ class _MainSearchState extends State<MainSearch> {
             child: SongList(songs: this.searchResults, songOnPress: (int x){}),
           ),
         ),
-      ]
+      ],
+      footer: PlaybackControls(isHost: true)
     );
   }
 }

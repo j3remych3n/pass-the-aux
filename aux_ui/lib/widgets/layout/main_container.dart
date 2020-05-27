@@ -5,8 +5,8 @@ import 'dart:math';
 class MainContainer extends StatelessWidget  {
 
   final String title;
-  final Widget headerWidget;
-  final Widget bottomWidget;
+  final Widget header;
+  final Widget footer;
   final List<Widget> body;
   final List<bool> expanded;
   static final Divider _bodySpacer = Divider(
@@ -17,9 +17,9 @@ class MainContainer extends StatelessWidget  {
     {
       Key key,
       this.title,
-      this.headerWidget,
+      this.header,
       this.body,
-      this.bottomWidget,
+      this.footer,
       this.expanded,
     }
   ) : super(key: key);
@@ -58,17 +58,33 @@ class MainContainer extends StatelessWidget  {
                 SizedBox(
                   width: SizeConfig.safeAreaHorizontal,
                   height: SizeConfig.blockSizeVertical * 1.5,
-                  child: this.headerWidget,
+                  child: this.header,
                 ),
                 Expanded(
-                  child: Column(
-                    children: List<Widget>
-                      .generate(
-                        max(0, this.body.length * 2 - 1), 
-                        (i) => (i.isEven) ? this.body[i ~/ 2] : _bodySpacer
-                    )
-                  ),
-                )
+                  child: Scaffold(
+                    body: Column(
+                      children: List<Widget>
+                        .generate(
+                          max(0, this.body.length * 2 - 1), 
+                          (i) => (i.isEven) ? this.body[i ~/ 2] : _bodySpacer
+                      )
+                    ),
+                    bottomSheet: Container(
+                      margin: EdgeInsets.all(0),
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.blockSizeVertical * 12,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [auxPrimary, auxPrimary, Colors.transparent],
+                          stops: [0, 0.55, 1],
+                        ),
+                      ),
+                      child: this.footer,
+                    ),
+                  )
+                ),
               ],
             ),
           ),
