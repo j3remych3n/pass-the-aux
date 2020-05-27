@@ -34,32 +34,33 @@ class _QueueItemState extends State<QueueItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-              Container(
-                  foregroundDecoration: BoxDecoration(
-                      border: Border.all(
-                        color: auxAccent,
-                        width: 1,
-                      ),
-                      borderRadius: BorderRadius.circular(3)),
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(3),
-                      child: Image.network(widget.song.coverLink,
-                          width: imageSize(), height: imageSize()))), //TODO: scale
-              Expanded(
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 13), // TODO: scale
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(widget.song.name,
-                                style: widget.isAccent ? auxHeadline : auxBody2, textAlign: TextAlign.left),
-                            Text(bottomText(),
-                                style: widget.isAccent ? auxAsterisk : auxBody1, textAlign: TextAlign.left)
-                          ]))),
-              Align(alignment: Alignment.centerRight, child: widget.rightPress)
-            ]);
+    return Row(children: <Widget>[
+      Container(
+          foregroundDecoration: BoxDecoration(
+              border: Border.all(
+                color: auxAccent,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(3)),
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(3),
+              child: Image.network(widget.song.coverLink,
+                  width: imageSize(), height: imageSize()))), //TODO: scale
+      Expanded(
+          child: Padding(
+              padding: EdgeInsets.only(left: 13), // TODO: scale
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(widget.song.name,
+                        style: widget.isAccent ? auxHeadline : auxBody2,
+                        textAlign: TextAlign.left),
+                    Text(bottomText(),
+                        style: widget.isAccent ? auxAsterisk : auxBody1,
+                        textAlign: TextAlign.left)
+                  ]))),
+      Align(alignment: Alignment.centerRight, child: widget.rightPress)
+    ]);
   }
 }

@@ -100,10 +100,11 @@ class _MainQueueState extends State<MainQueue> {
                                 child: QueueHeader()),
                             CurrentSong(playerState: playerState,
                                 spotifySession: widget.spotifySession),
-                            Expanded(child: QueueContainer(
+                            QueueContainer(
+                              height: 125,
                                 title: 'up next',
                                 child: SongUpNext(song: queueSongs[0]),
-                                titleWidget: const _ExpandQueueButton())),
+                                titleWidget: const _ExpandQueueButton()),
                             Expanded(child: QueueContainer(
 
                               title: 'your songs',
