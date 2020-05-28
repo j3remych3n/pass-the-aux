@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
-import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:spotify/spotify.dart';
+import 'package:spotify_sdk/models/player_state.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 import 'package:aux_ui/aux_lib/song.dart';
@@ -8,6 +9,7 @@ import 'package:aux_ui/aux_lib/song.dart';
 class SpotifySession {
   var _authToken;
   var _connected = false;
+  String currentSongUri = "spotify:track:5OuJTtNve7FxUX82eEBupN";
 
   static final String _CLIENT_ID = DotEnv().env['CLIENT_ID'].toString();
   static final String _REDIRECT_URL = DotEnv().env['REDIRECT_URL'].toString();
@@ -18,6 +20,10 @@ class SpotifySession {
   void setStatus(String code, {String message = ""}) {
     var text = message.isEmpty ? "" : " : $message";
     _logger.i("$code$text");
+  }
+
+  Stream<PlayerState> getPlayerState() {
+    return SpotifySdk.subscribePlayerState();
   }
 
   Future<void> connectToSpotifyRemote() async {
@@ -57,12 +63,69 @@ class SpotifySession {
     }
   }
 
+  Future<void> play(String spotifyUri) async {
+    try {
+      await SpotifySdk.play(spotifyUri: spotifyUri);
+    } on PlatformException catch (e) {
+      setStatus(e.code, message: e.message);
+    } on MissingPluginException {
+      setStatus("not implemented");
+    }
+  }
+
+  Future<void> pause() async {
+    try {
+      await SpotifySdk.pause();
+    } on PlatformException catch (e) {
+      setStatus(e.code, message: e.message);
+    } on MissingPluginException {
+      setStatus("not implemented");
+    }
+  }
+
+  Future<void> resume() async {
+    try {
+      await SpotifySdk.resume();
+    } on PlatformException catch (e) {
+      setStatus(e.code, message: e.message);
+    } on MissingPluginException {
+      setStatus("not implemented");
+    }
+  }
+
+  Future<void> skipNext() async {
+    try {
+      await SpotifySdk.skipNext();
+    } on PlatformException catch (e) {
+      setStatus(e.code, message: e.message);
+    } on MissingPluginException {
+      setStatus("not implemented");
+    }
+  }
+
+  Future<void> skipPrevious() async {
+    try {
+      await SpotifySdk.skipPrevious();
+    } on PlatformException catch (e) {
+      setStatus(e.code, message: e.message);
+    } on MissingPluginException {
+      setStatus("not implemented");
+    }
+  }
+
+
   Future<bool> login() async {
     await connectToSpotifyRemote();
     await authenticate();
     setStatus("token is", message: _authToken);
     setStatus("connected is", message: _connected.toString());
     return _connected;
+  }
+
+  Future<String> getCover(String spotifyUri) async {
+    String trackId = spotifyUri.split(':').last;
+    Track track = await _webApi.tracks.get(trackId);
+    return track.album.images.last.url;
   }
 
   // TODO: pipe optional args later
@@ -111,5 +174,4 @@ class SpotifySession {
     String cover = track.album.images.last.url;
     return new Song(track.name, artist, cover, track.uri, popularity: track.popularity);
   }
- 
 }

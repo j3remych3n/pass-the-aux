@@ -55,7 +55,7 @@ class MainContainer extends StatelessWidget  {
                     alignment: Alignment.bottomLeft,
                     child: Text(this.title, style: auxDisp2)
                   )
-                ), 
+                ),
                 Container(
                   height: SizeConfig.blockSizeVertical * 2,
                   child: Flex(

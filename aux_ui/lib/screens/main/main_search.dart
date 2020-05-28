@@ -1,6 +1,8 @@
 import 'package:aux_ui/aux_lib/song.dart';
+import 'package:aux_ui/routing/router.dart';
+import 'package:aux_ui/widgets/layout/song_list.dart';
 import 'package:aux_ui/aux_lib/spotify_session.dart';
-import 'package:aux_ui/screens/main/playback_controls.dart';
+import 'package:aux_ui/widgets/queue_main_display/playback_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/main_container.dart';
