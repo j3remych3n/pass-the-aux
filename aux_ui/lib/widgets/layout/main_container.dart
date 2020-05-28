@@ -8,6 +8,7 @@ class MainContainer extends StatelessWidget  {
   final Widget header;
   final Widget footer;
   final List<Widget> body;
+  final double footerHeight;
   static final Divider _bodySpacer = Divider(
     color: Colors.transparent,
     height: SizeConfig.blockSizeVertical);
@@ -19,11 +20,13 @@ class MainContainer extends StatelessWidget  {
       this.header = const Placeholder(color: Colors.transparent),
       this.body = const <Widget>[],
       this.footer = const Placeholder(color: Colors.transparent),
+      this.footerHeight,
     }
   ) : super(key: key);
 
   @override
   build(BuildContext context) {
+    print(SizeConfig.blockSizeVertical * 6);
     return Material(
       child: Container(
         constraints: BoxConstraints.loose(
@@ -78,19 +81,30 @@ class MainContainer extends StatelessWidget  {
                       bottomSheet: Container(
                         margin: EdgeInsets.all(0),
                         width: SizeConfig.screenWidth,
-                        constraints: BoxConstraints(
-                          maxHeight: SizeConfig.blockSizeVertical * 15,
-                          minHeight: SizeConfig.blockSizeVertical * 12,
+                        height: this.footerHeight,
+                        constraints: BoxConstraints.loose(
+                          Size.fromHeight(SizeConfig.blockSizeVertical * 20)
                         ),
                         decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black87, 
+                              offset: Offset(0, this.footerHeight / 1.5),
+                              blurRadius: 0.4 * this.footerHeight,
+                              spreadRadius: 0.6 * this.footerHeight,
+                            ),
+                          ],
                           gradient: LinearGradient(
                             begin: Alignment.bottomCenter,
                             end: Alignment.topCenter,
                             colors: [auxPrimary, auxPrimary, Colors.transparent],
-                            stops: [0, 0.55, 1],
+                            stops: [0, 0.2, 1],
                           ),
                         ),
-                        child: this.footer,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: this.footer, 
+                        ),
                       ),
                     )
                   )

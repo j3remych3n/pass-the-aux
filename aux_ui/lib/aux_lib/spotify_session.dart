@@ -81,7 +81,8 @@ class SpotifySession {
       var results = resultSet.toList();
       results.sort((a, b) => b.popularity.compareTo(a.popularity));
 
-      return results.sublist(0, limit);
+      if (results.length > limit) return results.sublist(0, limit);
+      return results;
   }
 
   Future<List<Song>> _naiveSearch(
