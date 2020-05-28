@@ -10,6 +10,7 @@ import 'package:aux_ui/widgets/text_input/aux_text_field.dart';
 import 'package:aux_ui/widgets/layout/queue_container.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
 import 'package:aux_ui/widgets/buttons/rounded_action_button.dart';
+import 'dart:collection';
 
 class MainSearch extends StatefulWidget {
   final SpotifySession spotifySession;
@@ -19,14 +20,35 @@ class MainSearch extends StatefulWidget {
 
 class _SearchResults extends StatelessWidget {
   final List<Song> searchResults;
-  final Function songOnPress;
-  const _SearchResults({Key key, @required this.searchResults, @required this.songOnPress}):super(key: key);
+  final HashMap<int, Song> selected = HashMap();
+  bool newSearch;
+
+  _SearchResults(
+    {
+      Key key, 
+      @required this.searchResults, 
+      @required this.newSearch,
+    }
+  ):super(key: key);
+
+  void selectSong(int idx) {
+    if(this.newSearch) {
+      this.selected.clear();
+      this.newSearch = false;
+    }
+    if(selected.containsKey(idx)) selected.remove(idx);
+    else selected.putIfAbsent(idx, () => searchResults[idx]);
+    print('selected indices: ${selected.keys.toString()}');
+  }
 
   @override
-  build(BuildContext) {
+  build(BuildContext context) {
     return QueueContainer( // TODO: factor out into nested class
         title: 'results',
-        child: SongList(songs: this.searchResults, songOnPress: (int x){}),
+        child: SongList(
+            songs: this.searchResults, 
+            onSelect: this.selectSong,
+        ),
     );
   }
 }
@@ -37,15 +59,28 @@ class _YourPicks extends StatelessWidget {
   const _YourPicks({Key key, @required this.yourPicks, @required this.songOnPress}):super(key: key);
 
   @override
-  build(BuildContext) {
+  build(BuildContext context) {
     return QueueContainer( // TODO: factor out into nested class
         title: 'your picks',
-        child: SongList(songs: this.yourPicks, songOnPress: (int x){}),
+        child: SongList(songs: this.yourPicks, onSelect: (int x){}),
     );
   }
 }
 
 class _SearchControls extends StatelessWidget {
+  final Function picksBack;
+  final Function picksDelete;
+  final Function searchAdd;
+
+  const _SearchControls(
+    {
+      Key key, 
+      @required this.picksBack, 
+      @required this.picksDelete,
+      @required this.searchAdd,
+    }
+  ):super(key: key);
+
   @override
   build(BuildContext) {
     return Row(
@@ -69,6 +104,7 @@ class _MainSearchState extends State<MainSearch> {
   List<int> selected;
   TextEditingController searchController;
   bool searching = false;
+  bool newSearch = true;
 
   @override
   void initState() {
@@ -82,6 +118,7 @@ class _MainSearchState extends State<MainSearch> {
   void _search(String query) async {
     setState(() {
       this.searching = true;
+      this.newSearch = true;
     });
     widget.spotifySession.search(query).then((results) =>
       setState(() {
@@ -117,7 +154,10 @@ class _MainSearchState extends State<MainSearch> {
         ),
         Expanded(
           child: (this.searching) ? 
-            _SearchResults(searchResults: this.searchResults, songOnPress: (int x) {},) : 
+            _SearchResults(
+              searchResults: this.searchResults, 
+              newSearch: this.newSearch,
+            ) :
             _YourPicks(yourPicks: this.yourPicks, songOnPress: (int x) {},)
           ),
       ],

@@ -11,11 +11,17 @@ class SongUpNext extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget right = QueueItemAction(onPressed: () {}, icons: [
-      Icon(Icons.more_vert,
-          color: auxAccent,
-          size: 20.0, // TODO: scale
-          semanticLabel: "get next song")
+    Widget right = IconButton(
+      icon: Icon(Icons.more_vert,
+        color: auxAccent,
+        size: 20.0, // TODO: scale
+        semanticLabel: "get next song"),
+      onPressed: () {},
+      color: Colors.transparent,
+    );
+    
+    QueueItemAction(onSelect: () {}, icons: [
+      
     ]);
 
     return QueueItem(

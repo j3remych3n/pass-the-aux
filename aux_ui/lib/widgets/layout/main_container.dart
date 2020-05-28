@@ -26,7 +26,6 @@ class MainContainer extends StatelessWidget  {
 
   @override
   build(BuildContext context) {
-    print(SizeConfig.blockSizeVertical * 6);
     return Material(
       child: Container(
         constraints: BoxConstraints.loose(
