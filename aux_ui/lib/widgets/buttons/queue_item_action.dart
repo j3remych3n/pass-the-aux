@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class QueueItemAction extends StatefulWidget {
   final Function onSelect;
   final List<Widget> icons;
+  int activeIcon;
   bool selected;
 
   QueueItemAction(
@@ -11,6 +12,7 @@ class QueueItemAction extends StatefulWidget {
       this.onSelect, 
       this.icons,
       this.selected = false,
+      this.activeIcon = 0,
     }
   ) : super(key: key);
 
@@ -18,14 +20,13 @@ class QueueItemAction extends StatefulWidget {
 }
 
 class _QueueItemActionState extends State<QueueItemAction> {
-  int _iconNum = 0;
 
   void _onSelect() {
     print('fuck my butthole');
     widget.selected = !widget.selected;
     widget.onSelect();
     setState(() {
-      _iconNum = widget.selected ? 1 : 0;
+      widget.activeIcon = widget.selected ? 1 : 0;
     });
   }
 
@@ -34,6 +35,6 @@ class _QueueItemActionState extends State<QueueItemAction> {
     return IconButton(
         onPressed: this._onSelect,
         color: Colors.transparent,
-        icon: widget.icons[_iconNum]);
+        icon: widget.icons[widget.activeIcon]);
   }
 }

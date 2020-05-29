@@ -34,6 +34,7 @@ class _QueueItemState extends State<QueueItem> {
 
   @override
   Widget build(BuildContext context) {
+    // rebuildAllChildren(context);
     return Row(children: <Widget>[
       Container(
           foregroundDecoration: BoxDecoration(
@@ -63,4 +64,12 @@ class _QueueItemState extends State<QueueItem> {
       Align(alignment: Alignment.centerRight, child: widget.rightPress)
     ]);
   }
+
+  // void rebuildAllChildren(BuildContext context) {
+  //   void rebuild(Element el) {
+  //     el.markNeedsBuild();
+  //     el.visitChildren(rebuild);
+  //   }
+  //   (context as Element).visitChildren(rebuild);
+  // }
 }

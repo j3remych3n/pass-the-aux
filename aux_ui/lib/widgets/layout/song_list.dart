@@ -5,15 +5,28 @@ import 'package:aux_ui/widgets/layout/queue_item.dart';
 import 'package:flutter/material.dart';
 
 class SongList extends StatefulWidget {
+  static const EMPTY_MSG = 'nothing (yet)!';
+  
   final List<Song> songs;
   final Function onSelect;
+  final Function onTap;
   final String emptyMessage;
+  final bool multiSelect;
 
-  const SongList({
+  const SongList.select({
     Key key, 
     this.songs, 
     this.onSelect, 
-    this.emptyMessage: 'nothing (yet)!'}) : super(key: key);
+    this.onTap = (){}
+    this.multiSelect: true,
+    this.emptyMessage: EMPTY_MSG}) : super(key: key);
+  
+  const SongList.tap({
+    Key key, 
+    this.songs, 
+    this.onSelect, 
+    this.multiSelect: false,
+    this.emptyMessage: EMPTY_MSG}) : super(key: key);
 
   _SongListState createState() => _SongListState();
 }
@@ -38,22 +51,26 @@ class _SongListState extends State<SongList> {
       Divider(thickness: 0, height: 8, color: Colors.transparent),
       itemBuilder: (BuildContext context, int index) {
         return QueueItem(
-          rightPress: QueueItemAction(
-            onSelect: () => widget.onSelect(index), 
-            icons: [
-              Icon(
-                Icons.radio_button_unchecked,
-                color: auxAccent,
-                size: 16.0, // TODO: scale
-                semanticLabel: "aux item action",
-              ),
-              Icon(
-                Icons.radio_button_checked,
-                color: auxAccent,
-                size: 16.0, // TODO: scale
-                semanticLabel: "aux item action",
-              )
-            ]
+          onPressed: ,
+          rightPress: Visibility(
+            visible: widget.multiSelect,
+            child: QueueItemAction(
+              onSelect: () => widget.onSelect(index), 
+              icons: [
+                Icon(
+                  Icons.radio_button_unchecked,
+                  color: auxAccent,
+                  size: 16.0, // TODO: scale
+                  semanticLabel: "aux item action",
+                ),
+                Icon(
+                  Icons.radio_button_checked,
+                  color: auxAccent,
+                  size: 16.0, // TODO: scale
+                  semanticLabel: "aux item action",
+                )
+              ]
+            ),
           ),
           song: widget.songs[index],
         );

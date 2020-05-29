@@ -46,6 +46,7 @@ class _SearchResults extends StatelessWidget {
     return QueueContainer( // TODO: factor out into nested class
         title: 'results',
         child: SongList(
+            multiSelect: false,
             songs: this.searchResults, 
             onSelect: this.selectSong,
         ),
@@ -86,11 +87,14 @@ class _SearchControls extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        // picks & search: unselected
         // RoundedActionButton.back(width: SizeConfig.blockSizeHorizontal * 50, onPressed: (){},),
 
+        // search results: selected
         RoundedActionButton.back(text: 'cancel', onPressed: (){},),
         RoundedActionButton(text: 'add ${20} songs', width: SizeConfig.blockSizeHorizontal * 40, onPressed: (){},),
 
+        // picks: selected
         // RoundedActionButton.back(text: 'cancel', onPressed: (){},),
         // RoundedActionButton.delete(width: SizeConfig.blockSizeHorizontal * 28, onPressed: (){},),
       ],
@@ -161,8 +165,6 @@ class _MainSearchState extends State<MainSearch> {
             _YourPicks(yourPicks: this.yourPicks, songOnPress: (int x) {},)
           ),
       ],
-      // footer: SearchControls(onConfirm: (){}, onCancel: (){}, selected: this.selected),
-        // footer: PlaybackControls(isHost: true),
       footerHeight: SizeConfig.blockSizeVertical * 8,
       footer: _SearchControls(),
     );
