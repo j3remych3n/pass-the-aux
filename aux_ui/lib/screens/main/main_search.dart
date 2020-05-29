@@ -94,8 +94,11 @@ class _SearchControls extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         // picks & search: unselected
-        RoundedActionButton.back(width: SizeConfig.blockSizeHorizontal * 50, onPressed: (){},),
+        RoundedActionButton.back(
+          width: SizeConfig.blockSizeHorizontal * 50, 
+          onPressed: (){},),
 
+        // TODO: implement with issue #26
         // search results: selected
         // RoundedActionButton.back(text: 'cancel', onPressed: (){},),
         // RoundedActionButton(text: 'add ${20} songs', width: SizeConfig.blockSizeHorizontal * 40, onPressed: (){},),
@@ -162,14 +165,20 @@ class _MainSearchState extends State<MainSearch> {
           onChanged: this._throttledSearch, // short search? https://stackoverflow.com/questions/54765307/textfield-on-change-call-api-how-to-throttle-this
           onSubmitted: this._search, // TODO: full search
         ),
+        // Expanded(
+        //   child: (this.searching) ? 
+        //     _SearchResults(
+        //       searchResults: this.searchResults, 
+        //       newSearch: this.newSearch,
+        //     ) :
+        //     _YourPicks(yourPicks: this.yourPicks, songOnPress: (int x) {},)
+        // ),
         Expanded(
-          child: (this.searching) ? 
-            _SearchResults(
-              searchResults: this.searchResults, 
-              newSearch: this.newSearch,
-            ) :
-            _YourPicks(yourPicks: this.yourPicks, songOnPress: (int x) {},)
+          child: _SearchResults(
+            searchResults: this.searchResults, 
+            newSearch: this.newSearch,
           ),
+        ),
       ],
       footerHeight: SizeConfig.blockSizeVertical * 8,
       footer: _SearchControls(),
