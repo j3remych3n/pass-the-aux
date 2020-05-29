@@ -103,54 +103,6 @@ class _MainQueueState extends State<MainQueue> {
                               isPaused: playerState.isPaused,
                             )
             );
-
-
-//            return Material(
-//                type: MaterialType.transparency,
-//                child: Container(
-//                    constraints: BoxConstraints.loose(
-//                        Size.fromHeight(
-//                            SizeConfig.safeAreaVertical
-//                        )
-//                    ),
-//                    padding: SizeConfig.notchPadding,
-//                    color: auxPrimary,
-//                    child: Stack(
-//                      children: <Widget>[
-//                        Column(
-//                          mainAxisAlignment: MainAxisAlignment.start,
-//                          mainAxisSize: MainAxisSize.min,
-//                          children: <Widget>[
-//                            Container(
-//                                padding: EdgeInsets.only(
-//                                    left: 12, right: 12, top: 42, bottom: 8),
-//                                child: QueueHeader()),
-//                            CurrentSong(playerState: playerState,
-//                                spotifySession: widget.spotifySession),
-//                            QueueContainer(
-//                              height: 125,
-//                                title: 'up next',
-//                                child: SongUpNext(song: queueSongs[0]),
-//                                titleWidget: const _ExpandQueueButton()),
-//                            Expanded(child: QueueContainer(
-//
-//                              title: 'your songs',
-//                              child:
-//                              SongList(
-//                                  songs: yourSongs, songOnPress: (int x) {}),
-//                              titleWidget: SongCountdown()),
-//                            ),
-//                          ],
-//                        ),
-//                        Positioned(
-//                            bottom: 50,
-//                            child: PlaybackControls(
-//                              isHost: true,
-//                              spotifySession: widget.spotifySession,
-//                              isPaused: playerState.isPaused,
-//                            ))
-//                      ],
-//                    )));
           } else {
             // TODO: come up with a better alternative to this
             return Center(
