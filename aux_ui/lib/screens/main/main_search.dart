@@ -41,14 +41,20 @@ class _SearchResults extends StatelessWidget {
     print('selected indices: ${selected.keys.toString()}');
   }
 
+  void addSong(int idx) {
+    this.selected.clear();
+    selected.putIfAbsent(idx, () => searchResults[idx]);
+    print('added single song idex: ${selected.keys.toString()}');
+  }
+
   @override
   build(BuildContext context) {
     return QueueContainer( // TODO: factor out into nested class
         title: 'results',
-        child: SongList(
+        child: SongList.tap(
             multiSelect: false,
             songs: this.searchResults, 
-            onSelect: this.selectSong,
+            onPressed: this.addSong,
         ),
     );
   }
@@ -63,7 +69,7 @@ class _YourPicks extends StatelessWidget {
   build(BuildContext context) {
     return QueueContainer( // TODO: factor out into nested class
         title: 'your picks',
-        child: SongList(songs: this.yourPicks, onSelect: (int x){}),
+        child: SongList.tap(songs: this.yourPicks, onPressed: (int x){}),
     );
   }
 }
@@ -88,11 +94,11 @@ class _SearchControls extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         // picks & search: unselected
-        // RoundedActionButton.back(width: SizeConfig.blockSizeHorizontal * 50, onPressed: (){},),
+        RoundedActionButton.back(width: SizeConfig.blockSizeHorizontal * 50, onPressed: (){},),
 
         // search results: selected
-        RoundedActionButton.back(text: 'cancel', onPressed: (){},),
-        RoundedActionButton(text: 'add ${20} songs', width: SizeConfig.blockSizeHorizontal * 40, onPressed: (){},),
+        // RoundedActionButton.back(text: 'cancel', onPressed: (){},),
+        // RoundedActionButton(text: 'add ${20} songs', width: SizeConfig.blockSizeHorizontal * 40, onPressed: (){},),
 
         // picks: selected
         // RoundedActionButton.back(text: 'cancel', onPressed: (){},),

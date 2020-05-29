@@ -8,23 +8,31 @@ class SongList extends StatefulWidget {
   static const EMPTY_MSG = 'nothing (yet)!';
   
   final List<Song> songs;
-  final Function onSelect;
-  final Function onTap;
   final String emptyMessage;
   final bool multiSelect;
 
-  const SongList.select({
+  Function onSelect;
+  Function onPressed;
+
+  SongList({
     Key key, 
     this.songs, 
     this.onSelect, 
-    this.onTap = (){}
+    this.onPressed,
+    this.multiSelect: true,
+    this.emptyMessage: EMPTY_MSG}) : super(key: key);
+
+  SongList.select({
+    Key key, 
+    this.songs, 
+    @required this.onSelect, 
     this.multiSelect: true,
     this.emptyMessage: EMPTY_MSG}) : super(key: key);
   
-  const SongList.tap({
+  SongList.tap({
     Key key, 
     this.songs, 
-    this.onSelect, 
+    @required this.onPressed, 
     this.multiSelect: false,
     this.emptyMessage: EMPTY_MSG}) : super(key: key);
 
@@ -48,32 +56,36 @@ class _SongListState extends State<SongList> {
       shrinkWrap: true,
       itemCount: widget.songs.length,
       separatorBuilder: (BuildContext context, int index) =>
-      Divider(thickness: 0, height: 8, color: Colors.transparent),
+      Divider(thickness: 0, height: 3, color: Colors.transparent),
       itemBuilder: (BuildContext context, int index) {
-        return QueueItem(
-          onPressed: ,
-          rightPress: Visibility(
-            visible: widget.multiSelect,
-            child: QueueItemAction(
-              onSelect: () => widget.onSelect(index), 
-              icons: [
-                Icon(
-                  Icons.radio_button_unchecked,
-                  color: auxAccent,
-                  size: 16.0, // TODO: scale
-                  semanticLabel: "aux item action",
-                ),
-                Icon(
-                  Icons.radio_button_checked,
-                  color: auxAccent,
-                  size: 16.0, // TODO: scale
-                  semanticLabel: "aux item action",
-                )
-              ]
-            ),
-          ),
-          song: widget.songs[index],
-        );
+        if(widget.multiSelect) {
+          return QueueItem.select(
+              rightPress: QueueItemAction(
+                onSelect: () => widget.onSelect(index), 
+                icons: [
+                  Icon(
+                    Icons.radio_button_unchecked,
+                    color: auxAccent,
+                    size: 16.0, // TODO: scale
+                    semanticLabel: "aux item action",
+                  ),
+                  Icon(
+                    Icons.radio_button_checked,
+                    color: auxAccent,
+                    size: 16.0, // TODO: scale
+                    semanticLabel: "aux item action",
+                  )
+                ]
+              ),
+            song: widget.songs[index],
+          );
+        }
+        else {
+          return QueueItem.tap(
+            onPressed: () => widget.onPressed(index),
+            song: widget.songs[index],
+          );
+        }
       });
   }
 }
