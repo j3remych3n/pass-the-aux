@@ -40,6 +40,8 @@ defmodule AuxApiWeb.Router do
       delete "/delete_sess", SessionController, :delete_session
       post "/add_member", SessionController, :add_member
       delete "/delete_member", SessionController, :delete_member
+      get "/authenticate", SpotifyApiController, :authenticate
+      get "/authorize", SpotifyApiController, :authorize
     end
 
   end
