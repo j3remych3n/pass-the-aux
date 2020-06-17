@@ -76,6 +76,7 @@ class _QueueItemState extends State<QueueItem> {
         side: BorderSide(style: BorderStyle.solid)
       ),
       color: Colors.transparent,
+      highlightColor: auxDGrey,
       splashColor: auxDGrey,
       child: Row(children: <Widget>[
         Container(
