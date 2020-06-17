@@ -26,7 +26,7 @@ class CurrentSong extends StatelessWidget {
         ? 0
         : playerState.playbackPosition / track.duration;
 
-    Widget right = QueueItemAction(onPressed: () {}, icons: [
+    Widget right = QueueItemAction(onSelect: () {}, icons: [
       Icon(
         Icons.favorite_border,
         color: auxAccent,
