@@ -25,6 +25,25 @@ defmodule AuxApiWeb.QueueChannel do
     {:noreply, socket}
   end
 
+  def handle_in("add_song", payload, socket) do
+    # payload: str: member_id, str: queue_id, str: spotify_uri
+    # generate previous song id by filtering for qentry where next is null (same member and queue id)
+    # insert
+
+    song = %AuxApi.Qentry{
+      member_id: 1, # passed in
+      session_id: 1, # pull from subtopic
+      next_qentry_id: 1, # null
+      prev_qentry_id: 1, # gen by filter
+      has_played: false, 
+      is_host: false, 
+      song_id: "temp" # passed in
+    }
+
+    {:ok, } = AuxApi.Repo.insert(song)
+    {:reply, {:ok, payload}, socket}
+  end
+
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true
