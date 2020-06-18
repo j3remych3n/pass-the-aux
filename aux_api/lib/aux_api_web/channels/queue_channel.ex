@@ -18,6 +18,24 @@ defmodule AuxApiWeb.QueueChannel do
     {:reply, {:ok, payload}, socket}
   end
 
+  def handle_in("add_song", payload, socket) do
+    # payload: str: member_id, str: queue_id, str: spotify_uri
+    # generate previous song id by filtering for qentry where next is null (same member and queue id)
+    # insert
+
+    song = %AuxApi.Qentry{
+      member_id: 1, # passed in
+      session_id: 1, # pull from subtopic
+      next_qentry_id: 1, # null
+      prev_qentry_id: 1, # gen by filter
+      played: false, 
+      song_id: "temp" # passed in
+    }
+
+    {:ok, } = AuxApi.Repo.insert(song)
+    {:reply, {:ok, payload}, socket}
+  end
+
   # It is also common to receive messages from the client and
   # broadcast to everyone in the current topic (queue:lobby).
   def handle_in("shout", payload, socket) do
