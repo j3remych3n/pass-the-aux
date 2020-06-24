@@ -1,3 +1,5 @@
+import Ecto.Query
+
 defmodule AuxApiWeb.SessionController do
   use AuxApiWeb, :controller
 
@@ -10,9 +12,9 @@ defmodule AuxApiWeb.SessionController do
   end
 
   def create_session(conn, _params) do
-      sess = %AuxApi.Session{}
-      {:ok, curr_sess} = AuxApi.Repo.insert(sess)
-      text(conn, "create session ok")
+    #   sess = %AuxApi.Session{}
+    #   {:ok, curr_sess} = AuxApi.Repo.insert(sess)
+    text(conn, "create session ok")
   end
 
   def delete_session(conn, _params) do
