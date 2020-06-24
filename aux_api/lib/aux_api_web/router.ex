@@ -45,7 +45,6 @@ defmodule AuxApiWeb.Router do
     end
 
     scope "/test" do
-      get "/find_prev_entry", TestController, :find_prev_entry
       post "/add_song", TestController, :add_song
       get "/init_test_db", TestController, :init_test_db
     end
