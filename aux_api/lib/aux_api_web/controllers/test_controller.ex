@@ -1,13 +1,14 @@
 import Ecto.Query
+alias AuxApi.Repo
 
 defmodule AuxApiWeb.TestController do
 	use AuxApiWeb, :controller
 
 	# clear all tables
 	def init_test_db(conn, _params) do
-		AuxApi.Repo.delete_all("qentries")
-		AuxApi.Repo.delete_all("sessions")
-		AuxApi.Repo.delete_all("members")
+		Repo.delete_all("qentries")
+		Repo.delete_all("sessions")
+		Repo.delete_all("members")
 
 		member = %AuxApi.Member{}
     {:ok, test_member} = AuxApi.Repo.insert(member)
@@ -27,7 +28,7 @@ defmodule AuxApiWeb.TestController do
 			prev_qentry_id: nil,
 		}
 
-		{:ok, test_qentry} = AuxApi.Repo.insert(qentry)
+		{:ok, test_qentry} = Repo.insert(qentry)
 		text(conn, "fine")
 	end
 
@@ -35,16 +36,14 @@ defmodule AuxApiWeb.TestController do
 		member_id = 2
 		session_id = 2
 
-		# query = from qentry in "qentries", 
-		# 	# where: qentry.member_id == ^member_id and qentry.session_id == ^session_id and is_nil(qentry.next_qentry_id),
-		# 	select: qentry.song_id
+		query = from qentry in "qentries", 
+			where: (qentry.member_id == ^member_id)
+				and (qentry.session_id == ^session_id)
+				and is_nil(qentry.next_qentry_id),
+			select: qentry.id
 
-		query = from qentry in "qentries",
-  		where: qentry.member_id == ^member_id and qentry.session_id == ^session_id and is_nil(qentry.next_qentry_id),
-  		select: struct(qentry, [:id])
-
-		IO.puts AuxApi.Repo.all(query)
-		text(conn, "fine")
+		[id] = Repo.all(query)
+		text(conn, id)
 	end
 
 end
