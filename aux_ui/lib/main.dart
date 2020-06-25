@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'aux_lib/aux_channels.dart';
+import 'aux_lib/aux_controller.dart';
 
 Future<void> main() async {
   await DotEnv().load('.env');
@@ -13,7 +13,7 @@ Future<void> main() async {
 
 class AuxApp extends StatelessWidget {
   Future<void> attempt() async {
-    AuxChannels tester = AuxChannels();
+    AuxController tester = AuxController();
     await tester.connect();
   }
 
