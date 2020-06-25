@@ -14,7 +14,7 @@ Future<void> main() async {
 class AuxApp extends StatelessWidget {
   Future<void> attempt() async {
     AuxChannels tester = AuxChannels();
-    await tester.connectTest();
+    await tester.connect();
   }
 
   // This widget is the root of your application.
