@@ -94,14 +94,15 @@ class _MainQueueState extends State<MainQueue> {
                 title: 'your songs',
                 child:
                 SongList(
-                    songs: yourSongs, songOnPress: (int x) {}),
+                    songs: yourSongs, onSelect: (int x) {}),
                 titleWidget: SongCountdown()))
               ],
+              footerHeight: SizeConfig.blockSizeVertical * 15,
               footer: PlaybackControls(
-                              isHost: true,
-                              spotifySession: widget.spotifySession,
-                              isPaused: playerState.isPaused,
-                            )
+                isHost: true,
+                spotifySession: widget.spotifySession,
+                isPaused: playerState.isPaused,
+              )
             );
           } else {
             // TODO: come up with a better alternative to this

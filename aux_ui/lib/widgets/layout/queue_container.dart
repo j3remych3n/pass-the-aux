@@ -12,7 +12,7 @@ class QueueContainer extends StatelessWidget {
   final EdgeInsets margin;
   final EdgeInsets padding;
 
-  QueueContainer({
+  const QueueContainer({
     Key key, 
     this.title,
     this.child,
