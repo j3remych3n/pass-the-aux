@@ -8,21 +8,23 @@ import 'package:aux_ui/aux_lib/spotify_session.dart';
 import 'package:aux_ui/screens/tester.dart';
 import 'package:aux_ui/screens/main/main_queue.dart';
 import 'package:aux_ui/screens/main/main_search.dart';
+import 'package:aux_ui/aux_lib/aux_controller.dart';
 import 'package:flutter/material.dart';
 
 final SpotifySession spotifySession = SpotifySession();
+final AuxController controller = AuxController();
+
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   Object args = settings.arguments;
   // TODO: confirm where we replace the route and where we push/pop, decide where to have default null next/back
   switch (settings.name) {
-  
     case MainQueueRoute:
-     return MaterialPageRoute(builder: (context) => MainSearch(spotifySession: spotifySession));
+     return MaterialPageRoute(builder: (context) => MainSearch(spotifySession: spotifySession, controller: controller));
       //  return MaterialPageRoute(builder: (context) => MainQueue(spotifySession: spotifySession));
     
-    case MainSearchRoute:
-      return MaterialPageRoute(builder: (context) => MainSearch(spotifySession: spotifySession));
+    case MainSearchRoute:      
+      return MaterialPageRoute(builder: (context) => MainSearch(spotifySession: spotifySession, controller: controller));
 
     case LinkSpotifyRoute:
       if (args.toString() == 'host') {
@@ -32,6 +34,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     
     case HostInviteRoute:
       String queueName = settings.arguments;
+      // TODO temporary hardcoded session; add auth / join specific user-created room later
+      controller.connect(4);
       return MaterialPageRoute(builder: (context) => HostInvite(
           queueName: queueName, 
           nextPage: MainQueueRoute,
@@ -43,9 +47,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => GuestJoinQueue(nextPage: JoinQueueConfirmationRoute));
 
     case JoinQueueConfirmationRoute:
+      // TODO temporary hardcoded session; add auth / join specific user-created room later
+      controller.connect(4);
       return MaterialPageRoute(builder: (context) => JoinQueueConfirmation(
-        nextPage: MainQueueRoute,
-        backPage: JoinQueueRoute,
+          nextPage: MainQueueRoute,
+          backPage: JoinQueueRoute,
         )
       );    
 

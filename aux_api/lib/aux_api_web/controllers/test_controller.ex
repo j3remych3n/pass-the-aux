@@ -11,8 +11,7 @@ defmodule AuxApiWeb.TestController do
 		Repo.delete_all("sessions")
 		Repo.delete_all("members")
 
-		member = %AuxApi.Member{}
-    	{:ok, test_member} = AuxApi.Repo.insert(member)
+		test_member = create_member(conn, _params)
 
 		sess = %AuxApi.Session{is_host: true, member_id: test_member.id}
 		{:ok, test_sess} = AuxApi.Repo.insert(sess)
@@ -20,12 +19,22 @@ defmodule AuxApiWeb.TestController do
 		text(conn, "also fine")
 	end
 
+	def create_member(conn, _params) do
+		text(conn, to_string(_create_member(conn, _params)))
+	end
+
+	defp _create_member(conn, _params) do
+		member = %AuxApi.Member{}
+		{:ok, test_member} = AuxApi.Repo.insert(member)
+		test_member.id
+	end
+
 	def add_song(conn, _params) do
 
 		prev_qentry_id = find_prev_qentry(4, 4)
 
 		qentry = %AuxApi.Qentry{
-			song_id: "spotify:track:2G7V7zsVDxg1yRsu7Ew9RJ",
+			song_id: "2G7V7zsVDxg1yRsu7Ew9RJ",
 			session_id: 4,
 			member_id: 4,
 			next_qentry_id: nil,
