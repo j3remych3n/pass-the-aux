@@ -13,8 +13,16 @@ class AuxChannels {
     await socket.connect();
     final channel = socket.channel("queue:lobby", {"id": "myId"});
 
-    channel.on("ping", (Map payload, String _ref, String _joinRef) {print(payload);});
+    channel.on("add_song", (Map payload, String _ref, String _joinRef) {print(payload);});
     channel.join();
-    channel.push(event: "ping", payload: {'test': 'hi'});
+    print("==================");
+    print("joined");
+    print("==================");
+    channel.push(event: "add_song", payload: {
+      "member_id": 2,
+      "session_id": 2,
+      "song_id": "spotify:track:2G7V7zsVDxg1yRsu7Ew9RJ"
+    });
+    print("PUSHED");
   }
 }

@@ -12,8 +12,8 @@ defmodule AuxApiWeb.TestController do
 		Repo.delete_all("members")
 
 		member = %AuxApi.Member{}
-    {:ok, test_member} = AuxApi.Repo.insert(member)
-		
+    	{:ok, test_member} = AuxApi.Repo.insert(member)
+
 		sess = %AuxApi.Session{is_host: true, member_id: test_member.id}
 		{:ok, test_sess} = AuxApi.Repo.insert(sess)
 
@@ -25,10 +25,10 @@ defmodule AuxApiWeb.TestController do
 		prev_qentry_id = find_prev_qentry(4, 4)
 
 		qentry = %AuxApi.Qentry{
-			song_id: "spotify:track:2G7V7zsVDxg1yRsu7Ew9RJ", 
-			session_id: 4, 
-			member_id: 4, 
-			next_qentry_id: nil, 
+			song_id: "spotify:track:2G7V7zsVDxg1yRsu7Ew9RJ",
+			session_id: 4,
+			member_id: 4,
+			next_qentry_id: nil,
 			prev_qentry_id: prev_qentry_id,
 		}
 		{:ok, test_qentry} = Repo.insert(qentry)
@@ -42,14 +42,13 @@ defmodule AuxApiWeb.TestController do
 	end
 
 	defp find_prev_qentry(member_id, session_id) do
-		query = from qentry in "qentries", 
+		query = from qentry in "qentries",
 			where: (qentry.member_id == ^member_id)
 				and (qentry.session_id == ^session_id)
 				and is_nil(qentry.next_qentry_id),
 			select: qentry.id
 
-		[id] = Repo.all(query)
-		id
+		first(Repo.all(query))
 	end
 
 end

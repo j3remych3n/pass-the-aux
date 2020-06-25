@@ -1,4 +1,6 @@
 import Ecto.Query
+import Ecto.Changeset
+alias AuxApi.Repo
 
 defmodule AuxApiWeb.QueueChannel do
   require Logger
@@ -25,18 +27,40 @@ defmodule AuxApiWeb.QueueChannel do
     # generate previous song id by filtering for qentry where next is null (same member and queue id)
     # insert
 
-    # song = %AuxApi.Qentry{
-    #   member_id: 1, # passed in
-    #   session_id: 1, # pull from subtopic
-    #   next_qentry_id: 1, # null
-    #   prev_qentry_id: 1, # gen by filter
-    #   played: false, 
-    #   song_id: "temp" # passed in
-    # }
+    member_id = payload["member_id"] #2
+    session_id = payload["session_id"] #2
+    song_id = payload["song_id"] #"spotify:track:2G7V7zsVDxg1yRsu7Ew9RJ"
 
-    # {:ok, } = AuxApi.Repo.insert(song)
-    # {:reply, {:ok, payload}, socket}
+    prev_qentry_id = find_prev_qentry(member_id, session_id)
+
+    qentry = %AuxApi.Qentry{
+			song_id: song_id, 
+			session_id: session_id, 
+			member_id: member_id, 
+			next_qentry_id: nil, 
+			prev_qentry_id: prev_qentry_id,
+		}
+
+    {:ok, test_qentry} = Repo.insert(qentry)
+    update_next_qentry(prev_qentry_id, test_qentry.id)
+
+    {:reply, {:ok, payload}, socket} # TODO: update with proper response
   end
+
+  defp find_prev_qentry(member_id, session_id) do
+		query = from qentry in "qentries", 
+			where: (qentry.member_id == ^member_id)
+				and (qentry.session_id == ^session_id)
+				and is_nil(qentry.next_qentry_id),
+			select: qentry.id
+
+    List.first(Repo.all(query))
+  end
+  
+  defp update_next_qentry(qentry_id, next_id) do
+		from(q in "qentries", where: q.id == ^qentry_id, update: [set: [next_qentry_id: ^next_id]])
+			|> Repo.update_all([])
+	end
 
   defp find_prev_qentry(member_id, session_id) do
     # filter qentires on member id and session id, if null (this is the first qentry queued), retun null
