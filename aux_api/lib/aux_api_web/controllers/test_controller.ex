@@ -54,7 +54,6 @@ defmodule AuxApiWeb.TestController do
 			update_prev_qentry(id, new_prev_id)
 			update_next_qentry(new_prev_id, id)
 		end
-
 		text(conn, "ok")
 	end
 
