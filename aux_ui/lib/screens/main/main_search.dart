@@ -1,3 +1,4 @@
+import 'package:aux_ui/aux_lib/aux_controller.dart';
 import 'package:aux_ui/aux_lib/song.dart';
 import 'package:aux_ui/routing/router.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
@@ -14,13 +15,15 @@ import 'dart:collection';
 
 class MainSearch extends StatefulWidget {
   final SpotifySession spotifySession;
-  const MainSearch({Key key, this.spotifySession}) : super(key: key);
+  final AuxController controller;
+  const MainSearch({Key key, this.spotifySession, this.controller}) : super(key: key);
   _MainSearchState createState() => _MainSearchState();
 }
 
 class _SearchResults extends StatelessWidget {
   final List<Song> searchResults;
   final HashMap<int, Song> selected = HashMap();
+  final AuxController controller;
   bool newSearch;
 
   _SearchResults(
@@ -28,6 +31,7 @@ class _SearchResults extends StatelessWidget {
       Key key, 
       @required this.searchResults, 
       @required this.newSearch,
+      @required this.controller,
     }
   ):super(key: key);
 
@@ -41,9 +45,11 @@ class _SearchResults extends StatelessWidget {
     print('selected indices: ${selected.keys.toString()}');
   }
 
-  void addSong(int idx) {
+  void addSong(int idx) async {
     this.selected.clear();
     selected.putIfAbsent(idx, () => searchResults[idx]);
+
+    await this.controller.addSong(selected[idx].id);
     print('added single song idex: ${selected.keys.toString()}');
   }
 
@@ -177,6 +183,7 @@ class _MainSearchState extends State<MainSearch> {
           child: _SearchResults(
             searchResults: this.searchResults, 
             newSearch: this.newSearch,
+            controller: widget.controller,
           ),
         ),
       ],

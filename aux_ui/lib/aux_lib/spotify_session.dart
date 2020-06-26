@@ -172,6 +172,6 @@ class SpotifySession {
     List<String> artists = track.artists.map((a) => a.name).toList();
     String artist = artists.join(', ');
     String cover = track.album.images.last.url;
-    return new Song(track.name, artist, cover, track.uri, popularity: track.popularity);
+    return new Song(track.name, artist, cover, track.id, popularity: track.popularity);
   }
 }

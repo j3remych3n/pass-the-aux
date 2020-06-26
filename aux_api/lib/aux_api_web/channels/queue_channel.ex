@@ -34,19 +34,16 @@ defmodule AuxApiWeb.QueueChannel do
     prev_qentry_id = find_last_qentry(member_id, session_id)
 
     qentry = %AuxApi.Qentry{
-			song_id: song_id, 
-			session_id: session_id, 
-			member_id: member_id, 
-			next_qentry_id: nil, 
-			prev_qentry_id: prev_qentry_id,
-		}
+      song_id: song_id,
+      session_id: session_id,
+      member_id: member_id,
+      next_qentry_id: nil,
+      prev_qentry_id: prev_qentry_id,
+    }
 
     {:ok, test_qentry} = Repo.insert(qentry)
 
-    if not is_nil(prev_qentry_id) do
-			update_next_qentry(prev_qentry_id, test_qentry.id)
-		end
-
+    update_next_qentry(prev_qentry_id, test_qentry.id)
     {:reply, {:ok, payload}, socket} # TODO: update with proper response
   end
 
@@ -100,14 +97,14 @@ defmodule AuxApiWeb.QueueChannel do
 			where: (qentry.id == ^qentry_id),
 			select: qentry.prev_qentry_id
 
-		List.first(Repo.all(query))
-	end
+    List.first(Repo.all(query))
+  end
 
 	defp find_next_qentry(qentry_id) do
 		query = from qentry in "qentries",
 			where: (qentry.id == ^qentry_id),
-			select: qentry.next_qentry_id
-
+      select: qentry.next_qentry_id
+      
 		List.first(Repo.all(query))
   end
   
