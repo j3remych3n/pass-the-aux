@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:phoenix_wings/phoenix_wings.dart';
 
@@ -22,6 +23,15 @@ class AuxController {
       "member_id": memberId,
       "session_id": sessionId,
       "song_id": songId
+    });
+  }
+
+  Future<void> changePos(memberId, sessionId, queueId, newPrevId) async {
+    channel.push(event: "change_pos", payload: {
+      "member_id": memberId,
+      "session_id": sessionId,
+      "queue_id": queueId,
+      "new_prev_id": newPrevId
     });
   }
 }

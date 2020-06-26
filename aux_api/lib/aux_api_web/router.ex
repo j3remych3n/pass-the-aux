@@ -47,6 +47,8 @@ defmodule AuxApiWeb.Router do
     scope "/test" do
       post "/add_song", TestController, :add_song
       get "/init_test_db", TestController, :init_test_db
+      post "/change_pos", TestController, :change_pos
+      get "/test_private_func", TestController, :test_private_func
     end
 
   end

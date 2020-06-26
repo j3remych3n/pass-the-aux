@@ -31,7 +31,7 @@ defmodule AuxApiWeb.QueueChannel do
     session_id = payload["session_id"] #2
     song_id = payload["song_id"] #"spotify:track:2G7V7zsVDxg1yRsu7Ew9RJ"
 
-    prev_qentry_id = find_prev_qentry(member_id, session_id)
+    prev_qentry_id = find_last_qentry(member_id, session_id)
 
     qentry = %AuxApi.Qentry{
 			song_id: song_id, 
@@ -42,35 +42,50 @@ defmodule AuxApiWeb.QueueChannel do
 		}
 
     {:ok, test_qentry} = Repo.insert(qentry)
-    update_next_qentry(prev_qentry_id, test_qentry.id)
+
+    if not is_nil(prev_qentry_id) do
+			update_next_qentry(prev_qentry_id, test_qentry.id)
+		end
 
     {:reply, {:ok, payload}, socket} # TODO: update with proper response
   end
 
-  defp find_prev_qentry(member_id, session_id) do
-		query = from qentry in "qentries", 
-			where: (qentry.member_id == ^member_id)
-				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.next_qentry_id),
-			select: qentry.id
+  def handle_in("change_pos", payload, socket) do
+    member_id = payload["member_id"]
+    session_id = payload["session_id"]
+    id = payload["queue_id"]
+    new_prev_id = payload["new_prev_id"]
 
-    List.first(Repo.all(query))
-  end
-  
-  defp update_next_qentry(qentry_id, next_id) do
-		from(q in "qentries", where: q.id == ^qentry_id, update: [set: [next_qentry_id: ^next_id]])
-			|> Repo.update_all([])
-	end
+    # link this qentry's previous and next (== remove this qentry)
+		# curr.prev.next = curr.next
+		# curr.next.prev = curr.prev
+		curr_prev_id = find_prev_qentry(id)
+		curr_next_id = find_next_qentry(id)
 
-  defp find_prev_qentry(member_id, session_id) do
-    # filter qentires on member id and session id, if null (this is the first qentry queued), retun null
-    # else filter for entry where next is null then return id
-
-  #   query = from qentry in Qentries, 
-  #     where: qentry.member_id == member_id and qentry.session_id == session_id and is_nil(qentry.next_qentry_id),
-  #     select: qentry.id
-
-  #   Repo.all(query)
+		unless new_prev_id == curr_prev_id do
+			update_prev_qentry(curr_next_id, curr_prev_id)
+			update_next_qentry(curr_prev_id, curr_next_id)
+	
+			# curr.next = new_prev.next
+			if is_nil(new_prev_id) do
+				# song needs to go to front of the queue 
+				new_next_id = find_first_qentry(member_id, session_id)
+				update_prev_qentry(new_next_id, id)
+				update_next_qentry(id, new_next_id)
+			else
+				# song is now in the middle somewhere, or at the end
+				new_next_id = find_next_qentry(new_prev_id)
+				update_prev_qentry(new_next_id, id)
+				update_next_qentry(id, new_next_id)
+			end
+	
+			# curr.prev = new_prev
+			# new_prev.next = curr
+			update_prev_qentry(id, new_prev_id)
+			update_next_qentry(new_prev_id, id)
+    end
+    
+    {:reply, {:ok, payload}, socket} # TODO: update with proper response
   end
 
   # It is also common to receive messages from the client and
@@ -78,6 +93,56 @@ defmodule AuxApiWeb.QueueChannel do
   def handle_in("shout", payload, socket) do
     broadcast socket, "shout", payload
     {:noreply, socket}
+  end
+
+  defp find_prev_qentry(qentry_id) do
+		query = from qentry in "qentries",
+			where: (qentry.id == ^qentry_id),
+			select: qentry.prev_qentry_id
+
+		List.first(Repo.all(query))
+	end
+
+	defp find_next_qentry(qentry_id) do
+		query = from qentry in "qentries",
+			where: (qentry.id == ^qentry_id),
+			select: qentry.next_qentry_id
+
+		List.first(Repo.all(query))
+  end
+  
+  defp update_prev_qentry(qentry_id, prev_id) do
+		if not is_nil(qentry_id) do
+			from(q in "qentries", where: q.id == ^qentry_id, update: [set: [prev_qentry_id: ^prev_id]])
+				|> Repo.update_all([])
+		end
+	end
+
+	defp update_next_qentry(qentry_id, next_id) do
+		if not is_nil(qentry_id) do
+			from(q in "qentries", where: q.id == ^qentry_id, update: [set: [next_qentry_id: ^next_id]])
+				|> Repo.update_all([])
+		end
+  end
+  
+  defp find_first_qentry(member_id, session_id) do
+		query = from qentry in "qentries",
+			where: (qentry.member_id == ^member_id)
+				and (qentry.session_id == ^session_id)
+				and is_nil(qentry.prev_qentry_id),
+			select: qentry.id
+
+		List.first(Repo.all(query))
+	end
+
+  defp find_last_qentry(member_id, session_id) do
+		query = from qentry in "qentries", 
+			where: (qentry.member_id == ^member_id)
+				and (qentry.session_id == ^session_id)
+				and is_nil(qentry.next_qentry_id),
+			select: qentry.id
+
+    List.first(Repo.all(query))
   end
 
   # Add authorization logic here as required.

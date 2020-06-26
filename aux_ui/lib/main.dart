@@ -15,6 +15,7 @@ class AuxApp extends StatelessWidget {
   Future<void> attempt() async {
     AuxController tester = AuxController();
     await tester.connect();
+    await tester.changePos(3, 3, 69, null);
   }
 
   // This widget is the root of your application.
