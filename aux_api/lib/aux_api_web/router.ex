@@ -23,23 +23,33 @@ defmodule AuxApiWeb.Router do
   scope "/api", AuxApiWeb do
     pipe_through :api
 
-    scope "/queue" do
-      post "/add_song", QueueController, :add_song
-      put "/mark_played", QueueController, :mark_played
-      put "/change_pos", QueueController, :change_pos
-      delete "/delete_song", QueueController, :delete_song
-      get "/next", QueueController, :next
-    end
+    # scope "/queue" do
+    #   post "/add_song", QueueController, :add_song
+    #   put "/mark_played", QueueController, :mark_played
+    #   put "/change_pos", QueueController, :change_pos
+    #   delete "/delete_song", QueueController, :delete_song
+    #   get "/next", QueueController, :next
+    # end
 
-    scope "/member" do
-      get "/get_songs", MemberController, :get_songs
-    end
+    # scope "/member" do
+    #   get "/get_songs", MemberController, :get_songs
+    # end
 
     scope "/session" do
       post "/create_sess", SessionController, :create_session
       delete "/delete_sess", SessionController, :delete_session
       post "/add_member", SessionController, :add_member
       delete "/delete_member", SessionController, :delete_member
+      get "/authenticate", SpotifyApiController, :authenticate
+      get "/authorize", SpotifyApiController, :authorize
+    end
+
+    scope "/test" do
+      post "/add_song", TestController, :add_song
+      get "/init_test_db", TestController, :init_test_db
+      post "/change_pos", TestController, :change_pos
+      get "/test_private_func", TestController, :test_private_func
+      post "/create_member", TestController, :create_member
     end
 
   end
