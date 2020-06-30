@@ -49,7 +49,9 @@ defmodule AuxApiWeb.Router do
       get "/init_test_db", TestController, :init_test_db
       post "/change_pos", TestController, :change_pos
       get "/test_private_func", TestController, :test_private_func
-      post "/create_member", TestController, :create_member
+			post "/create_member", TestController, :create_member
+			post "/delete_song", TestController, :delete_song
+			get "/get_songs", TestController, :get_songs
     end
 
   end

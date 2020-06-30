@@ -49,7 +49,8 @@ class _SearchResults extends StatelessWidget {
     this.selected.clear();
     selected.putIfAbsent(idx, () => searchResults[idx]);
 
-    await this.controller.addSong(selected[idx].id);
+//    await this.controller.addSong(selected[idx].id);
+    await this.controller.getSongs(3, 3);
     print('added single song idex: ${selected.keys.toString()}');
   }
 

@@ -23,8 +23,8 @@ defmodule AuxApiWeb.TestController do
 		# tester params
 		member_id = 3
 		session_id = 3
-		id = 65
-		new_prev_id = nil
+		id = 82
+		new_prev_id = 76
 
 		# link this qentry's previous and next (== remove this qentry)
 		# curr.prev.next = curr.next
@@ -39,7 +39,7 @@ defmodule AuxApiWeb.TestController do
 			# curr.next = new_prev.next
 			if is_nil(new_prev_id) do
 				# song needs to go to front of the queue 
-				new_next_id = find_first_qentry(member_id, session_id)
+				{new_next_id, _} = find_first_qentry(member_id, session_id)
 				update_prev_qentry(new_next_id, id)
 				update_next_qentry(id, new_next_id)
 			else
@@ -67,8 +67,41 @@ defmodule AuxApiWeb.TestController do
 		test_member.id
 	end
 
+	def delete_song(conn, _params) do
+		# song could be: beginning, middle, end
+		qentry_id = 85
+
+		prev_qentry_id = find_prev_qentry(qentry_id)
+		next_qentry_id = find_next_qentry(qentry_id)
+
+		update_prev_qentry(next_qentry_id, prev_qentry_id)
+		update_next_qentry(prev_qentry_id, next_qentry_id)
+
+		from(q in "qentries", where: q.id == ^qentry_id) |> Repo.delete_all
+		text(conn, "fine")
+	end
+
+	def get_songs(conn, _params) do
+		member_id = 3
+		session_id = 3
+ 
+		{qentry_id, song_id} = find_first_qentry(member_id, session_id)
+		tracker = get_songs_recursive(qentry_id, [[qentry_id, song_id]])
+		IO.inspect tracker
+		text(conn, "fine")
+	end
+
+	defp get_songs_recursive(qentry_id, tracker) do
+		{next_id, next_song_id} = find_song(find_next_qentry(qentry_id))
+		if is_nil(next_id) do
+			tracker
+		else
+			get_songs_recursive(next_id, tracker ++ [[next_id, next_song_id]])
+		end
+	end
+
 	def add_song(conn, _params) do
-		prev_qentry_id = find_last_qentry(3, 3)
+		{prev_qentry_id, _} = find_last_qentry(3, 3)
 
 		qentry = %AuxApi.Qentry{
 			song_id: "2G7V7zsVDxg1yRsu7Ew9RJ",
@@ -84,11 +117,12 @@ defmodule AuxApiWeb.TestController do
 	end
 
 	def test_private_func(conn, _params) do
-		first = find_first_qentry(3, 3)
-		last = find_last_qentry(3, 3)
+		{first, _} = find_first_qentry(3, 3)
+		{last, _} = find_last_qentry(3, 3)
 		forwards = print_qentry_order(first, Integer.to_string(first) <> " ")
 		backwards = print_qentry_order_backwards(last, Integer.to_string(last) <> " ")
 		text(conn, forwards <> "\n" <> backwards)
+		# text(conn, find_first_qentry(3, 3))
 	end
 
 	defp print_qentry_order(curr_id, tracker) do
@@ -109,20 +143,40 @@ defmodule AuxApiWeb.TestController do
 		end
 	end
 
-	defp find_prev_qentry(qentry_id) do
-		query = from qentry in "qentries",
-			where: (qentry.id == ^qentry_id),
-			select: qentry.prev_qentry_id
+	defp find_song(qentry_id) do
+		if not is_nil(qentry_id) do
+			query = from qentry in "qentries",
+				where: (qentry.id == ^qentry_id),
+				select: {qentry.id, qentry.song_id}
 
-		List.first(Repo.all(query))
+			List.first(Repo.all(query))
+		else
+			{nil, nil}
+		end
+	end
+
+	defp find_prev_qentry(qentry_id) do
+		if not is_nil(qentry_id) do
+			query = from qentry in "qentries",
+				where: (qentry.id == ^qentry_id),
+				select: qentry.prev_qentry_id
+
+			List.first(Repo.all(query))
+		else
+			nil
+		end
 	end
 
 	defp find_next_qentry(qentry_id) do
-		query = from qentry in "qentries",
-			where: (qentry.id == ^qentry_id),
-			select: qentry.next_qentry_id
+		if not is_nil(qentry_id) do
+			query = from qentry in "qentries",
+				where: (qentry.id == ^qentry_id),
+				select: qentry.next_qentry_id
 
-		List.first(Repo.all(query))
+			List.first(Repo.all(query))
+		else
+			nil
+		end
 	end
 
 	defp update_prev_qentry(qentry_id, prev_id) do
@@ -143,10 +197,17 @@ defmodule AuxApiWeb.TestController do
 		query = from qentry in "qentries",
 			where: (qentry.member_id == ^member_id)
 				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.prev_qentry_id),
-			select: qentry.id
+				and is_nil(qentry.prev_qentry_id)
+				and (qentry.played == false),
+			select: {qentry.id, qentry.song_id}
 
-		List.first(Repo.all(query))
+		res = List.first(Repo.all(query))
+
+		if is_nil(res) do
+			{nil, nil}
+		else
+			res
+		end
 	end
 
 	defp find_last_qentry(member_id, session_id) do
@@ -154,9 +215,15 @@ defmodule AuxApiWeb.TestController do
 			where: (qentry.member_id == ^member_id)
 				and (qentry.session_id == ^session_id)
 				and is_nil(qentry.next_qentry_id),
-			select: qentry.id
+			select: {qentry.id, qentry.song_id}
 
-		List.first(Repo.all(query))
+		res = List.first(Repo.all(query))
+
+		if is_nil(res) do
+			{nil, nil}
+		else
+			res
+		end
 	end
 
 end
