@@ -62,10 +62,10 @@ defmodule AuxApiWeb.QueueChannel do
 		unless new_prev_id == curr_prev_id do
 			update_prev_qentry(curr_next_id, curr_prev_id)
 			update_next_qentry(curr_prev_id, curr_next_id)
-	
+
 			# curr.next = new_prev.next
 			if is_nil(new_prev_id) do
-				# song needs to go to front of the queue 
+				# song needs to go to front of the queue
 				new_next_id = find_first_qentry(member_id, session_id)
 				update_prev_qentry(new_next_id, id)
 				update_next_qentry(id, new_next_id)
@@ -75,13 +75,13 @@ defmodule AuxApiWeb.QueueChannel do
 				update_prev_qentry(new_next_id, id)
 				update_next_qentry(id, new_next_id)
 			end
-	
+
 			# curr.prev = new_prev
 			# new_prev.next = curr
 			update_prev_qentry(id, new_prev_id)
 			update_next_qentry(new_prev_id, id)
     end
-    
+
     {:reply, {:ok, payload}, socket} # TODO: update with proper response
   end
 
@@ -104,10 +104,10 @@ defmodule AuxApiWeb.QueueChannel do
 		query = from qentry in "qentries",
 			where: (qentry.id == ^qentry_id),
       select: qentry.next_qentry_id
-      
+
 		List.first(Repo.all(query))
   end
-  
+
   defp update_prev_qentry(qentry_id, prev_id) do
 		if not is_nil(qentry_id) do
 			from(q in "qentries", where: q.id == ^qentry_id, update: [set: [prev_qentry_id: ^prev_id]])
@@ -121,22 +121,24 @@ defmodule AuxApiWeb.QueueChannel do
 				|> Repo.update_all([])
 		end
   end
-  
-  defp find_first_qentry(member_id, session_id) do
+
+  defp find_first_qentry(member_id, session_id, played \\ false) do
 		query = from qentry in "qentries",
 			where: (qentry.member_id == ^member_id)
 				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.prev_qentry_id),
+        and is_nil(qentry.prev_qentry_id)
+        and (qentry.played == ^played),
 			select: qentry.id
 
 		List.first(Repo.all(query))
 	end
 
-  defp find_last_qentry(member_id, session_id) do
-		query = from qentry in "qentries", 
+  defp find_last_qentry(member_id, session_id, played \\ false) do
+		query = from qentry in "qentries",
 			where: (qentry.member_id == ^member_id)
 				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.next_qentry_id),
+        and is_nil(qentry.next_qentry_id)
+        and (qentry.played == ^played),
 			select: qentry.id
 
     List.first(Repo.all(query))

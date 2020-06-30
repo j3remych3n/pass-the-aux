@@ -5,87 +5,115 @@ alias AuxApi.Repo
 defmodule AuxApiWeb.TestController do
 	use AuxApiWeb, :controller
 
-	# clear all tables
 	def init_test_db(conn, _params) do
 		Repo.delete_all("qentries")
 		Repo.delete_all("sessions")
 		Repo.delete_all("members")
 
-		test_member = create_member(conn, _params)
+		test_member = _create_member()
 
-		sess = %AuxApi.Session{is_host: true, member_id: test_member.id}
+		sess = %AuxApi.Session{is_host: true, member_id: test_member}
 		{:ok, test_sess} = AuxApi.Repo.insert(sess)
 
-		text(conn, "also fine")
-	end
-
-	def change_pos(conn, _params) do
-		# tester params
-		member_id = 3
-		session_id = 3
-		id = 65
-		new_prev_id = nil
-
-		# link this qentry's previous and next (== remove this qentry)
-		# curr.prev.next = curr.next
-		# curr.next.prev = curr.prev
-		curr_prev_id = find_prev_qentry(id)
-		curr_next_id = find_next_qentry(id)
-
-		unless new_prev_id == curr_prev_id do
-			update_prev_qentry(curr_next_id, curr_prev_id)
-			update_next_qentry(curr_prev_id, curr_next_id)
-	
-			# curr.next = new_prev.next
-			if is_nil(new_prev_id) do
-				# song needs to go to front of the queue 
-				new_next_id = find_first_qentry(member_id, session_id)
-				update_prev_qentry(new_next_id, id)
-				update_next_qentry(id, new_next_id)
-			else
-				# song is now in the middle somewhere, or at the end
-				new_next_id = find_next_qentry(new_prev_id)
-				update_prev_qentry(new_next_id, id)
-				update_next_qentry(id, new_next_id)
-			end
-	
-			# curr.prev = new_prev
-			# new_prev.next = curr
-			update_prev_qentry(id, new_prev_id)
-			update_next_qentry(new_prev_id, id)
-		end
-		text(conn, "ok")
+		json(conn, %{member_id: test_member, session_id: test_sess.id})
 	end
 
 	def create_member(conn, _params) do
-		text(conn, to_string(_create_member(conn, _params)))
+		text(conn, to_string(_create_member()))
 	end
 
-	defp _create_member(conn, _params) do
+	defp _create_member() do
 		member = %AuxApi.Member{}
 		{:ok, test_member} = AuxApi.Repo.insert(member)
 		test_member.id
 	end
 
-	def add_song(conn, _params) do
-		prev_qentry_id = find_last_qentry(3, 3)
+	def add_song(conn, %{"member_id" => mid, "session_id" => sid}) do
+		member_id = String.to_integer(mid)
+		session_id = String.to_integer(sid)
+
+		prev_qentry_id = find_last_qentry(member_id, session_id)
 
 		qentry = %AuxApi.Qentry{
 			song_id: "2G7V7zsVDxg1yRsu7Ew9RJ",
-			session_id: 3,
-			member_id: 3,
+			member_id: member_id,
+			session_id: session_id,
 			next_qentry_id: nil,
 			prev_qentry_id: prev_qentry_id,
 		}
 		{:ok, test_qentry} = Repo.insert(qentry)
 
 		update_next_qentry(prev_qentry_id, test_qentry.id)
-		text(conn, "fine")
+		text(conn, "added " <> to_string(test_qentry.id))
 	end
 
-	def test_private_func(conn, _params) do
-		first = find_first_qentry(3, 3)
-		last = find_last_qentry(3, 3)
+	def next(conn, %{"member_id" => mid, "session_id" => sid}) do
+		member = String.to_integer(mid)
+		session = String.to_integer(sid)
+
+		qentry = find_first_qentry(member, session)
+		if is_nil(qentry) do
+			json(conn, %{warn: "no songs in queue"})
+		else
+
+			debug = mark_played(member, session, qentry)
+			text(conn, debug)
+			# song = mark_played(member, session, qentry)
+
+			# json(conn, %{qentry_id: qentry, song_id: song})
+		end
+	end
+
+	defp mark_played(member_id, session_id, qentry_id) do
+		get_neighbors = from q in "qentries",
+			where: (q.id == ^qentry_id),
+			select: {q.prev_qentry_id, q.next_qentry_id}
+		if not is_nil(qentry_id) do
+			{prev, next} = List.first(Repo.all(get_neighbors))
+
+			if not is_nil(prev) do
+				from(q in "qentries", where: q.id == ^prev, update: [set: [next_qentry_id: ^next]])
+        |> Repo.update_all([])
+			end
+
+			if not is_nil(next) do
+				from(q in "qentries", where: q.id == ^next, update: [set: [prev_qentry_id: ^prev]])
+        |> Repo.update_all([])
+			end
+
+			last_played = find_last_qentry(member_id, session_id, true)
+			if not is_nil(last_played) do
+				from(q in "qentries", where: q.id == ^last_played, update: [set: [next_qentry_id: ^qentry_id,]])
+				|> Repo.update_all([])
+			end
+			from(q in "qentries", where: q.id == ^qentry_id,
+				update: [
+					set: [
+						played: true,
+						next_qentry_id: nil,
+						prev_qentry_id: ^last_played,
+					]])
+			|> Repo.update_all([])
+			not_played = "empty"
+			if not is_nil(next) do
+				not_played = print_qentry_order(next, Integer.to_string(next) <> " ")
+				played = print_qentry_order_backwards(qentry_id, Integer.to_string(qentry_id) <> " ")
+				"played: " <> played <> "\nnot played: " <> not_played
+			else
+				played = print_qentry_order_backwards(qentry_id, Integer.to_string(qentry_id) <> " ")
+				"played: " <> played <> "\nnot played: " <> not_played
+			end
+		end
+
+		# query = from qentry in "qentries",
+		# 	where: (qentry.id == ^qentry_id),
+		# 	select: qentry.song_id
+		# List.first(Repo.all(query))
+  end
+
+	def find_qentry_test(conn, _params) do
+		first = find_first_qentry(4, 4)
+		last = find_last_qentry(4, 4)
 		forwards = print_qentry_order(first, Integer.to_string(first) <> " ")
 		backwards = print_qentry_order_backwards(last, Integer.to_string(last) <> " ")
 		text(conn, forwards <> "\n" <> backwards)
@@ -139,24 +167,25 @@ defmodule AuxApiWeb.TestController do
 		end
 	end
 
-	defp find_first_qentry(member_id, session_id) do
+  defp find_first_qentry(member_id, session_id, played \\ false) do
 		query = from qentry in "qentries",
 			where: (qentry.member_id == ^member_id)
 				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.prev_qentry_id),
+        and is_nil(qentry.prev_qentry_id)
+        and (qentry.played == ^played),
 			select: qentry.id
-
 		List.first(Repo.all(query))
 	end
 
-	defp find_last_qentry(member_id, session_id) do
+  defp find_last_qentry(member_id, session_id, played \\ false) do
 		query = from qentry in "qentries",
 			where: (qentry.member_id == ^member_id)
 				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.next_qentry_id),
+        and is_nil(qentry.next_qentry_id)
+        and (qentry.played == ^played),
 			select: qentry.id
 
-		List.first(Repo.all(query))
-	end
+    List.first(Repo.all(query))
+  end
 
 end
