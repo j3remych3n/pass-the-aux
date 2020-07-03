@@ -5,6 +5,7 @@ defmodule AuxApi.Session do
   schema "sessions" do
     field :is_host, :boolean, default: false
     field :member_id, :integer
+    field :session_id, :integer
     has_many :qentries, AuxApi.Qentry
     has_many :members, AuxApi.Member
 

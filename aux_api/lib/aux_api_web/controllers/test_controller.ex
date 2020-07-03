@@ -58,10 +58,10 @@ defmodule AuxApiWeb.TestController do
 	end
 
 	def create_member(conn, _params) do
-		text(conn, to_string(_create_member(conn, _params)))
+		text(conn, to_string(_create_member()))
 	end
 
-	defp _create_member(conn, _params) do
+	defp _create_member() do
 		member = %AuxApi.Member{}
 		{:ok, test_member} = AuxApi.Repo.insert(member)
 		test_member.id
@@ -91,6 +91,54 @@ defmodule AuxApiWeb.TestController do
 		text(conn, "fine")
 	end
 
+	def join_session(conn, _params) do
+		session_id = 3
+		member_id = 4
+
+		session = %AuxApi.Session{id: session_id, member_id: member_id}
+		{:ok, joined_session} = AuxApi.Repo.insert(session)
+
+		update_num_members(session_id)
+		text(conn, "fine")
+	end
+
+	def leave_session(conn, _params) do
+		member_id = 4
+		session_id = 3
+
+		from(q in "qentries", where: q.member_id == ^member_id and q.session_id == ^session_id) |> Repo.delete_all
+		from(s in "sessions", where: s.member_id == ^member_id and s.id == ^session_id) |> Repo.delete_all
+
+		update_num_members(session_id)
+		text(conn, "fine")
+	end
+
+	def create_sess(conn, _params) do
+		host_member_id = 5
+
+		if is_nil(host_member_id) do
+			host_member_id = _create_member()
+		end
+
+		session = %AuxApi.Session{member_id: host_member_id, is_host: true}
+		{:ok, new_session} = AuxApi.Repo.insert(session)
+
+		# {:reply, {:ok, %{member_id: host_member_id, session_id: new_session.id}}}
+		update_num_members(new_session.id)
+		
+		text(conn, "fine")
+	end
+
+	defp update_num_members(session_id) do
+		query = from session in "sessions",
+				where: (session.id == ^session_id),
+				select: count("*")
+
+		num_members = Repo.one(query)
+		num_members
+		# broadcast!(socket, "num_members", %{session_id: session_id, num_members: num_members})
+	end
+
 	defp get_songs_recursive(qentry_id, tracker) do
 		{next_id, next_song_id} = find_song(find_next_qentry(qentry_id))
 		if is_nil(next_id) do
@@ -117,12 +165,12 @@ defmodule AuxApiWeb.TestController do
 	end
 
 	def test_private_func(conn, _params) do
-		{first, _} = find_first_qentry(3, 3)
-		{last, _} = find_last_qentry(3, 3)
-		forwards = print_qentry_order(first, Integer.to_string(first) <> " ")
-		backwards = print_qentry_order_backwards(last, Integer.to_string(last) <> " ")
-		text(conn, forwards <> "\n" <> backwards)
-		# text(conn, find_first_qentry(3, 3))
+		# {first, _} = find_first_qentry(3, 3)
+		# {last, _} = find_last_qentry(3, 3)
+		# forwards = print_qentry_order(first, Integer.to_string(first) <> " ")
+		# backwards = print_qentry_order_backwards(last, Integer.to_string(last) <> " ")
+		# text(conn, forwards <> "\n" <> backwards)
+		text(conn, update_num_members(3))
 	end
 
 	defp print_qentry_order(curr_id, tracker) do

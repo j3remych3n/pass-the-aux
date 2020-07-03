@@ -52,6 +52,7 @@ defmodule AuxApiWeb.Router do
 			post "/create_member", TestController, :create_member
 			post "/delete_song", TestController, :delete_song
 			get "/get_songs", TestController, :get_songs
+			post "/join_session", TestController, :join_session
     end
 
   end
