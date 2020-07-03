@@ -53,14 +53,43 @@ defmodule AuxApiWeb.TestController do
 
 		qentry = find_first_qentry(member, session)
 		if is_nil(qentry) do
-			json(conn, %{warn: "no songs in queue"})
+			json(conn, %{debug_queue: "no songs in queue"})
 		else
+			song_id = mark_played(member, session, qentry)
+			json(conn, %{qentry_id: qentry, song_id: song_id})
+		end
+	end
 
-			debug = mark_played(member, session, qentry)
-			text(conn, debug)
-			# song = mark_played(member, session, qentry)
+	def auth_member(conn, %{"spotify_uid" => spotify_uid}) do
+		member_id = find_member(spotify_uid)
+		if is_nil(member_id) do
+			{:ok, member} = %AuxApi.Member{spotify_uid: spotify_uid} |> AuxApi.Repo.insert
+			json(conn, ${auth_token: member.id})
+		else
+			json(conn, %{auth_token: member_id})
+		end
+	end
 
-			# json(conn, %{qentry_id: qentry, song_id: song})
+	def delete_member(conn, ${"spotify_uid" => spotify_uid, "member_id" => mid}) do
+		member_id = String.to_integer(mid)
+
+		if member_id == find_member(spotify_uid) do
+			from(member in "members", where: member.id == ^member_id) |> AuxApi.Repo.delete_all
+			conn |> put_status(200)
+		else
+			conn |> put_status(403)
+		end
+	end
+
+	defp find_member(spotify_uid) do
+		query = from member in "members",
+			where: (member.spotify_uid == ^spotify_uid),
+			select: member.id
+		member_result = Repo.all(query)
+
+		case length(member_result) do
+			1 -> List.first(member_result)
+			_ -> nil
 		end
 	end
 
@@ -94,21 +123,21 @@ defmodule AuxApiWeb.TestController do
 						prev_qentry_id: ^last_played,
 					]])
 			|> Repo.update_all([])
-			not_played = "empty"
-			if not is_nil(next) do
-				not_played = print_qentry_order(next, Integer.to_string(next) <> " ")
-				played = print_qentry_order_backwards(qentry_id, Integer.to_string(qentry_id) <> " ")
-				"played: " <> played <> "\nnot played: " <> not_played
-			else
-				played = print_qentry_order_backwards(qentry_id, Integer.to_string(qentry_id) <> " ")
-				"played: " <> played <> "\nnot played: " <> not_played
-			end
-		end
+			# not_played = "empty"
+			# if not is_nil(next) do
+			# 	not_played = print_qentry_order(next, Integer.to_string(next) <> " ")
+			# 	played = print_qentry_order_backwards(qentry_id, Integer.to_string(qentry_id) <> " ")
+			# 	"played: " <> played <> "\nnot played: " <> not_played
+			# else
+			# 	played = print_qentry_order_backwards(qentry_id, Integer.to_string(qentry_id) <> " ")
+			# 	song_id, "played: " <> played <> "\nnot played: " <> not_played
+			# end
 
-		# query = from qentry in "qentries",
-		# 	where: (qentry.id == ^qentry_id),
-		# 	select: qentry.song_id
-		# List.first(Repo.all(query))
+			get_next_song = from qentry in "qentries",
+				where: (qentry.id == ^next),
+				select: qentry.song_id
+			song_id = List.first(Repo.all(get_next_song))
+		end
   end
 
 	def find_qentry_test(conn, _params) do
