@@ -11,9 +11,9 @@ defmodule AuxApiWeb.TestController do
 		Repo.delete_all("sessions")
 		Repo.delete_all("members")
 
-		test_member = create_member(conn, _params)
+		test_member_id = _create_member()
 
-		sess = %AuxApi.Session{is_host: true, member_id: test_member.id}
+		sess = %AuxApi.Session{host_id: test_member_id}
 		{:ok, test_sess} = AuxApi.Repo.insert(sess)
 
 		text(conn, "also fine")
@@ -21,8 +21,8 @@ defmodule AuxApiWeb.TestController do
 
 	def change_pos(conn, _params) do
 		# tester params
-		member_id = 3
-		session_id = 3
+		member_id = 1
+		session_id = 1
 		id = 82
 		new_prev_id = 76
 
@@ -82,8 +82,8 @@ defmodule AuxApiWeb.TestController do
 	end
 
 	def get_songs(conn, _params) do
-		member_id = 3
-		session_id = 3
+		member_id = 1
+		session_id = 1
  
 		{qentry_id, song_id} = find_first_qentry(member_id, session_id)
 		tracker = get_songs_recursive(qentry_id, [[qentry_id, song_id]])
@@ -91,52 +91,32 @@ defmodule AuxApiWeb.TestController do
 		text(conn, "fine")
 	end
 
-	def join_session(conn, _params) do
-		session_id = 3
-		member_id = 4
-
-		session = %AuxApi.Session{id: session_id, member_id: member_id}
-		{:ok, joined_session} = AuxApi.Repo.insert(session)
-
-		update_num_members(session_id)
-		text(conn, "fine")
-	end
-
-	def leave_session(conn, _params) do
-		member_id = 4
-		session_id = 3
+	def leave_sess(conn, _params) do
+		member_id = 7
+		session_id = 1
 
 		from(q in "qentries", where: q.member_id == ^member_id and q.session_id == ^session_id) |> Repo.delete_all
-		from(s in "sessions", where: s.member_id == ^member_id and s.id == ^session_id) |> Repo.delete_all
-
-		update_num_members(session_id)
 		text(conn, "fine")
 	end
 
 	def create_sess(conn, _params) do
-		host_member_id = 5
+		host_id = 5
+		host_id = if is_nil(host_id) do _create_member() else host_id end
 
-		if is_nil(host_member_id) do
-			host_member_id = _create_member()
-		end
-
-		session = %AuxApi.Session{member_id: host_member_id, is_host: true}
+		session = %AuxApi.Session{host_id: host_id}
 		{:ok, new_session} = AuxApi.Repo.insert(session)
 
-		# {:reply, {:ok, %{member_id: host_member_id, session_id: new_session.id}}}
-		update_num_members(new_session.id)
-		
+		# {:reply, {:ok, %{host_id: host_member_id, session_id: new_session.id}}}		
 		text(conn, "fine")
 	end
 
-	defp update_num_members(session_id) do
-		query = from session in "sessions",
-				where: (session.id == ^session_id),
-				select: count("*")
+	def end_sess(conn, _params) do
+		session_id = 15
 
-		num_members = Repo.one(query)
-		num_members
-		# broadcast!(socket, "num_members", %{session_id: session_id, num_members: num_members})
+		from(q in "qentries", where: q.session_id == ^session_id) |> Repo.delete_all
+		from(s in "sessions", where: s.id == ^session_id) |> Repo.delete_all
+
+		text(conn, "fine")
 	end
 
 	defp get_songs_recursive(qentry_id, tracker) do
@@ -149,12 +129,12 @@ defmodule AuxApiWeb.TestController do
 	end
 
 	def add_song(conn, _params) do
-		{prev_qentry_id, _} = find_last_qentry(3, 3)
+		{prev_qentry_id, _} = find_last_qentry(7, 1)
 
 		qentry = %AuxApi.Qentry{
 			song_id: "2G7V7zsVDxg1yRsu7Ew9RJ",
-			session_id: 3,
-			member_id: 3,
+			session_id: 1,
+			member_id: 7,
 			next_qentry_id: nil,
 			prev_qentry_id: prev_qentry_id,
 		}
@@ -165,12 +145,11 @@ defmodule AuxApiWeb.TestController do
 	end
 
 	def test_private_func(conn, _params) do
-		# {first, _} = find_first_qentry(3, 3)
-		# {last, _} = find_last_qentry(3, 3)
-		# forwards = print_qentry_order(first, Integer.to_string(first) <> " ")
-		# backwards = print_qentry_order_backwards(last, Integer.to_string(last) <> " ")
-		# text(conn, forwards <> "\n" <> backwards)
-		text(conn, update_num_members(3))
+		{first, _} = find_first_qentry(7, 1)
+		{last, _} = find_last_qentry(7, 1)
+		forwards = print_qentry_order(first, Integer.to_string(first) <> " ")
+		backwards = print_qentry_order_backwards(last, Integer.to_string(last) <> " ")
+		text(conn, forwards <> "\n" <> backwards)
 	end
 
 	defp print_qentry_order(curr_id, tracker) do

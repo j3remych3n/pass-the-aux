@@ -3,11 +3,11 @@ defmodule AuxApi.Session do
   import Ecto.Changeset
 
   schema "sessions" do
-    field :is_host, :boolean, default: false
-    field :member_id, :integer
-    field :session_id, :integer
+    field :party, :boolean, default: true
+    field :dictatorship, :boolean, default: true
+    field :host_id, :integer
     has_many :qentries, AuxApi.Qentry
-    has_many :members, AuxApi.Member
+    has_one :members, AuxApi.Member
 
     timestamps()
   end
