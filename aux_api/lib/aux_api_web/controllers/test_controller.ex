@@ -99,9 +99,12 @@ defmodule AuxApiWeb.TestController do
 		text(conn, "fine")
 	end
 
+	@optional_params %{"host_id" => nil}
 	def create_sess(conn, _params) do
-		host_id = 5
-		host_id = if is_nil(host_id) do _create_member() else host_id end
+		_params = Map.merge(@optional_params, _params)
+
+		%{"host_id" => host_id} = _params
+		host_id = if is_nil(host_id) do _create_member() else String.to_integer(host_id) end
 
 		session = %AuxApi.Session{host_id: host_id}
 		{:ok, new_session} = AuxApi.Repo.insert(session)
@@ -110,9 +113,8 @@ defmodule AuxApiWeb.TestController do
 		text(conn, "fine")
 	end
 
-	def end_sess(conn, _params) do
-		session_id = 15
-
+	def end_sess(conn, %{"session_id" => session_id}) do
+		session_id = String.to_integer(session_id)
 		from(q in "qentries", where: q.session_id == ^session_id) |> Repo.delete_all
 		from(s in "sessions", where: s.id == ^session_id) |> Repo.delete_all
 

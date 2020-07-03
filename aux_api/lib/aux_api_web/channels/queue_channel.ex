@@ -111,12 +111,26 @@ defmodule AuxApiWeb.QueueChannel do
 		{:reply, {:ok, %{songs: tracker}}, socket}
 	end
 
+	def handle_in("leave_sess", payload, socket) do
+		member_id = payload["member_id"]
+		session_id = payload["session_id"]
+
+		from(q in "qentries", where: q.member_id == ^member_id and q.session_id == ^session_id) |> Repo.delete_all
+		{:reply, {:ok, payload}, socket} # TODO: update with proper response
+	end
+
 	# It is also common to receive messages from the client and
   # broadcast to everyone in the current topic (queue:lobby).
   def handle_in("shout", payload, socket) do
     broadcast socket, "shout", payload
     {:noreply, socket}
-  end
+	end
+	
+	defp _create_member() do
+		member = %AuxApi.Member{}
+		{:ok, created_member} = AuxApi.Repo.insert(member)
+		created_member.id
+	end
 
 	defp get_songs_recursive(qentry_id, tracker) do
 		{next_id, next_song_id} = find_song(find_next_qentry(qentry_id))
