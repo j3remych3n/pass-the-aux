@@ -3,7 +3,7 @@ defmodule AuxApi.Repo.Migrations.CreateMembers do
 
   def change do
     create table(:members) do
-      add :spotify_user, :string
+      add :spotify_uid, :string
 
       timestamps()
     end

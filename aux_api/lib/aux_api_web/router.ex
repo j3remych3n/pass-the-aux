@@ -23,25 +23,15 @@ defmodule AuxApiWeb.Router do
   scope "/api", AuxApiWeb do
     pipe_through :api
 
-    # scope "/queue" do
-    #   post "/add_song", QueueController, :add_song
-    #   put "/mark_played", QueueController, :mark_played
-    #   put "/change_pos", QueueController, :change_pos
-    #   delete "/delete_song", QueueController, :delete_song
-    #   get "/next", QueueController, :next
-    # end
-
-    # scope "/member" do
-    #   get "/get_songs", MemberController, :get_songs
-    # end
-
     scope "/session" do
-      post "/create_sess", SessionController, :create_session
-      delete "/delete_sess", SessionController, :delete_session
-      post "/add_member", SessionController, :add_member
-      delete "/delete_member", SessionController, :delete_member
-      get "/authenticate", SpotifyApiController, :authenticate
-      get "/authorize", SpotifyApiController, :authorize
+      post "/create", SessionController, :create_session
+      delete "/delete", SessionController, :delete_session
+    end
+
+    scope "/member" do
+      post "/auth", MemberController, :auth_member
+      post "/create", MemberController, :auth_member
+      delete "/delete", MemberController, :delete_member
     end
 
     scope "/test" do
@@ -49,6 +39,8 @@ defmodule AuxApiWeb.Router do
       get "/init_test_db", TestController, :init_test_db
       post "/add_song", TestController, :add_song
       post "/next", TestController, :next
+      post "/auth_member", TestController, :auth_member
+      delete "/delete_member", TestController, :delete_member
     end
 
   end

@@ -92,6 +92,7 @@ defmodule AuxApiWeb.QueueChannel do
     {:noreply, socket}
   end
 
+  ## MOVE TO LIBRARY FILE
   defp find_prev_qentry(qentry_id) do
 		query = from qentry in "qentries",
 			where: (qentry.id == ^qentry_id),
@@ -143,9 +144,13 @@ defmodule AuxApiWeb.QueueChannel do
 
     List.first(Repo.all(query))
   end
+## END MOVE TO LIBRARY FILE
 
   # Add authorization logic here as required.
+  # on join channel
   defp authorized?(_payload) do
+    # check member_id and spotify_uid pair match in DB
+
     true
   end
 end

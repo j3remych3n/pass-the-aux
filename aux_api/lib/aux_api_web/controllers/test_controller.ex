@@ -47,38 +47,26 @@ defmodule AuxApiWeb.TestController do
 		text(conn, "added " <> to_string(test_qentry.id))
 	end
 
-	def next(conn, %{"member_id" => mid, "session_id" => sid}) do
-		member = String.to_integer(mid)
-		session = String.to_integer(sid)
-
-		qentry = find_first_qentry(member, session)
-		if is_nil(qentry) do
-			json(conn, %{debug_queue: "no songs in queue"})
-		else
-			song_id = mark_played(member, session, qentry)
-			json(conn, %{qentry_id: qentry, song_id: song_id})
-		end
-	end
-
 	def auth_member(conn, %{"spotify_uid" => spotify_uid}) do
 		member_id = find_member(spotify_uid)
-		if is_nil(member_id) do
+		if is_nil(member_id) do # New member
 			{:ok, member} = %AuxApi.Member{spotify_uid: spotify_uid} |> AuxApi.Repo.insert
-			json(conn, ${auth_token: member.id})
-		else
+			json(conn, %{auth_token: member.id})
+		else # Existing member
 			json(conn, %{auth_token: member_id})
 		end
 	end
 
-	def delete_member(conn, ${"spotify_uid" => spotify_uid, "member_id" => mid}) do
+	def delete_member(conn, %{"spotify_uid" => spotify_uid, "member_id" => mid}) do
 		member_id = String.to_integer(mid)
 
 		if member_id == find_member(spotify_uid) do
 			from(member in "members", where: member.id == ^member_id) |> AuxApi.Repo.delete_all
-			conn |> put_status(200)
+			conn |> put_status(200) |> json(%{error: "invalid authentication / member does not exist"})
 		else
-			conn |> put_status(403)
+			conn |> put_status(403) |> json(%{})
 		end
+
 	end
 
 	defp find_member(spotify_uid) do
@@ -90,6 +78,19 @@ defmodule AuxApiWeb.TestController do
 		case length(member_result) do
 			1 -> List.first(member_result)
 			_ -> nil
+		end
+	end
+
+	def next(conn, %{"member_id" => mid, "session_id" => sid}) do
+		member = String.to_integer(mid)
+		session = String.to_integer(sid)
+
+		qentry = find_first_qentry(member, session)
+		if is_nil(qentry) do
+			json(conn, %{debug_queue: "no songs in queue"})
+		else
+			song_id = mark_played(member, session, qentry)
+			json(conn, %{qentry_id: qentry, song_id: song_id})
 		end
 	end
 
