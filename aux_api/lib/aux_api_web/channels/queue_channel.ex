@@ -63,7 +63,7 @@ defmodule AuxApiWeb.QueueChannel do
 		unless new_prev_id == curr_prev_id do
 			update_prev_qentry(curr_next_id, curr_prev_id)
 			update_next_qentry(curr_prev_id, curr_next_id)
-	
+
 			# curr.next = new_prev.next
 			if is_nil(new_prev_id) do
 				# song needs to go to front of the queue 
@@ -76,13 +76,13 @@ defmodule AuxApiWeb.QueueChannel do
 				update_prev_qentry(new_next_id, id)
 				update_next_qentry(id, new_next_id)
 			end
-	
+
 			# curr.prev = new_prev
 			# new_prev.next = curr
 			update_prev_qentry(id, new_prev_id)
 			update_next_qentry(new_prev_id, id)
     end
-    
+
     {:reply, {:ok, payload}, socket} # TODO: update with proper response
 	end
 	
@@ -153,6 +153,7 @@ defmodule AuxApiWeb.QueueChannel do
 		end
 	end
 
+  ## MOVE TO LIBRARY FILE
   defp find_prev_qentry(qentry_id) do
 		if not is_nil(qentry_id) do
 			query = from qentry in "qentries",
@@ -225,7 +226,10 @@ defmodule AuxApiWeb.QueueChannel do
 	end
 
   # Add authorization logic here as required.
+  # on join channel
   defp authorized?(_payload) do
+    # check member_id and spotify_uid pair match in DB
+
     true
   end
 end

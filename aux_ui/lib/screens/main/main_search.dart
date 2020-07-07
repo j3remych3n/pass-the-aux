@@ -69,7 +69,7 @@ class _SearchResults extends StatelessWidget {
 }
 
 class _YourPicks extends StatelessWidget {
-  final List<Song> yourPicks;
+  final List<So ng> yourPicks;
   final Function songOnPress;
   const _YourPicks({Key key, @required this.yourPicks, @required this.songOnPress}):super(key: key);
 
