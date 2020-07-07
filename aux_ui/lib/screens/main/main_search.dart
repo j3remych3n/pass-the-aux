@@ -49,7 +49,9 @@ class _SearchResults extends StatelessWidget {
     this.selected.clear();
     selected.putIfAbsent(idx, () => searchResults[idx]);
 
-    await this.controller.addSong(selected[idx].id);
+//    await this.controller.addSong(selected[idx].id);
+    // TODO: change this back
+    await this.controller.getSongs(3, 3);
     print('added single song idex: ${selected.keys.toString()}');
   }
 
@@ -67,7 +69,7 @@ class _SearchResults extends StatelessWidget {
 }
 
 class _YourPicks extends StatelessWidget {
-  final List<Song> yourPicks;
+  final List<So ng> yourPicks;
   final Function songOnPress;
   const _YourPicks({Key key, @required this.yourPicks, @required this.songOnPress}):super(key: key);
 
