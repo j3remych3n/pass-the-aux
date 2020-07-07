@@ -24,8 +24,8 @@ defmodule AuxApiWeb.Router do
     pipe_through :api
 
     scope "/session" do
-      post "/create", SessionController, :create_session
-      delete "/delete", SessionController, :delete_session
+      post "/create", SessionController, :create_sess
+      delete "/end", SessionController, :end_sess
     end
 
     scope "/member" do

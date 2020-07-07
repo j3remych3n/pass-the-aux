@@ -22,8 +22,8 @@ defmodule AuxApiWeb.TestController do
 		# tester params
 		member_id = 1
 		session_id = 1
-		id = 82
-		new_prev_id = 76
+		id = 4
+		new_prev_id = 2
 
 		# link this qentry's previous and next (== remove this qentry)
 		# curr.prev.next = curr.next
@@ -69,7 +69,7 @@ defmodule AuxApiWeb.TestController do
 
 	def delete_song(conn, _params) do
 		# song could be: beginning, middle, end
-		qentry_id = 85
+		qentry_id = 4
 
 		prev_qentry_id = find_prev_qentry(qentry_id)
 		next_qentry_id = find_next_qentry(qentry_id)
@@ -92,7 +92,7 @@ defmodule AuxApiWeb.TestController do
 	end
 
 	def leave_sess(conn, _params) do
-		member_id = 7
+		member_id = 2
 		session_id = 1
 
 		from(q in "qentries", where: q.member_id == ^member_id and q.session_id == ^session_id) |> Repo.delete_all
@@ -245,8 +245,8 @@ defmodule AuxApiWeb.TestController do
     end
 
 	def test_private_func(conn, _params) do
-		{first, _} = find_first_qentry(7, 1)
-		{last, _} = find_last_qentry(7, 1)
+		{first, _} = find_first_qentry(1, 1)
+		{last, _} = find_last_qentry(1, 1)
 		forwards = print_qentry_order(first, Integer.to_string(first) <> " ")
 		backwards = print_qentry_order_backwards(last, Integer.to_string(last) <> " ")
 		text(conn, forwards <> "\n" <> backwards)
