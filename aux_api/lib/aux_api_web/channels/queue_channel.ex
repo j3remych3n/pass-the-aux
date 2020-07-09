@@ -66,7 +66,7 @@ defmodule AuxApiWeb.QueueChannel do
 
 			# curr.next = new_prev.next
 			if is_nil(new_prev_id) do
-				# song needs to go to front of the queue 
+				# song needs to go to front of the queue
 				{new_next_id, _} = find_first_qentry(member_id, session_id)
 				update_prev_qentry(new_next_id, id)
 				update_next_qentry(id, new_next_id)
@@ -85,7 +85,7 @@ defmodule AuxApiWeb.QueueChannel do
 
     {:reply, {:ok, payload}, socket} # TODO: update with proper response
 	end
-	
+
 	def handle_in("delete_song", payload, socket) do
 		# song could be: beginning, middle, end
 		# this should be fine with the two linkedlists approach, no edits
@@ -119,13 +119,72 @@ defmodule AuxApiWeb.QueueChannel do
 		{:reply, {:ok, payload}, socket} # TODO: update with proper response
 	end
 
+	def handle_in("next", %{"member_id" => mid, "session_id" => sid}, socket) do
+		member = String.to_integer(mid)
+		session = String.to_integer(sid)
+
+		{qentry, _} = find_first_qentry(member, session)
+		if is_nil(qentry) do
+			{:reply, {:ok, %{info: "no songs in queue"}}, socket}
+		else
+			song_id = mark_played(member, session, qentry)
+			{:reply, {:ok, %{qentry_id: qentry, song_id: song_id}}, socket}
+		end
+	end
+
+	defp mark_played(member_id, session_id, qentry_id) do
+		get_neighbors = from q in "qentries",
+			where: (q.id == ^qentry_id),
+			select: {q.prev_qentry_id, q.next_qentry_id}
+		if not is_nil(qentry_id) do
+			{prev, next} = List.first(Repo.all(get_neighbors))
+
+			if not is_nil(prev) do
+				from(q in "qentries", where: q.id == ^prev, update: [set: [next_qentry_id: ^next]])
+        |> Repo.update_all([])
+			end
+
+			if not is_nil(next) do
+				from(q in "qentries", where: q.id == ^next, update: [set: [prev_qentry_id: ^prev]])
+        |> Repo.update_all([])
+			end
+
+			{last_played, _} = find_last_qentry(member_id, session_id, true)
+			if not is_nil(last_played) do
+				from(q in "qentries", where: q.id == ^last_played, update: [set: [next_qentry_id: ^qentry_id,]])
+				|> Repo.update_all([])
+			end
+			from(q in "qentries", where: q.id == ^qentry_id,
+				update: [
+					set: [
+						played: true,
+						next_qentry_id: nil,
+						prev_qentry_id: ^last_played,
+					]])
+			|> Repo.update_all([])
+			# not_played = "empty"
+			# if not is_nil(next) do
+			# 	not_played = print_qentry_order(next, Integer.to_string(next) <> " ")
+			# 	played = print_qentry_order_backwards(qentry_id, Integer.to_string(qentry_id) <> " ")
+			# 	"played: " <> played <> "\nnot played: " <> not_played
+			# else
+			# 	played = print_qentry_order_backwards(qentry_id, Integer.to_string(qentry_id) <> " ")
+			# 	song_id, "played: " <> played <> "\nnot played: " <> not_played
+			# end
+
+			get_next_song = from qentry in "qentries",
+				where: (qentry.id == ^next),
+				select: qentry.song_id
+			song_id = List.first(Repo.all(get_next_song))
+		end
+  end
 	# It is also common to receive messages from the client and
   # broadcast to everyone in the current topic (queue:lobby).
   def handle_in("shout", payload, socket) do
     broadcast socket, "shout", payload
     {:noreply, socket}
 	end
-	
+
 	defp _create_member() do
 		member = %AuxApi.Member{}
 		{:ok, created_member} = AuxApi.Repo.insert(member)
@@ -177,7 +236,7 @@ defmodule AuxApiWeb.QueueChannel do
 			nil
 		end
 	end
-  
+
   defp update_prev_qentry(qentry_id, prev_id) do
 		if not is_nil(qentry_id) do
 			from(q in "qentries", where: q.id == ^qentry_id, update: [set: [prev_qentry_id: ^prev_id]])
@@ -191,38 +250,26 @@ defmodule AuxApiWeb.QueueChannel do
 				|> Repo.update_all([])
 		end
 	end
-  
-  defp find_first_qentry(member_id, session_id) do
+
+	defp find_lonely_qentry(member_id, session_id, played \\ false, first \\ true) do
 		query = from qentry in "qentries",
 			where: (qentry.member_id == ^member_id)
 				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.prev_qentry_id)
-				and (qentry.played == false),
+				and (qentry.played == ^played)
+				and ((not ^first and is_nil(qentry.next_qentry_id))
+					or (^first and is_nil(qentry.prev_qentry_id))),
 			select: {qentry.id, qentry.song_id}
 
 		res = List.first(Repo.all(query))
-
-		if is_nil(res) do
-			{nil, nil}
-		else
-			res
-		end
+		if is_nil(res), do: {nil, nil}, else: res
 	end
 
-	defp find_last_qentry(member_id, session_id) do
-		query = from qentry in "qentries",
-			where: (qentry.member_id == ^member_id)
-				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.next_qentry_id),
-			select: {qentry.id, qentry.song_id}
+	defp find_first_qentry(member_id, session_id, played \\ false) do
+		find_lonely_qentry(member_id, session_id, played, true)
+	end
 
-		res = List.first(Repo.all(query))
-
-		if is_nil(res) do
-			{nil, nil}
-		else
-			res
-		end
+  defp find_last_qentry(member_id, session_id, played \\ false) do
+		find_lonely_qentry(member_id, session_id, played, false)
 	end
 
   # Add authorization logic here as required.

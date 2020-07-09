@@ -241,7 +241,7 @@ defmodule AuxApiWeb.TestController do
 				select: qentry.song_id
 			song_id = List.first(Repo.all(get_next_song))
 		end
-    end
+  end
 
 	def test_private_func(conn, _params) do
 		{first, _} = find_first_qentry(1, 1)
@@ -324,7 +324,7 @@ defmodule AuxApiWeb.TestController do
 			where: (qentry.member_id == ^member_id)
 				and (qentry.session_id == ^session_id)
 				and is_nil(qentry.prev_qentry_id)
-				and (qentry.played == false),
+				and (!qentry.played == false),
 			select: {qentry.id, qentry.song_id}
 
 		res = List.first(Repo.all(query))
@@ -340,7 +340,8 @@ defmodule AuxApiWeb.TestController do
 		query = from qentry in "qentries",
 			where: (qentry.member_id == ^member_id)
 				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.next_qentry_id),
+				and is_nil(qentry.next_qentry_id)
+				and (qentry.played == false),
 			select: {qentry.id, qentry.song_id}
 
 		res = List.first(Repo.all(query))
