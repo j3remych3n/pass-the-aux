@@ -1,5 +1,6 @@
 import Ecto.Query
 import Ecto.Changeset
+import AuxApi.AuxLibrary
 alias AuxApi.Repo
 
 defmodule AuxApiWeb.QueueChannel do
@@ -183,93 +184,6 @@ defmodule AuxApiWeb.QueueChannel do
   def handle_in("shout", payload, socket) do
     broadcast socket, "shout", payload
     {:noreply, socket}
-	end
-
-	defp _create_member() do
-		member = %AuxApi.Member{}
-		{:ok, created_member} = AuxApi.Repo.insert(member)
-		created_member.id
-	end
-
-	defp get_songs_recursive(qentry_id, tracker) do
-		{next_id, next_song_id} = find_song(find_next_qentry(qentry_id))
-		if is_nil(next_id) do
-			tracker
-		else
-			get_songs_recursive(next_id, tracker ++ [[next_id, next_song_id]])
-		end
-	end
-
-	defp find_song(qentry_id) do
-		if not is_nil(qentry_id) do
-			query = from qentry in "qentries",
-				where: (qentry.id == ^qentry_id),
-				select: {qentry.id, qentry.song_id}
-
-			List.first(Repo.all(query))
-		else
-			{nil, nil}
-		end
-	end
-
-  ## MOVE TO LIBRARY FILE
-  defp find_prev_qentry(qentry_id) do
-		if not is_nil(qentry_id) do
-			query = from qentry in "qentries",
-				where: (qentry.id == ^qentry_id),
-				select: qentry.prev_qentry_id
-
-			List.first(Repo.all(query))
-		else
-			nil
-		end
-	end
-
-	defp find_next_qentry(qentry_id) do
-		if not is_nil(qentry_id) do
-			query = from qentry in "qentries",
-				where: (qentry.id == ^qentry_id),
-				select: qentry.next_qentry_id
-
-			List.first(Repo.all(query))
-		else
-			nil
-		end
-	end
-
-  defp update_prev_qentry(qentry_id, prev_id) do
-		if not is_nil(qentry_id) do
-			from(q in "qentries", where: q.id == ^qentry_id, update: [set: [prev_qentry_id: ^prev_id]])
-				|> Repo.update_all([])
-		end
-	end
-
-	defp update_next_qentry(qentry_id, next_id) do
-		if not is_nil(qentry_id) do
-			from(q in "qentries", where: q.id == ^qentry_id, update: [set: [next_qentry_id: ^next_id]])
-				|> Repo.update_all([])
-		end
-	end
-
-	defp find_lonely_qentry(member_id, session_id, played \\ false, first \\ true) do
-		query = from qentry in "qentries",
-			where: (qentry.member_id == ^member_id)
-				and (qentry.session_id == ^session_id)
-				and (qentry.played == ^played)
-				and ((not ^first and is_nil(qentry.next_qentry_id))
-					or (^first and is_nil(qentry.prev_qentry_id))),
-			select: {qentry.id, qentry.song_id}
-
-		res = List.first(Repo.all(query))
-		if is_nil(res), do: {nil, nil}, else: res
-	end
-
-	defp find_first_qentry(member_id, session_id, played \\ false) do
-		find_lonely_qentry(member_id, session_id, played, true)
-	end
-
-  defp find_last_qentry(member_id, session_id, played \\ false) do
-		find_lonely_qentry(member_id, session_id, played, false)
 	end
 
   # Add authorization logic here as required.

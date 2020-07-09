@@ -3,14 +3,10 @@ import Ecto.Changeset
 alias AuxApi.Repo
 
 defmodule AuxApiWeb.SessionController do
-  use AuxApiWeb, :controller
-
-  @optional_params %{"host_id" => nil}
-	def create_sess(conn, _params) do
-		_params = Map.merge(@optional_params, _params)
-
-		%{"host_id" => host_id} = _params
-		host_id = if is_nil(host_id) do _create_member() else String.to_integer(host_id) end
+	use AuxApiWeb, :controller
+	
+	def create_sess(conn, %{"host_id" => host_id}) do
+		host_id = String.to_integer(host_id)
 
 		session = %AuxApi.Session{host_id: host_id}
 		{:ok, new_session} = AuxApi.Repo.insert(session)
@@ -26,11 +22,4 @@ defmodule AuxApiWeb.SessionController do
 
 		text(conn, "fine")
   end
-  
-  defp _create_member() do
-		member = %AuxApi.Member{}
-		{:ok, new_member} = AuxApi.Repo.insert(member)
-		new_member.id
-	end
-
 end
