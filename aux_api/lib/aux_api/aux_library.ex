@@ -12,31 +12,36 @@ defmodule AuxApi.AuxLibrary do
 		end
   end
 
-  def find_song(qentry_id) do
-		if is_nil(qentry_id) do
-			{nil, nil}
-		else
-			query = from qentry in "qentries",
-				where: (qentry.id == ^qentry_id),
-				select: {qentry.id, qentry.song_id}
-			List.first(Repo.all(query))
-		end
-  end
+	def find_song(qentry_id) when is_nil(qentry_id), do: {nil, nil}
+	def find_song(qentry_id) when not is_nil(qentry_id) do
+		query = from qentry in "qentries",
+			where: (qentry.id == ^qentry_id),
+			select: {qentry.id, qentry.song_id}
+		List.first(Repo.all(query))
+	end
+
 
 	def find_prev_qentry(qentry_id) when not is_nil(qentry_id) do
 		query = from qentry in "qentries",
 			where: (qentry.id == ^qentry_id),
 			select: qentry.prev_qentry_id
 		List.first(Repo.all(query))
-  end
+	end
 
-  def find_next_qentry(qentry_id) when not is_nil(qentry_id) do
+	def find_next_qentry(qentry_id) when not is_nil(qentry_id) do
 		query = from qentry in "qentries",
 			where: (qentry.id == ^qentry_id),
 			select: qentry.next_qentry_id
-
 		List.first(Repo.all(query))
-  end
+	end
+
+	def find_neighbor_qentries(qentry_id) when is_nil(qentry_id), do: {nil, nil}
+	def find_neighbor_qentries(qentry_id) when not is_nil(qentry_id) do
+		query = from qentry in "qentries",
+			where: (qentry.id == ^qentry_id),
+			select: {qentry.prev_qentry_id, qentry.next_qentry_id}
+		List.first(Repo.all(query))
+	end
 
   def update_prev_qentry(qentry_id, prev_id) when not is_nil(qentry_id) do
 		from(q in "qentries", where: q.id == ^qentry_id, update: [set: [prev_qentry_id: ^prev_id]])
@@ -56,6 +61,26 @@ defmodule AuxApi.AuxLibrary do
 		find_lonely_qentry(member_id, session_id, played, false)
 	end
 
+	defp mark_played(member_id, session_id, qentry_id) when not is_nil(qentry_id) do
+		{prev, next} = find_neighbor_qentries(qentry_id)
+		update_next_qentry(prev, next)
+		update_prev_qentry(next, prev)
+
+		{last_played, _} = find_last_qentry(member_id, session_id, true)
+		update_next_qentry(last_played, qentry_id)
+
+		from(q in "qentries", where: q.id == ^qentry_id,
+			update: [
+				set: [
+					played: true,
+					next_qentry_id: nil,
+					prev_qentry_id: ^last_played,
+				]])
+		|> Repo.update_all([])
+
+		find_song(next)
+  end
+
 	defp find_lonely_qentry(member_id, session_id, played, first) do
 		query = from qentry in "qentries",
 			where: (qentry.member_id == ^member_id)
@@ -69,7 +94,7 @@ defmodule AuxApi.AuxLibrary do
 		if is_nil(res), do: {nil, nil}, else: res
 	end
 
-	def find_member(spotify_uid) do
+	def find_member(spotify_uid) when not is_nil(spotify_uid) do
 		query = from member in "members",
 			where: (member.spotify_uid == ^spotify_uid),
 			select: member.id

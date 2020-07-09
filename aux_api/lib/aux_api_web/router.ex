@@ -49,6 +49,7 @@ defmodule AuxApiWeb.Router do
       post "/next", TestController, :next
       post "/auth_member", TestController, :auth_member
       delete "/delete_member", TestController, :delete_member
+      get "/find_neighbor_qentries", TestController, :find_neighbor_qentries
     end
 
   end
