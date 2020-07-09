@@ -60,22 +60,22 @@ defmodule AuxApiWeb.QueueChannel do
 		{curr_prev_id, curr_next_id} = find_neighbor_qentries(id)
 
 		unless new_prev_id == curr_prev_id do
-			swap_pos(curr_next_id, curr_prev_id)
+			swap_qentries(curr_next_id, curr_prev_id)
 
 			# curr.next = new_prev.next
 			if is_nil(new_prev_id) do
 				# song needs to go to front of the queue
 				{new_next_id, _} = find_first_qentry(member_id, session_id)
-				swap_pos(new_next_id, id)
+				swap_qentries(new_next_id, id)
 			else
 				# song is now in the middle somewhere, or at the end
 				{_, new_next_id} = find_neighbor_qentries(new_prev_id)
-				swap_pos(new_next_id, id)
+				swap_qentries(new_next_id, id)
 			end
 
 			# curr.prev = new_prev
 			# new_prev.next = curr
-			swap_pos(id, new_prev_id)
+			swap_qentries(id, new_prev_id)
     end
 
     {:reply, {:ok, payload}, socket} # TODO: update with proper response
@@ -88,7 +88,7 @@ defmodule AuxApiWeb.QueueChannel do
 
 		{prev_qentry_id, next_qentry_id} = find_neighbor_qentries(qentry_id)
 
-		swap_pos(next_qentry_id, prev_qentry_id)
+		swap_qentries(next_qentry_id, prev_qentry_id)
 
 		from(q in "qentries", where: q.id == ^qentry_id) |> Repo.delete_all
 		{:reply, {:ok, payload}, socket} # TODO: update with proper response
