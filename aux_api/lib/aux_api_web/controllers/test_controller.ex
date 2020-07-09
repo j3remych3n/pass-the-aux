@@ -1,5 +1,6 @@
 import Ecto.Query
 import Ecto.Changeset
+import AuxApi.AuxLibrary
 alias AuxApi.Repo
 
 defmodule AuxApiWeb.TestController do
@@ -120,16 +121,6 @@ defmodule AuxApiWeb.TestController do
 
 		text(conn, "fine")
 	end
-
-	defp get_songs_recursive(qentry_id, tracker) do
-		{next_id, next_song_id} = find_song(find_next_qentry(qentry_id))
-		if is_nil(next_id) do
-			tracker
-		else
-			get_songs_recursive(next_id, tracker ++ [[next_id, next_song_id]])
-		end
-	end
-
 	
 	def add_song(conn, %{"member_id" => mid, "session_id" => sid}) do
 		member_id = String.to_integer(mid)
@@ -170,18 +161,6 @@ defmodule AuxApiWeb.TestController do
 			conn |> put_status(403) |> json(%{})
 		end
 
-	end
-
-	defp find_member(spotify_uid) do
-		query = from member in "members",
-			where: (member.spotify_uid == ^spotify_uid),
-			select: member.id
-		member_result = Repo.all(query)
-
-		case length(member_result) do
-			1 -> List.first(member_result)
-			_ -> nil
-		end
 	end
 
 	def next(conn, %{"member_id" => mid, "session_id" => sid}) do
@@ -267,89 +246,6 @@ defmodule AuxApiWeb.TestController do
 			tracker
 		else
 			print_qentry_order_backwards(prev_id, tracker <> Integer.to_string(prev_id) <> " ")
-		end
-	end
-
-	defp find_song(qentry_id) do
-		if not is_nil(qentry_id) do
-			query = from qentry in "qentries",
-				where: (qentry.id == ^qentry_id),
-				select: {qentry.id, qentry.song_id}
-
-			List.first(Repo.all(query))
-		else
-			{nil, nil}
-		end
-	end
-
-	defp find_prev_qentry(qentry_id) do
-		if not is_nil(qentry_id) do
-			query = from qentry in "qentries",
-				where: (qentry.id == ^qentry_id),
-				select: qentry.prev_qentry_id
-
-			List.first(Repo.all(query))
-		else
-			nil
-		end
-	end
-
-	defp find_next_qentry(qentry_id) do
-		if not is_nil(qentry_id) do
-			query = from qentry in "qentries",
-				where: (qentry.id == ^qentry_id),
-				select: qentry.next_qentry_id
-
-			List.first(Repo.all(query))
-		else
-			nil
-		end
-	end
-
-	defp update_prev_qentry(qentry_id, prev_id) do
-		if not is_nil(qentry_id) do
-			from(q in "qentries", where: q.id == ^qentry_id, update: [set: [prev_qentry_id: ^prev_id]])
-				|> Repo.update_all([])
-		end
-	end
-
-	defp update_next_qentry(qentry_id, next_id) do
-		if not is_nil(qentry_id) do
-			from(q in "qentries", where: q.id == ^qentry_id, update: [set: [next_qentry_id: ^next_id]])
-				|> Repo.update_all([])
-		end
-	end
-
-  defp find_first_qentry(member_id, session_id, played \\ false) do
-		query = from qentry in "qentries",
-			where: (qentry.member_id == ^member_id)
-				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.prev_qentry_id)
-				and (qentry.played == false),
-			select: {qentry.id, qentry.song_id}
-
-		res = List.first(Repo.all(query))
-
-		if is_nil(res) do
-			{nil, nil}
-		else
-			res
-		end
-	end
-
-  defp find_last_qentry(member_id, session_id, played \\ false) do
-		query = from qentry in "qentries",
-			where: (qentry.member_id == ^member_id)
-				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.next_qentry_id),
-			select: {qentry.id, qentry.song_id}
-
-		res = List.first(Repo.all(query))
-
-		if is_nil(res) do
-			{nil, nil}
-		else
-			res
 		end
 	end
 
