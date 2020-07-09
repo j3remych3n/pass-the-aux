@@ -57,8 +57,7 @@ defmodule AuxApiWeb.QueueChannel do
     # link this qentry's previous and next (== remove this qentry)
 		# curr.prev.next = curr.next
 		# curr.next.prev = curr.prev
-		curr_prev_id = find_prev_qentry(id)
-		curr_next_id = find_next_qentry(id)
+		{curr_prev_id, curr_next_id} = find_neighbor_qentries(id)
 
 		unless new_prev_id == curr_prev_id do
 			swap_pos(curr_next_id, curr_prev_id)
@@ -70,7 +69,7 @@ defmodule AuxApiWeb.QueueChannel do
 				swap_pos(new_next_id, id)
 			else
 				# song is now in the middle somewhere, or at the end
-				new_next_id = find_next_qentry(new_prev_id)
+				{_, new_next_id} = find_neighbor_qentries(new_prev_id)
 				swap_pos(new_next_id, id)
 			end
 
@@ -87,8 +86,7 @@ defmodule AuxApiWeb.QueueChannel do
 		# this should be fine with the two linkedlists approach, no edits
 		qentry_id = payload["qentry_id"]
 
-		prev_qentry_id = find_prev_qentry(qentry_id)
-		next_qentry_id = find_next_qentry(qentry_id)
+		{prev_qentry_id, next_qentry_id} = find_neighbor_qentries(qentry_id)
 
 		swap_pos(next_qentry_id, prev_qentry_id)
 
@@ -114,11 +112,24 @@ defmodule AuxApiWeb.QueueChannel do
 		{:reply, {:ok, payload}, socket} # TODO: update with proper response
 	end
 
+	def handle_in("next", %{"member_id" => mid, "session_id" => sid}, socket) do
+		member = String.to_integer(mid)
+		session = String.to_integer(sid)
+
+		{qentry, _} = find_first_qentry(member, session)
+		if is_nil(qentry) do
+			{:reply, {:ok, %{info: "no songs in queue"}}, socket}
+		else
+			song_id = mark_played(member, session, qentry)
+			{:reply, {:ok, %{qentry_id: qentry, song_id: song_id}}, socket}
+		end
+	end
+
 	# It is also common to receive messages from the client and
   # broadcast to everyone in the current topic (queue:lobby).
   def handle_in("shout", payload, socket) do
-    	broadcast socket, "shout", payload
-    	{:noreply, socket}
+    broadcast socket, "shout", payload
+    {:noreply, socket}
 	end
 
   # Add authorization logic here as required.
