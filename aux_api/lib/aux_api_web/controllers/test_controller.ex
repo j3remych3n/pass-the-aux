@@ -1,6 +1,5 @@
 import Ecto.Query
-import Ecto.Changeset
-import AuxApi.AuxLibrary
+import AuxApi.DbActions
 alias AuxApi.Repo
 
 defmodule AuxApiWeb.TestController do
@@ -14,7 +13,7 @@ defmodule AuxApiWeb.TestController do
 		test_member_id = _create_member()
 
 		sess = %AuxApi.Session{host_id: test_member_id}
-		{:ok, test_sess} = AuxApi.Repo.insert(sess)
+		{:ok, test_sess} = Repo.insert(sess)
 
 		json(conn, %{member_id: test_member_id, session_id: test_sess.id})
 	end
@@ -35,10 +34,10 @@ defmodule AuxApiWeb.TestController do
 		unless new_prev_id == curr_prev_id do
 			update_prev_qentry(curr_next_id, curr_prev_id)
 			update_next_qentry(curr_prev_id, curr_next_id)
-	
+
 			# curr.next = new_prev.next
 			if is_nil(new_prev_id) do
-				# song needs to go to front of the queue 
+				# song needs to go to front of the queue
 				{new_next_id, _} = find_first_qentry(member_id, session_id)
 				update_prev_qentry(new_next_id, id)
 				update_next_qentry(id, new_next_id)
@@ -48,7 +47,7 @@ defmodule AuxApiWeb.TestController do
 				update_prev_qentry(new_next_id, id)
 				update_next_qentry(id, new_next_id)
 			end
-	
+
 			# curr.prev = new_prev
 			# new_prev.next = curr
 			update_prev_qentry(id, new_prev_id)
@@ -64,7 +63,7 @@ defmodule AuxApiWeb.TestController do
 
 	defp _create_member() do
 		member = %AuxApi.Member{}
-		{:ok, test_member} = AuxApi.Repo.insert(member)
+		{:ok, test_member} = Repo.insert(member)
 		test_member.id
 	end
 
@@ -85,7 +84,7 @@ defmodule AuxApiWeb.TestController do
 	def get_songs(conn, _params) do
 		member_id = 1
 		session_id = 1
- 
+
 		{qentry_id, song_id} = find_first_qentry(member_id, session_id)
 		tracker = get_songs_recursive(qentry_id, [[qentry_id, song_id]])
 		IO.inspect tracker
@@ -108,9 +107,9 @@ defmodule AuxApiWeb.TestController do
 		host_id = if is_nil(host_id) do _create_member() else String.to_integer(host_id) end
 
 		session = %AuxApi.Session{host_id: host_id}
-		{:ok, new_session} = AuxApi.Repo.insert(session)
+		{:ok, new_session} = Repo.insert(session)
 
-		# {:reply, {:ok, %{host_id: host_member_id, session_id: new_session.id}}}		
+		# {:reply, {:ok, %{host_id: host_member_id, session_id: new_session.id}}}
 		text(conn, "fine")
 	end
 
@@ -121,30 +120,11 @@ defmodule AuxApiWeb.TestController do
 
 		text(conn, "fine")
 	end
-	
-	def add_song(conn, %{"member_id" => mid, "session_id" => sid}) do
-		member_id = String.to_integer(mid)
-		session_id = String.to_integer(sid)
-
-		{prev_qentry_id, _} = find_last_qentry(member_id, session_id)
-
-		qentry = %AuxApi.Qentry{
-			song_id: "2G7V7zsVDxg1yRsu7Ew9RJ",
-			member_id: member_id,
-			session_id: session_id,
-			next_qentry_id: nil,
-			prev_qentry_id: prev_qentry_id,
-		}
-		{:ok, test_qentry} = Repo.insert(qentry)
-
-		update_next_qentry(prev_qentry_id, test_qentry.id)
-		text(conn, "added " <> to_string(test_qentry.id))
-	end
 
 	def auth_member(conn, %{"spotify_uid" => spotify_uid}) do
 		member_id = find_member(spotify_uid)
 		if is_nil(member_id) do # New member
-			{:ok, member} = %AuxApi.Member{spotify_uid: spotify_uid} |> AuxApi.Repo.insert
+			{:ok, member} = %AuxApi.Member{spotify_uid: spotify_uid} |> Repo.insert
 			json(conn, %{auth_token: member.id})
 		else # Existing member
 			json(conn, %{auth_token: member_id})
@@ -155,7 +135,7 @@ defmodule AuxApiWeb.TestController do
 		member_id = String.to_integer(mid)
 
 		if member_id == find_member(spotify_uid) do
-			from(member in "members", where: member.id == ^member_id) |> AuxApi.Repo.delete_all
+			from(member in "members", where: member.id == ^member_id) |> Repo.delete_all
 			conn |> put_status(200) |> json(%{error: "invalid authentication / member does not exist"})
 		else
 			conn |> put_status(403) |> json(%{})
@@ -221,11 +201,11 @@ defmodule AuxApiWeb.TestController do
 				select: qentry.song_id
 			song_id = List.first(Repo.all(get_next_song))
 		end
-    end
+  end
 
 	def test_private_func(conn, _params) do
-		{first, _} = find_first_qentry(1, 1)
-		{last, _} = find_last_qentry(1, 1)
+		{first, _} = find_first_qentry(3, 2)
+		{last, _} = find_last_qentry(3, 2)
 		forwards = print_qentry_order(first, Integer.to_string(first) <> " ")
 		backwards = print_qentry_order_backwards(last, Integer.to_string(last) <> " ")
 		text(conn, forwards <> "\n" <> backwards)

@@ -1,6 +1,5 @@
 import Ecto.Query
-import Ecto.Changeset
-import AuxApi.AuxLibrary
+import AuxApi.DbActions
 alias AuxApi.Repo
 
 defmodule AuxApiWeb.QueueChannel do
@@ -48,7 +47,7 @@ defmodule AuxApiWeb.QueueChannel do
     {:reply, {:ok, payload}, socket} # TODO: update with proper response
   end
 
-	def handle_in("change_pos", payload, socket) do
+  def handle_in("change_pos", payload, socket) do
 		# TODO: pull member and session id from channel, or from db?
     member_id = payload["member_id"]
     session_id = payload["session_id"]
@@ -62,31 +61,27 @@ defmodule AuxApiWeb.QueueChannel do
 		curr_next_id = find_next_qentry(id)
 
 		unless new_prev_id == curr_prev_id do
-			update_prev_qentry(curr_next_id, curr_prev_id)
-			update_next_qentry(curr_prev_id, curr_next_id)
+			swap_pos(curr_next_id, curr_prev_id)
 
 			# curr.next = new_prev.next
 			if is_nil(new_prev_id) do
-				# song needs to go to front of the queue 
+				# song needs to go to front of the queue
 				{new_next_id, _} = find_first_qentry(member_id, session_id)
-				update_prev_qentry(new_next_id, id)
-				update_next_qentry(id, new_next_id)
+				swap_pos(new_next_id, id)
 			else
 				# song is now in the middle somewhere, or at the end
 				new_next_id = find_next_qentry(new_prev_id)
-				update_prev_qentry(new_next_id, id)
-				update_next_qentry(id, new_next_id)
+				swap_pos(new_next_id, id)
 			end
 
 			# curr.prev = new_prev
 			# new_prev.next = curr
-			update_prev_qentry(id, new_prev_id)
-			update_next_qentry(new_prev_id, id)
+			swap_pos(id, new_prev_id)
     end
 
     {:reply, {:ok, payload}, socket} # TODO: update with proper response
 	end
-	
+
 	def handle_in("delete_song", payload, socket) do
 		# song could be: beginning, middle, end
 		# this should be fine with the two linkedlists approach, no edits
@@ -95,8 +90,7 @@ defmodule AuxApiWeb.QueueChannel do
 		prev_qentry_id = find_prev_qentry(qentry_id)
 		next_qentry_id = find_next_qentry(qentry_id)
 
-		update_prev_qentry(next_qentry_id, prev_qentry_id)
-		update_next_qentry(prev_qentry_id, next_qentry_id)
+		swap_pos(next_qentry_id, prev_qentry_id)
 
 		from(q in "qentries", where: q.id == ^qentry_id) |> Repo.delete_all
 		{:reply, {:ok, payload}, socket} # TODO: update with proper response
@@ -122,7 +116,7 @@ defmodule AuxApiWeb.QueueChannel do
 
 	# It is also common to receive messages from the client and
   # broadcast to everyone in the current topic (queue:lobby).
-  	def handle_in("shout", payload, socket) do
+  def handle_in("shout", payload, socket) do
     	broadcast socket, "shout", payload
     	{:noreply, socket}
 	end
