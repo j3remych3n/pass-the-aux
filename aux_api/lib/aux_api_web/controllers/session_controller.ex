@@ -1,22 +1,16 @@
 import Ecto.Query
-import Ecto.Changeset
 alias AuxApi.Repo
 
 defmodule AuxApiWeb.SessionController do
-  use AuxApiWeb, :controller
+	use AuxApiWeb, :controller
 
-  @optional_params %{"host_id" => nil}
-	def create_sess(conn, _params) do
-		_params = Map.merge(@optional_params, _params)
-
-		%{"host_id" => host_id} = _params
-		host_id = if is_nil(host_id) do _create_member() else String.to_integer(host_id) end
+	def create_sess(conn, %{"host_id" => host_id}) do
+		host_id = String.to_integer(host_id)
 
 		session = %AuxApi.Session{host_id: host_id}
-		{:ok, new_session} = AuxApi.Repo.insert(session)
+		{:ok, new_session} = Repo.insert(session)
 
-		# {:reply, {:ok, %{host_id: host_member_id, session_id: new_session.id}}}		
-		text(conn, "fine")
+		json(conn, %{host_id: host_id, session_id: new_session.id})
 	end
 
   def end_sess(conn, %{"session_id" => session_id}) do
@@ -24,13 +18,6 @@ defmodule AuxApiWeb.SessionController do
 		from(q in "qentries", where: q.session_id == ^session_id) |> Repo.delete_all
 		from(s in "sessions", where: s.id == ^session_id) |> Repo.delete_all
 
-		text(conn, "fine")
+		json(conn, %{})
   end
-  
-  defp _create_member() do
-		member = %AuxApi.Member{}
-		{:ok, new_member} = AuxApi.Repo.insert(member)
-		new_member.id
-	end
-
 end

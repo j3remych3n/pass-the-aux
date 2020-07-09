@@ -16,7 +16,7 @@ class AuxController {
   }
 
   Future<void> connect(sessionId) async {
-    this.sessionId = sessionId;
+    this.sessionId = 2;//sessionId;
 
     channel = socket.channel("queue:lobby", {"spotify_user": "me"});
     await socket.connect();

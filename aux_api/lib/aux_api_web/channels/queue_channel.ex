@@ -1,5 +1,5 @@
 import Ecto.Query
-import Ecto.Changeset
+import AuxApi.DbActions
 alias AuxApi.Repo
 
 defmodule AuxApiWeb.QueueChannel do
@@ -47,7 +47,7 @@ defmodule AuxApiWeb.QueueChannel do
     {:reply, {:ok, payload}, socket} # TODO: update with proper response
   end
 
-	def handle_in("change_pos", payload, socket) do
+  def handle_in("change_pos", payload, socket) do
 		# TODO: pull member and session id from channel, or from db?
     member_id = payload["member_id"]
     session_id = payload["session_id"]
@@ -57,45 +57,38 @@ defmodule AuxApiWeb.QueueChannel do
     # link this qentry's previous and next (== remove this qentry)
 		# curr.prev.next = curr.next
 		# curr.next.prev = curr.prev
-		curr_prev_id = find_prev_qentry(id)
-		curr_next_id = find_next_qentry(id)
+		{curr_prev_id, curr_next_id} = find_neighbor_qentries(id)
 
 		unless new_prev_id == curr_prev_id do
-			update_prev_qentry(curr_next_id, curr_prev_id)
-			update_next_qentry(curr_prev_id, curr_next_id)
+			swap_qentries(curr_next_id, curr_prev_id)
 
 			# curr.next = new_prev.next
 			if is_nil(new_prev_id) do
-				# song needs to go to front of the queue 
+				# song needs to go to front of the queue
 				{new_next_id, _} = find_first_qentry(member_id, session_id)
-				update_prev_qentry(new_next_id, id)
-				update_next_qentry(id, new_next_id)
+				swap_qentries(new_next_id, id)
 			else
 				# song is now in the middle somewhere, or at the end
-				new_next_id = find_next_qentry(new_prev_id)
-				update_prev_qentry(new_next_id, id)
-				update_next_qentry(id, new_next_id)
+				{_, new_next_id} = find_neighbor_qentries(new_prev_id)
+				swap_qentries(new_next_id, id)
 			end
 
 			# curr.prev = new_prev
 			# new_prev.next = curr
-			update_prev_qentry(id, new_prev_id)
-			update_next_qentry(new_prev_id, id)
+			swap_qentries(id, new_prev_id)
     end
 
     {:reply, {:ok, payload}, socket} # TODO: update with proper response
 	end
-	
+
 	def handle_in("delete_song", payload, socket) do
 		# song could be: beginning, middle, end
 		# this should be fine with the two linkedlists approach, no edits
 		qentry_id = payload["qentry_id"]
 
-		prev_qentry_id = find_prev_qentry(qentry_id)
-		next_qentry_id = find_next_qentry(qentry_id)
+		{prev_qentry_id, next_qentry_id} = find_neighbor_qentries(qentry_id)
 
-		update_prev_qentry(next_qentry_id, prev_qentry_id)
-		update_next_qentry(prev_qentry_id, next_qentry_id)
+		swap_qentries(next_qentry_id, prev_qentry_id)
 
 		from(q in "qentries", where: q.id == ^qentry_id) |> Repo.delete_all
 		{:reply, {:ok, payload}, socket} # TODO: update with proper response
@@ -119,110 +112,24 @@ defmodule AuxApiWeb.QueueChannel do
 		{:reply, {:ok, payload}, socket} # TODO: update with proper response
 	end
 
+	def handle_in("next", %{"member_id" => mid, "session_id" => sid}, socket) do
+		member = String.to_integer(mid)
+		session = String.to_integer(sid)
+
+		{qentry, _} = find_first_qentry(member, session)
+		if is_nil(qentry) do
+			{:reply, {:ok, %{info: "no songs in queue"}}, socket}
+		else
+			song_id = mark_played(member, session, qentry)
+			{:reply, {:ok, %{qentry_id: qentry, song_id: song_id}}, socket}
+		end
+	end
+
 	# It is also common to receive messages from the client and
   # broadcast to everyone in the current topic (queue:lobby).
   def handle_in("shout", payload, socket) do
     broadcast socket, "shout", payload
     {:noreply, socket}
-	end
-	
-	defp _create_member() do
-		member = %AuxApi.Member{}
-		{:ok, created_member} = AuxApi.Repo.insert(member)
-		created_member.id
-	end
-
-	defp get_songs_recursive(qentry_id, tracker) do
-		{next_id, next_song_id} = find_song(find_next_qentry(qentry_id))
-		if is_nil(next_id) do
-			tracker
-		else
-			get_songs_recursive(next_id, tracker ++ [[next_id, next_song_id]])
-		end
-	end
-
-	defp find_song(qentry_id) do
-		if not is_nil(qentry_id) do
-			query = from qentry in "qentries",
-				where: (qentry.id == ^qentry_id),
-				select: {qentry.id, qentry.song_id}
-
-			List.first(Repo.all(query))
-		else
-			{nil, nil}
-		end
-	end
-
-  ## MOVE TO LIBRARY FILE
-  defp find_prev_qentry(qentry_id) do
-		if not is_nil(qentry_id) do
-			query = from qentry in "qentries",
-				where: (qentry.id == ^qentry_id),
-				select: qentry.prev_qentry_id
-
-			List.first(Repo.all(query))
-		else
-			nil
-		end
-	end
-
-	defp find_next_qentry(qentry_id) do
-		if not is_nil(qentry_id) do
-			query = from qentry in "qentries",
-				where: (qentry.id == ^qentry_id),
-				select: qentry.next_qentry_id
-
-			List.first(Repo.all(query))
-		else
-			nil
-		end
-	end
-  
-  defp update_prev_qentry(qentry_id, prev_id) do
-		if not is_nil(qentry_id) do
-			from(q in "qentries", where: q.id == ^qentry_id, update: [set: [prev_qentry_id: ^prev_id]])
-				|> Repo.update_all([])
-		end
-	end
-
-	defp update_next_qentry(qentry_id, next_id) do
-		if not is_nil(qentry_id) do
-			from(q in "qentries", where: q.id == ^qentry_id, update: [set: [next_qentry_id: ^next_id]])
-				|> Repo.update_all([])
-		end
-	end
-  
-  defp find_first_qentry(member_id, session_id) do
-		query = from qentry in "qentries",
-			where: (qentry.member_id == ^member_id)
-				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.prev_qentry_id)
-				and (qentry.played == false),
-			select: {qentry.id, qentry.song_id}
-
-		res = List.first(Repo.all(query))
-
-		if is_nil(res) do
-			{nil, nil}
-		else
-			res
-		end
-	end
-
-	defp find_last_qentry(member_id, session_id) do
-		query = from qentry in "qentries",
-			where: (qentry.member_id == ^member_id)
-				and (qentry.session_id == ^session_id)
-				and is_nil(qentry.next_qentry_id),
-			select: {qentry.id, qentry.song_id}
-
-		res = List.first(Repo.all(query))
-
-		if is_nil(res) do
-			{nil, nil}
-		else
-			res
-		end
 	end
 
   # Add authorization logic here as required.
