@@ -10,17 +10,30 @@ class AuxController {
   PhoenixChannel channel;
   int sessionId;
   int memberId;
+  PhoenixMessageCallback _printPayload;
+  Logger logger;
 
   AuxController() {
+    logger = new Logger();
     socket = new PhoenixSocket("ws://$ipAddress:4000/socket/websocket");
+
+    _responseSetup();
+  }
+
+  void _responseSetup() {
+    _printPayload = (payload, ref, joinRef) {
+      logger.d(payload);
+    };
   }
 
   Future<void> connect(sessionId) async {
     this.sessionId = sessionId;
 
-    channel = socket.channel("queue:lobby", {"spotify_user": "me"});
     await socket.connect();
+
+    channel = socket.channel("queue:lobby", {"spotify_user": "me"});
     channel.on("get_songs", _printPayload);
+
     var resp = channel.join();
 
     print('successfully connected: ${resp}');
@@ -65,11 +78,5 @@ class AuxController {
       "member_id": memberId,
       "session_id": sessionId
     });
-  }
-
-  void _printPayload(payload, _ref, _joinRef) {
-    Logger l = new Logger();
-    l.d("CALLED");
-    l.d(payload["songs"]);
   }
 }
