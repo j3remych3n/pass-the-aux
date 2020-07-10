@@ -27,7 +27,7 @@ defmodule AuxApi.DbActions do
 		List.first(Repo.all(query))
 	end
 
-	def swap_pos(qid_one, qid_two) do
+	def swap_qentries(qid_one, qid_two) do
 		update_prev_qentry(qid_one, qid_two)
 		update_next_qentry(qid_two, qid_one)
 	end

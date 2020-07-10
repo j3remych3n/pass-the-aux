@@ -53,7 +53,7 @@ class _SearchResults extends StatelessWidget {
     await this.controller.addSong(selected[idx].id);
     // TODO: change this back
 //    await this.controller.getSongs(3, 2);
-    print('added single song idex: ${selected.keys.toString()}');
+//    print('added single song idex: ${selected.keys.toString()}');
   }
 
   @override
