@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/queue_container.dart';
 import 'package:spotify_sdk/models/player_state.dart';
+import 'package:aux_ui/routing/routing_constants.dart';
 
 class MainQueue extends StatefulWidget {
   final SpotifySession spotifySession;
@@ -37,8 +38,8 @@ class _ExpandQueueButton extends StatelessWidget {
                   color: auxAccent, size: 10.0, semanticLabel: "expand queue"),
               Text("view full queue", style: auxCaption)
             ])));
-    }
   }
+}
 
 class _MainQueueState extends State<MainQueue> {
   List<Song> yourSongs;
@@ -55,7 +56,9 @@ class _MainQueueState extends State<MainQueue> {
     setState(() {
       queueSongs = List.filled(
           20,
-          Song("Tommy's Party", "Peach Pit",
+          Song(
+              "Tommy's Party",
+              "Peach Pit",
               "https://images.genius.com/22927a8e14101437686b56ce1103e624.1000x1000x1.jpg",
               "spotify:track:5OuJTtNve7FxUX82eEBupN",
               contributor: "Diane"));
@@ -63,7 +66,9 @@ class _MainQueueState extends State<MainQueue> {
       // your songs would be a filter over queue ^ for where contributor == you
       yourSongs = List.filled(
           20,
-          Song("Tommy's Party", "Peach Pit",
+          Song(
+              "Tommy's Party",
+              "Peach Pit",
               "https://images.genius.com/22927a8e14101437686b56ce1103e624.1000x1000x1.jpg",
               "spotify:track:5OuJTtNve7FxUX82eEBupN",
               contributor: "Diane"));
@@ -80,30 +85,33 @@ class _MainQueueState extends State<MainQueue> {
           if (snapshot.data != null && snapshot.data.track != null) {
             var playerState = snapshot.data;
             return MainContainer(
-              title: "too queue for u",
-              header: QueueHeader(),
-              body: <Widget>[
-              CurrentSong(playerState: playerState,
-                spotifySession: widget.spotifySession),
-              QueueContainer(
-                height: 125,
-                  title: 'up next',
-                  child: SongUpNext(song: queueSongs[0]),
-                  titleWidget: const _ExpandQueueButton()),
-              Expanded(child: QueueContainer(
-                title: 'your songs',
-                child:
-                SongList(
-                    songs: yourSongs, onSelect: (int x) {}),
-                titleWidget: SongCountdown()))
-              ],
-              footerHeight: SizeConfig.blockSizeVertical * 15,
-              footer: PlaybackControls(
-                isHost: true,
-                spotifySession: widget.spotifySession,
-                isPaused: playerState.isPaused,
-              )
-            );
+                title: "too queue for u",
+                header: QueueHeader(),
+                body: <Widget>[
+                  CurrentSong(
+                      playerState: playerState,
+                      spotifySession: widget.spotifySession),
+                  QueueContainer(
+                      height: 125,
+                      title: 'up next',
+                      child: SongUpNext(song: queueSongs[0]),
+                      titleWidget: const _ExpandQueueButton()),
+                  Expanded(
+                      child: QueueContainer(
+                          title: 'your songs',
+                          child:
+                              SongList(songs: yourSongs, onSelect: (int x) {}),
+                          titleWidget: SongCountdown()))
+                ],
+                footerHeight: SizeConfig.blockSizeVertical * 15,
+                footer: PlaybackControls(
+                  isHost: true,
+                  spotifySession: widget.spotifySession,
+                  isPaused: playerState.isPaused,
+                  addSongAction: () => Navigator.pushNamed(
+                      context, MainSearchRoute,
+                      arguments: 'placeholder'),
+                ));
           } else {
             // TODO: come up with a better alternative to this
             return Center(

@@ -100,14 +100,14 @@ class _SearchControls extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  build(BuildContext) {
+  build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         // picks & search: unselected
         RoundedActionButton.back(
           width: SizeConfig.blockSizeHorizontal * 50,
-          onPressed: () {},
+          onPressed: () => Navigator.pop(context),
         ),
 
         // TODO: implement with issue #26

@@ -11,7 +11,6 @@ Future<void> main() async {
 }
 
 class AuxApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,21 +23,23 @@ class AuxApp extends StatelessWidget {
         accentColor: auxAccent,
         scaffoldBackgroundColor: auxPrimary,
         fontFamily: 'Larsseit',
-        textTheme: auxTextTheme, // TODO add secondary text theme for alt buttons?
+        textTheme:
+            auxTextTheme, // TODO add secondary text theme for alt buttons?
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: auxAccentButton,
           contentPadding: EdgeInsets.all(11),
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white, width: 3),
-            borderRadius: BorderRadius.circular(10), // TODO: scale by screen resolution
+            borderRadius:
+                BorderRadius.circular(10), // TODO: scale by screen resolution
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.white, width: 3),
-            borderRadius: BorderRadius.circular(10), // TODO: scale by screen resolution
+            borderRadius:
+                BorderRadius.circular(10), // TODO: scale by screen resolution
           ),
         ),
       ),
-//      home: HostSpotifyLink(),
     );
   }
 }

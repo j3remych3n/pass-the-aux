@@ -7,8 +7,14 @@ class PlaybackControls extends StatefulWidget {
   final bool isHost;
   final SpotifySession spotifySession;
   final bool isPaused;
+  final Function addSongAction;
 
-  const PlaybackControls({Key key, this.isHost, this.spotifySession, this.isPaused})
+  const PlaybackControls(
+      {Key key,
+      this.isHost,
+      this.spotifySession,
+      this.isPaused,
+      this.addSongAction})
       : super(key: key);
 
   @override
@@ -78,14 +84,13 @@ class _PlaybackControlsState extends State<PlaybackControls> {
             child: Column(
               children: <Widget>[
                 Align(
-                    alignment: widget.isHost
-                        ? Alignment.center
-                        : Alignment.centerLeft,
+                    alignment:
+                        widget.isHost ? Alignment.center : Alignment.centerLeft,
                     child: RoundedActionButton(
                         height: 41,
                         width: SizeConfig.screenWidth * 1 / 2,
                         // TODO: scale
-                        onPressed: () {},
+                        onPressed: widget.addSongAction,
                         text: "add a song")),
                 Visibility(
                     visible: widget.isHost,
