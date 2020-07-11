@@ -1,3 +1,4 @@
+import 'package:aux_ui/aux_lib/aux_controller.dart';
 import 'package:aux_ui/aux_lib/song.dart';
 import 'package:aux_ui/aux_lib/spotify_session.dart';
 import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
@@ -10,9 +11,9 @@ import 'package:spotify_sdk/models/track.dart';
 
 class CurrentSong extends StatelessWidget {
   final PlayerState playerState;
-  final SpotifySession spotifySession;
+  final AuxController controller;
 
-  const CurrentSong({Key key, this.playerState, this.spotifySession})
+  const CurrentSong({Key key, this.playerState, this.controller})
       : super(key: key);
 
   @override
@@ -42,7 +43,7 @@ class CurrentSong extends StatelessWidget {
     ]);
 
     return FutureBuilder(
-        future: spotifySession.getCover(trackUri),
+        future: controller.getCover(trackUri),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
             var albumCover = snapshot.data;

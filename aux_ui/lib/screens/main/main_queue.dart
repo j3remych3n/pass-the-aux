@@ -1,3 +1,4 @@
+import 'package:aux_ui/aux_lib/aux_controller.dart';
 import 'package:aux_ui/aux_lib/song.dart';
 import 'package:aux_ui/aux_lib/spotify_session.dart';
 import 'package:aux_ui/widgets/layout/main_container.dart';
@@ -12,11 +13,14 @@ import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/queue_container.dart';
 import 'package:spotify_sdk/models/player_state.dart';
 import 'package:aux_ui/routing/routing_constants.dart';
+import 'package:phoenix_wings/phoenix_wings.dart';
 
 class MainQueue extends StatefulWidget {
   final SpotifySession spotifySession;
+  final AuxController controller;
 
-  const MainQueue({Key key, this.spotifySession}) : super(key: key);
+  const MainQueue({Key key, this.spotifySession, this.controller})
+      : super(key: key);
 
   _MainQueueState createState() => _MainQueueState();
 }
@@ -52,8 +56,10 @@ class _MainQueueState extends State<MainQueue> {
   }
 
   void _initSongList() {
-    //TODO: implement fetch here
-    setState(() {
+    this.yourSongs = new List<Song>();
+    widget.controller.getSongs(getSongsCurry);
+
+    setState(() async {
       queueSongs = List.filled(
           20,
           Song(
@@ -62,17 +68,14 @@ class _MainQueueState extends State<MainQueue> {
               "https://images.genius.com/22927a8e14101437686b56ce1103e624.1000x1000x1.jpg",
               "spotify:track:5OuJTtNve7FxUX82eEBupN",
               contributor: "Diane"));
-
-      // your songs would be a filter over queue ^ for where contributor == you
-      yourSongs = List.filled(
-          20,
-          Song(
-              "Tommy's Party",
-              "Peach Pit",
-              "https://images.genius.com/22927a8e14101437686b56ce1103e624.1000x1000x1.jpg",
-              "spotify:track:5OuJTtNve7FxUX82eEBupN",
-              contributor: "Diane"));
     });
+  }
+
+  // if nothing happens: setState is probably pointing at the wrong BuildContext / widget
+  PhoenixMessageCallback getSongsCurry(callback) {
+    return (payload, ref, joinRef) => this.setState(() async {
+          this.yourSongs = await callback(payload, ref, joinRef);
+        });
   }
 
   @override
@@ -89,8 +92,7 @@ class _MainQueueState extends State<MainQueue> {
                 header: QueueHeader(),
                 body: <Widget>[
                   CurrentSong(
-                      playerState: playerState,
-                      spotifySession: widget.spotifySession),
+                      playerState: playerState, controller: widget.controller),
                   QueueContainer(
                       height: 125,
                       title: 'up next',

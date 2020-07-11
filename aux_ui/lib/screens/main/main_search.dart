@@ -14,10 +14,8 @@ import 'package:aux_ui/widgets/buttons/rounded_action_button.dart';
 import 'dart:collection';
 
 class MainSearch extends StatefulWidget {
-  final SpotifySession spotifySession;
   final AuxController controller;
-  const MainSearch({Key key, this.spotifySession, this.controller})
-      : super(key: key);
+  const MainSearch({Key key, this.controller}) : super(key: key);
   _MainSearchState createState() => _MainSearchState();
 }
 
@@ -145,7 +143,7 @@ class _MainSearchState extends State<MainSearch> {
       this.searching = true;
       this.newSearch = true;
     });
-    widget.spotifySession.search(query).then((results) => setState(() {
+    widget.controller.search(query).then((results) => setState(() {
           this.searchResults = results;
         }));
   }
