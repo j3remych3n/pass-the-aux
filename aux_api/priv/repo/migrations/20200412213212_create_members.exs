@@ -7,6 +7,5 @@ defmodule AuxApi.Repo.Migrations.CreateMembers do
 
       timestamps()
     end
-
   end
 end
