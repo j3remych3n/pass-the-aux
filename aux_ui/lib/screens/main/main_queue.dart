@@ -60,7 +60,7 @@ class _MainQueueState extends State<MainQueue> {
 
   void _initSongList() {
     this.yourSongs = new List<Song>();
-    widget.controller.getSongs(getSongsCurry);
+    widget.controller.getSongs(_getSongsCurry);
 
     setState(() {
       queueSongs = List.filled(
@@ -74,11 +74,17 @@ class _MainQueueState extends State<MainQueue> {
     });
   }
 
-  PhoenixMessageCallback getSongsCurry(callback) {
+  PhoenixMessageCallback _getSongsCurry(callback) {
     return (payload, ref, joinRef) {
-      callback(payload, ref, joinRef)
-          .then((songs) => this.setState(() => this.yourSongs = songs));
+      callback(payload, ref, joinRef).then((songs) =>
+          this.setState(() => this.yourSongs = new List.from(songs)));
     };
+  }
+
+  void _reorderQueue(Song selectedSong, int newPos) {
+    int qentryId = selectedSong.qentryId;
+    int newPrevId = newPos == 0 ? null : this.yourSongs[newPos - 1].qentryId;
+    widget.controller.changePos(qentryId, newPrevId);
   }
 
   @override
@@ -104,8 +110,9 @@ class _MainQueueState extends State<MainQueue> {
                   Expanded(
                       child: QueueContainer(
                           title: 'your songs',
-                          child:
-                              SongList(songs: yourSongs, onSelect: (int x) {}),
+                          child: SongList.reorder(
+                              onReorder: _reorderQueue,
+                              songs: yourSongs),
                           titleWidget: SongCountdown()))
                 ],
                 footerHeight: SizeConfig.blockSizeVertical * 15,

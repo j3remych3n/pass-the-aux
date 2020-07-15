@@ -41,7 +41,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case HostInviteRoute:
       String queueName = settings.arguments;
       // TODO temporary hardcoded session; add auth / join specific user-created room later
-      controller.connect(1);
+      controller.connect(2);
       return MaterialPageRoute(
           builder: (context) => HostInvite(
                 queueName: queueName,
@@ -56,7 +56,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
     case JoinQueueConfirmationRoute:
       // TODO temporary hardcoded session; add auth / join specific user-created room later
-      controller.connect(1);
+      controller.connect(2);
       return MaterialPageRoute(
           builder: (context) => JoinQueueConfirmation(
                 nextPage: MainQueueRoute,
