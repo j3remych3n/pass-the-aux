@@ -60,7 +60,6 @@ class _MainQueueState extends State<MainQueue> {
 
   void _initSongList() {
     this.yourSongs = new List<Song>();
-    logger.d('🍆 🍆 calling getSongs in main_queue.dart 🍆 🍆');
     widget.controller.getSongs(getSongsCurry);
 
     setState(() {
@@ -75,7 +74,6 @@ class _MainQueueState extends State<MainQueue> {
     });
   }
 
-  // if nothing happens: setState is probably pointing at the wrong BuildContext / widget
   PhoenixMessageCallback getSongsCurry(callback) {
     return (payload, ref, joinRef) {
       callback(payload, ref, joinRef)

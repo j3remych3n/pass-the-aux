@@ -32,32 +32,13 @@ class AuxController {
 
   Future<void> connect(sessionId) async {
     this.sessionId = sessionId;
-
     await socket.connect();
 
-    channel = socket.channel("queue:lobby", {"spotify_user": "me"});
-
+    channel = socket.channel("queue:lobby", {"spotify_uid": "me"});
     var resp = channel.join();
 
     print('successfully connected: ${resp}');
-
-    //TODO: implement following pseudocode for "auth"R
-    /*
-      1. Send spotify user info to backend
-      2a.If new user: furnish new memberId (create new entry in member base)
-      2b.New or returning user: return memberId
-      3. Client sets memberId
-    */
     this.memberId = 3;
-  }
-
-  Future<void> addSong(songId) async {
-    print('received requed to add song: ${songId}');
-    channel.push(event: "add_song", payload: {
-      "member_id": this.memberId,
-      "session_id": this.sessionId,
-      "song_id": songId
-    });
   }
 
   Future<void> changePos(qentryId, newPrevId) async {
@@ -73,9 +54,7 @@ class AuxController {
     channel.push(event: "delete_song", payload: {"qentry_id": qentryId});
   }
 
-  // BEGIN JS callback mindfuck version
   Future<List<Song>> returnSongs(payload, ref, joinRef) {
-    logger.d('🍆 🍆 returnSongs reached in aux_controller 🍆 🍆');
     List<Qentry> qentries = payload["songs"]
         .map((item) => Qentry.fromList(item))
         .toList()
@@ -83,40 +62,32 @@ class AuxController {
 
     Future<List<Song>> songFutures = Future.wait(
         qentries.map(_songFromQentry).toList().cast<Future<Song>>());
-    // List<Future<Song>> songFutures =
-    //     payload["songs"].map((item) => Qentry(item)).map(_songFromQentry);
     return songFutures;
   }
 
   Future<void> getSongs(curry) async {
-    logger.d('🍆 🍆 getSongs called 🍆 🍆');
-
-    // ATTN: would need bijective relationship between event and front-end state object
     channel.on("get_songs", curry(returnSongs));
+    _getSongs();
+  }
+
+  Future<void> addSong(songId) async {
+    channel.push(event: "add_song", payload: {
+      "member_id": this.memberId,
+      "session_id": this.sessionId,
+      "song_id": songId
+    });
+  }
+
+  Future<void> addSongAndUpdate(songId) async {
+    addSong(songId);
+    _getSongs();
+  }
+
+  Future<void> _getSongs() async {
     channel.push(
         event: "get_songs",
         payload: {"member_id": this.memberId, "session_id": this.sessionId});
-    logger.d('🍆 🍆 pushed "get_songs" to ws 🍆 🍆');
   }
-  // END JS callback mindfuck
-
-  // BEGIN streamed version
-  // List<Song> str_songs = List<Song>();
-  // Future<List<Song>> getSongsStream() async {
-  //   // in some init function / constructor, but here for illustration
-  //   PhoenixMessageCallback callback = (payload, ref, joinRef) async {
-  //     List<Qentry> qentries = payload["songs"].map(Qentry);
-  //     List<Future<Song>> songFutures = qentries.map(songFromQentry);
-  //     str_songs = await Future.wait(songFutures);
-  //   };
-  //   channel.on("get_songs", callback);
-
-  //   channel.push(
-  //       event: "get_songs",
-  //       payload: {"member_id": this.memberId, "session_id": this.sessionId});
-  //   // create future, based on state of tempy variable
-  // }
-  // BEGIN streamed version
 
   Future<String> getCover(String trackId) async {
     Track track = await _webApi.tracks.get(trackId);
