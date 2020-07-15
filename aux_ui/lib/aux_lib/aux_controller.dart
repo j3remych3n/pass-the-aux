@@ -11,15 +11,9 @@ final String _CLIENT_ID = DotEnv().env['CLIENT_ID'].toString();
 final String _REDIRECT_URL = DotEnv().env['REDIRECT_URL'].toString();
 final String _CLIENT_SECRET = DotEnv().env['CLIENT_SECRET'].toString();
 final String ipAddress = DotEnv().env['IP_ADDRESS'].toString();
-final Logger logger = new Logger();
+final Logger logger = Logger();
 SpotifyApi _webApi =
-    new SpotifyApi(new SpotifyApiCredentials(_CLIENT_ID, _CLIENT_SECRET));
-
-PhoenixMessageCallback printPayload = (payload, ref, joinRef) {
-  logger.d(payload);
-};
-
-PhoenixMessageCallback returnSongs = (payload, ref, joinRef) {};
+    SpotifyApi(SpotifyApiCredentials(_CLIENT_ID, _CLIENT_SECRET));
 
 class AuxController {
   int sessionId;
@@ -47,7 +41,7 @@ class AuxController {
 
     print('successfully connected: ${resp}');
 
-    //TODO: implement following pseudocode for "auth"
+    //TODO: implement following pseudocode for "auth"R
     /*
       1. Send spotify user info to backend
       2a.If new user: furnish new memberId (create new entry in member base)
@@ -80,18 +74,29 @@ class AuxController {
   }
 
   // BEGIN JS callback mindfuck version
-  Future<List<Song>> returnSongs(payload, ref, joinRef) async {
-    List<Future<Song>> songFutures =
-        payload["songs"].map(Qentry).map(_songFromQentry);
-    return Future.wait(songFutures);
+  Future<List<Song>> returnSongs(payload, ref, joinRef) {
+    logger.d('🍆 🍆 returnSongs reached in aux_controller 🍆 🍆');
+    List<Qentry> qentries = payload["songs"]
+        .map((item) => Qentry.fromList(item))
+        .toList()
+        .cast<Qentry>();
+
+    Future<List<Song>> songFutures = Future.wait(
+        qentries.map(_songFromQentry).toList().cast<Future<Song>>());
+    // List<Future<Song>> songFutures =
+    //     payload["songs"].map((item) => Qentry(item)).map(_songFromQentry);
+    return songFutures;
   }
 
   Future<void> getSongs(curry) async {
+    logger.d('🍆 🍆 getSongs called 🍆 🍆');
+
     // ATTN: would need bijective relationship between event and front-end state object
     channel.on("get_songs", curry(returnSongs));
     channel.push(
         event: "get_songs",
         payload: {"member_id": this.memberId, "session_id": this.sessionId});
+    logger.d('🍆 🍆 pushed "get_songs" to ws 🍆 🍆');
   }
   // END JS callback mindfuck
 
@@ -159,10 +164,6 @@ class AuxController {
     song.qentryId = qentry.id;
     return song;
   }
-
-  // Future<Song> getSong(String trackId) async {
-  //   return _songFromTrack(await _webApi.tracks.get(trackId));
-  // }
 
   Song _songFromTrack(Track track) {
     List<String> artists = track.artists.map((a) => a.name).toList();

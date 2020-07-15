@@ -14,6 +14,9 @@ import 'package:aux_ui/widgets/layout/queue_container.dart';
 import 'package:spotify_sdk/models/player_state.dart';
 import 'package:aux_ui/routing/routing_constants.dart';
 import 'package:phoenix_wings/phoenix_wings.dart';
+import 'package:logger/logger.dart';
+
+final Logger logger = Logger();
 
 class MainQueue extends StatefulWidget {
   final SpotifySession spotifySession;
@@ -57,9 +60,10 @@ class _MainQueueState extends State<MainQueue> {
 
   void _initSongList() {
     this.yourSongs = new List<Song>();
+    logger.d('🍆 🍆 calling getSongs in main_queue.dart 🍆 🍆');
     widget.controller.getSongs(getSongsCurry);
 
-    setState(() async {
+    setState(() {
       queueSongs = List.filled(
           20,
           Song(
@@ -73,9 +77,10 @@ class _MainQueueState extends State<MainQueue> {
 
   // if nothing happens: setState is probably pointing at the wrong BuildContext / widget
   PhoenixMessageCallback getSongsCurry(callback) {
-    return (payload, ref, joinRef) => this.setState(() async {
-          this.yourSongs = await callback(payload, ref, joinRef);
-        });
+    return (payload, ref, joinRef) {
+      callback(payload, ref, joinRef)
+          .then((songs) => this.setState(() => this.yourSongs = songs));
+    };
   }
 
   @override

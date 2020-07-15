@@ -101,6 +101,7 @@ defmodule AuxApiWeb.QueueChannel do
 		{qentry_id, song_id} = find_first_qentry(member_id, session_id)
 		tracker = get_songs_recursive(qentry_id, [[qentry_id, song_id]])
 
+		IO.inspect tracker
 		push(socket, "get_songs", %{songs: tracker})
 		{:reply, {:ok, %{songs: tracker}}, socket}
 	end

@@ -21,7 +21,7 @@ class CurrentSong extends StatelessWidget {
     Track track = playerState.track;
     String name = track.name;
     String artist = track.artist.name;
-    String trackUri = track.uri;
+    String trackUri = track.uri.split(':').last;
     String contributor = "Diane"; // TODO: don't hardcode
     double progress = (playerState.playbackPosition == 0 || track.duration == 0)
         ? 0
