@@ -36,7 +36,7 @@ class _ExpandQueueButton extends StatelessWidget {
     return ButtonTheme(
         height: SizeConfig.blockSizeVertical * 3,
         child: OutlineButton(
-            padding: EdgeInsets.only(top: 5, bottom: 5, right: 7, left: 7),
+            padding: EdgeInsets.only(top: 0, bottom: 0, right: 7, left: 7),
             borderSide: BorderSide(color: auxAccent),
             onPressed: () {},
             color: Colors.transparent,
@@ -97,15 +97,25 @@ class _MainQueueState extends State<MainQueue> {
                   CurrentSong(
                       playerState: playerState, controller: widget.controller),
                   QueueContainer(
-                      height: 125,
+                      height: SizeConfig.blockSizeVertical * 15,
                       title: 'up next',
                       child: SongUpNext(song: queueSongs[0]),
-                      titleWidget: const _ExpandQueueButton()),
+                      titleWidget: IconButton(
+                        iconSize: 18,
+                        constraints: BoxConstraints.loose(Size(18, 18)),
+                        padding: EdgeInsets.only(
+                            top: 0, bottom: 0, left: 5, right: 50),
+                        icon: Icon(Icons.unfold_more),
+                        color: Colors.white,
+                        onPressed: () {},
+                      )), //const _ExpandQueueButton()),
                   Expanded(
                       child: QueueContainer(
                           title: 'your songs',
-                          child:
-                              SongList(songs: yourSongs, onSelect: (int x) {}),
+                          child: SongList(
+                              songs: yourSongs,
+                              onSelect: (int x) {},
+                              caboose: SizeConfig.blockSizeVertical * 12),
                           titleWidget: SongCountdown()))
                 ],
                 footerHeight: SizeConfig.blockSizeVertical * 15,
