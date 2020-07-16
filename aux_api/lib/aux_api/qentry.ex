@@ -4,7 +4,7 @@ defmodule AuxApi.Qentry do
 
   schema "qentries" do
     field :song_id, :string
-    
+
     field :played, :boolean, default: false
     field :next_qentry_id, :integer
     field :prev_qentry_id, :integer

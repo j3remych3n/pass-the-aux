@@ -7,6 +7,5 @@ defmodule AuxApi.Repo.Migrations.CreateSessions do
       add :dictatorship, :boolean, default: false, null: false
       timestamps()
     end
-
   end
 end

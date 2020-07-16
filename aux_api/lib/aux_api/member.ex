@@ -5,7 +5,7 @@ defmodule AuxApi.Member do
   schema "members" do
     has_many :qentries, AuxApi.Qentry
     belongs_to :session, AuxApi.Session
-    
+
     field :spotify_uid, :string
 
     timestamps()

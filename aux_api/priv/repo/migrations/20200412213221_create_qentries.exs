@@ -8,6 +8,5 @@ defmodule AuxApi.Repo.Migrations.CreateQentries do
 
       timestamps()
     end
-
   end
 end

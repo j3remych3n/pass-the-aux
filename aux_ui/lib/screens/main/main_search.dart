@@ -1,9 +1,6 @@
 import 'package:aux_ui/aux_lib/aux_controller.dart';
 import 'package:aux_ui/aux_lib/song.dart';
-import 'package:aux_ui/routing/router.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
-import 'package:aux_ui/aux_lib/spotify_session.dart';
-import 'package:aux_ui/widgets/queue_main_display/playback_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:aux_ui/theme/aux_theme.dart';
 import 'package:aux_ui/widgets/layout/main_container.dart';
@@ -12,12 +9,11 @@ import 'package:aux_ui/widgets/layout/queue_container.dart';
 import 'package:aux_ui/widgets/layout/song_list.dart';
 import 'package:aux_ui/widgets/buttons/rounded_action_button.dart';
 import 'dart:collection';
+import 'package:phoenix_wings/phoenix_wings.dart';
 
 class MainSearch extends StatefulWidget {
-  final SpotifySession spotifySession;
   final AuxController controller;
-  const MainSearch({Key key, this.spotifySession, this.controller})
-      : super(key: key);
+  const MainSearch({Key key, this.controller}) : super(key: key);
   _MainSearchState createState() => _MainSearchState();
 }
 
@@ -46,14 +42,13 @@ class _SearchResults extends StatelessWidget {
     print('selected indices: ${selected.keys.toString()}');
   }
 
-  void addSong(int idx) async {
-    this.selected.clear();
-    selected.putIfAbsent(idx, () => searchResults[idx]);
-
-    await this.controller.addSong(selected[idx].id);
-    // TODO: change this back
-//    await this.controller.getSongs(3, 2);
-    print('added single song idex: ${selected.keys.toString()}');
+  Function addSong(BuildContext ctx) {
+    return (int idx) async {
+      this.selected.clear();
+      selected.putIfAbsent(idx, () => searchResults[idx]);
+      await this.controller.addSongAndUpdate(selected[idx].id);
+      Navigator.pop(ctx);
+    };
   }
 
   @override
@@ -62,9 +57,10 @@ class _SearchResults extends StatelessWidget {
       // TODO: factor out into nested class
       title: 'results',
       child: SongList.tap(
+        caboose: SizeConfig.blockSizeVertical * 5,
         multiSelect: false,
         songs: this.searchResults,
-        onPressed: this.addSong,
+        onPressed: this.addSong(context),
       ),
     );
   }
@@ -100,14 +96,14 @@ class _SearchControls extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  build(BuildContext) {
+  build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         // picks & search: unselected
         RoundedActionButton.back(
           width: SizeConfig.blockSizeHorizontal * 50,
-          onPressed: () {},
+          onPressed: () => Navigator.pop(context),
         ),
 
         // TODO: implement with issue #26
@@ -145,7 +141,7 @@ class _MainSearchState extends State<MainSearch> {
       this.searching = true;
       this.newSearch = true;
     });
-    widget.spotifySession.search(query).then((results) => setState(() {
+    widget.controller.search(query).then((results) => setState(() {
           this.searchResults = results;
         }));
   }
@@ -158,6 +154,18 @@ class _MainSearchState extends State<MainSearch> {
 
   void _throttledSearch(String query) async {
     _search(query);
+  }
+
+  PhoenixMessageCallback addSongCurry(callback) {
+    return (payload, ref, joinRef) {
+      callback(payload, ref, joinRef).then((response) {
+        if (response.code == '200') {
+          print('successful');
+        } else {
+          print('retry');
+        }
+      });
+    };
   }
 
   @override
