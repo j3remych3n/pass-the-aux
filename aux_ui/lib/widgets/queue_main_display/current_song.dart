@@ -31,13 +31,13 @@ class CurrentSong extends StatelessWidget {
       Icon(
         Icons.favorite_border,
         color: auxAccent,
-        size: 16.0, // TODO: scale
+        size: 21.0, // TODO: scale
         semanticLabel: "original song",
       ),
       Icon(
         Icons.favorite,
         color: auxAccent,
-        size: 16.0, // TODO: scale
+        size: 21.0, // TODO: scale
         semanticLabel: "liked song",
       )
     ]);
@@ -48,8 +48,9 @@ class CurrentSong extends StatelessWidget {
           if (snapshot.hasData) {
             var albumCover = snapshot.data;
             return AuxCard(
-                borderColor: auxBlurple,
-                padding: EdgeInsets.all(15.0),
+                color: Colors.transparent,
+                borderColor: Colors.transparent,
+                padding: EdgeInsets.all(5.0),
                 margin: EdgeInsets.all(0),
                 child: Column(
                   children: <Widget>[

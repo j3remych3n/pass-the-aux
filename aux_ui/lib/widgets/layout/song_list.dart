@@ -11,6 +11,7 @@ class SongList extends StatefulWidget {
   final String emptyMessage;
   final bool multiSelect;
   final bool reorder;
+  final double caboose;
 
   Function onReorder;
   Function onSelect;
@@ -26,7 +27,8 @@ class SongList extends StatefulWidget {
       this.multiSelect: true,
       this.emptyMessage: EMPTY_MSG,
       this.reorder: false,
-      this.onReorder})
+      this.onReorder,
+      this.caboose: 0})
       : super(key: key);
 
   SongList.select(
@@ -35,7 +37,8 @@ class SongList extends StatefulWidget {
       @required this.onSelect,
       this.multiSelect: true,
       this.emptyMessage: EMPTY_MSG,
-      this.reorder: false})
+      this.reorder: false,
+        this.caboose: 0})
       : super(key: key);
 
   SongList.tap(
@@ -44,7 +47,8 @@ class SongList extends StatefulWidget {
       @required this.onPressed,
       this.multiSelect: false,
       this.emptyMessage: EMPTY_MSG,
-      this.reorder: false})
+      this.reorder: false,
+        this.caboose: 0})
       : super(key: key);
 
   SongList.reorder(
@@ -53,7 +57,8 @@ class SongList extends StatefulWidget {
         @required this.onReorder,
         this.multiSelect: false,
         this.emptyMessage: EMPTY_MSG,
-        this.reorder: true})
+        this.reorder: true,
+        this.caboose: 0})
       : super(key: key);
 
   _SongListState createState() => _SongListState();
@@ -134,7 +139,13 @@ class _SongListState extends State<SongList> {
           onReorder: _onReorder,
           scrollDirection: Axis.vertical,
           padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical),
-          children: List.generate(widget.songs.length, (index) {
+          children: List.generate(widget.songs.length+1, (index) {
+            if (index >= widget.songs.length)
+              return Divider(
+                  key: Key('$index'),
+                  thickness: 0,
+                  height: widget.caboose,
+                  color: Colors.transparent);
             return _SongItem(
                 key: Key('$index'),
                 multiSelect: widget.multiSelect,
@@ -147,10 +158,16 @@ class _SongListState extends State<SongList> {
       return ListView.separated(
           padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical),
           shrinkWrap: true,
-          itemCount: widget.songs.length,
+          itemCount: widget.songs.length+1,
           separatorBuilder: (BuildContext context, int index) =>
               Divider(thickness: 0, height: 3, color: Colors.transparent),
           itemBuilder: (BuildContext context, int index) {
+            if (index >= widget.songs.length)
+              return Divider(
+                  key: Key('$index'),
+                  thickness: 0,
+                  height: widget.caboose,
+                  color: Colors.transparent);
             return _SongItem(
                 key: Key('$index'),
                 multiSelect: widget.multiSelect,
