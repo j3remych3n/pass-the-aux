@@ -38,7 +38,7 @@ class SongList extends StatefulWidget {
       this.multiSelect: true,
       this.emptyMessage: EMPTY_MSG,
       this.reorder: false,
-        this.caboose: 0})
+      this.caboose: 0})
       : super(key: key);
 
   SongList.tap(
@@ -48,17 +48,17 @@ class SongList extends StatefulWidget {
       this.multiSelect: false,
       this.emptyMessage: EMPTY_MSG,
       this.reorder: false,
-        this.caboose: 0})
+      this.caboose: 0})
       : super(key: key);
 
   SongList.reorder(
       {Key key,
-        this.songs,
-        @required this.onReorder,
-        this.multiSelect: false,
-        this.emptyMessage: EMPTY_MSG,
-        this.reorder: true,
-        this.caboose: 0})
+      this.songs,
+      @required this.onReorder,
+      this.multiSelect: false,
+      this.emptyMessage: EMPTY_MSG,
+      this.reorder: true,
+      this.caboose: 0})
       : super(key: key);
 
   _SongListState createState() => _SongListState();
@@ -123,6 +123,23 @@ class _SongListState extends State<SongList> {
     });
   }
 
+  Widget _buildSongItem(index) {
+    if (index >= widget.songs.length) {
+      return Divider(
+          key: Key('$index'),
+          thickness: 0,
+          height: widget.caboose,
+          color: Colors.transparent);
+    }
+    return _SongItem(
+        key: Key('$index'),
+        multiSelect: widget.multiSelect,
+        index: index,
+        onSelect: widget.onSelect,
+        song: widget.songs[index],
+        onPressed: widget.onPressed);
+  }
+
   @override
   Widget build(BuildContext context) {
     // if (widget.songs == null || widget.songs.length == 0) {
@@ -139,42 +156,18 @@ class _SongListState extends State<SongList> {
           onReorder: _onReorder,
           scrollDirection: Axis.vertical,
           padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical),
-          children: List.generate(widget.songs.length+1, (index) {
-            if (index >= widget.songs.length)
-              return Divider(
-                  key: Key('$index'),
-                  thickness: 0,
-                  height: widget.caboose,
-                  color: Colors.transparent);
-            return _SongItem(
-                key: Key('$index'),
-                multiSelect: widget.multiSelect,
-                index: index,
-                onSelect: widget.onSelect,
-                song: widget.songs[index],
-                onPressed: widget.onPressed);
+          children: List.generate(widget.songs.length + 1, (index) {
+            return _buildSongItem(index);
           }));
     } else {
       return ListView.separated(
           padding: EdgeInsets.only(top: SizeConfig.blockSizeVertical),
           shrinkWrap: true,
-          itemCount: widget.songs.length+1,
+          itemCount: widget.songs.length + 1,
           separatorBuilder: (BuildContext context, int index) =>
               Divider(thickness: 0, height: 3, color: Colors.transparent),
           itemBuilder: (BuildContext context, int index) {
-            if (index >= widget.songs.length)
-              return Divider(
-                  key: Key('$index'),
-                  thickness: 0,
-                  height: widget.caboose,
-                  color: Colors.transparent);
-            return _SongItem(
-                key: Key('$index'),
-                multiSelect: widget.multiSelect,
-                index: index,
-                onSelect: widget.onSelect,
-                song: widget.songs[index],
-                onPressed: widget.onPressed);
+            return _buildSongItem(index);
           });
     }
   }
