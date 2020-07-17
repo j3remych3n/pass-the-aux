@@ -1,3 +1,4 @@
+import 'package:aux_ui/aux_lib/aux_controller.dart';
 import 'package:aux_ui/aux_lib/song.dart';
 import 'package:aux_ui/aux_lib/spotify_session.dart';
 import 'package:aux_ui/widgets/buttons/queue_item_action.dart';
@@ -10,9 +11,9 @@ import 'package:spotify_sdk/models/track.dart';
 
 class CurrentSong extends StatelessWidget {
   final PlayerState playerState;
-  final SpotifySession spotifySession;
+  final AuxController controller;
 
-  const CurrentSong({Key key, this.playerState, this.spotifySession})
+  const CurrentSong({Key key, this.playerState, this.controller})
       : super(key: key);
 
   @override
@@ -20,7 +21,7 @@ class CurrentSong extends StatelessWidget {
     Track track = playerState.track;
     String name = track.name;
     String artist = track.artist.name;
-    String trackUri = track.uri;
+    String trackUri = track.uri.split(':').last;
     String contributor = "Diane"; // TODO: don't hardcode
     double progress = (playerState.playbackPosition == 0 || track.duration == 0)
         ? 0
@@ -30,25 +31,26 @@ class CurrentSong extends StatelessWidget {
       Icon(
         Icons.favorite_border,
         color: auxAccent,
-        size: 16.0, // TODO: scale
+        size: 21.0, // TODO: scale
         semanticLabel: "original song",
       ),
       Icon(
         Icons.favorite,
         color: auxAccent,
-        size: 16.0, // TODO: scale
+        size: 21.0, // TODO: scale
         semanticLabel: "liked song",
       )
     ]);
 
     return FutureBuilder(
-        future: spotifySession.getCover(trackUri),
+        future: controller.getCover(trackUri),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
             var albumCover = snapshot.data;
             return AuxCard(
-                borderColor: auxBlurple,
-                padding: EdgeInsets.all(15.0),
+                color: Colors.transparent,
+                borderColor: Colors.transparent,
+                padding: EdgeInsets.all(5.0),
                 margin: EdgeInsets.all(0),
                 child: Column(
                   children: <Widget>[

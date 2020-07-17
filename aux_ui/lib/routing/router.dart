@@ -8,53 +8,67 @@ import 'package:aux_ui/aux_lib/spotify_session.dart';
 import 'package:aux_ui/screens/tester.dart';
 import 'package:aux_ui/screens/main/main_queue.dart';
 import 'package:aux_ui/screens/main/main_search.dart';
+import 'package:aux_ui/aux_lib/aux_controller.dart';
 import 'package:flutter/material.dart';
 
 final SpotifySession spotifySession = SpotifySession();
+final AuxController controller = AuxController();
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   Object args = settings.arguments;
   // TODO: confirm where we replace the route and where we push/pop, decide where to have default null next/back
   switch (settings.name) {
-  
     case MainQueueRoute:
-     return MaterialPageRoute(builder: (context) => MainSearch(spotifySession: spotifySession));
-      //  return MaterialPageRoute(builder: (context) => MainQueue(spotifySession: spotifySession));
-    
+      return MaterialPageRoute(
+          builder: (context) => MainQueue(
+              spotifySession: spotifySession, controller: controller));
+    //  return MaterialPageRoute(builder: (context) => MainQueue(spotifySession: spotifySession));
+
     case MainSearchRoute:
-      return MaterialPageRoute(builder: (context) => MainSearch(spotifySession: spotifySession));
+      return MaterialPageRoute(
+          builder: (context) => MainSearch(controller: controller));
 
     case LinkSpotifyRoute:
       if (args.toString() == 'host') {
-        return MaterialPageRoute(builder: (context) => LinkSpotify(nextPage: HostInviteRoute, sessionManager: spotifySession));
+        return MaterialPageRoute(
+            builder: (context) => LinkSpotify(
+                nextPage: HostInviteRoute, sessionManager: spotifySession));
       }
-      return MaterialPageRoute(builder: (context) => LinkSpotify(nextPage: JoinQueueRoute, sessionManager: spotifySession));
-    
+      return MaterialPageRoute(
+          builder: (context) => LinkSpotify(
+              nextPage: JoinQueueRoute, sessionManager: spotifySession));
+
     case HostInviteRoute:
       String queueName = settings.arguments;
-      return MaterialPageRoute(builder: (context) => HostInvite(
-          queueName: queueName, 
-          nextPage: MainQueueRoute,
-          backPage: NuxIntroRoute,
-        )
-      );
-    
+      // TODO temporary hardcoded session; add auth / join specific user-created room later
+      controller.connect(2);
+      return MaterialPageRoute(
+          builder: (context) => HostInvite(
+                queueName: queueName,
+                nextPage: MainQueueRoute,
+                backPage: NuxIntroRoute,
+              ));
+
     case JoinQueueRoute:
-      return MaterialPageRoute(builder: (context) => GuestJoinQueue(nextPage: JoinQueueConfirmationRoute));
+      return MaterialPageRoute(
+          builder: (context) =>
+              GuestJoinQueue(nextPage: JoinQueueConfirmationRoute));
 
     case JoinQueueConfirmationRoute:
-      return MaterialPageRoute(builder: (context) => JoinQueueConfirmation(
-        nextPage: MainQueueRoute,
-        backPage: JoinQueueRoute,
-        )
-      );    
+      // TODO temporary hardcoded session; add auth / join specific user-created room later
+      controller.connect(2);
+      return MaterialPageRoute(
+          builder: (context) => JoinQueueConfirmation(
+                nextPage: MainQueueRoute,
+                backPage: JoinQueueRoute,
+              ));
 
     case NuxIntroRoute:
       return MaterialPageRoute(builder: (context) => NuxIntro());
 
     case TesterRoute:
       return MaterialPageRoute(builder: (context) => Tester());
-    
+
     default:
       return MaterialPageRoute(builder: (context) => NuxIntro());
   }

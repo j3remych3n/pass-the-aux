@@ -3,9 +3,12 @@ defmodule AuxApi.Qentry do
   import Ecto.Changeset
 
   schema "qentries" do
-    field :has_played, :boolean, default: false
-    field :is_host, :boolean, default: false
     field :song_id, :string
+
+    field :played, :boolean, default: false
+    field :next_qentry_id, :integer
+    field :prev_qentry_id, :integer
+
     belongs_to :member, AuxApi.Member
     belongs_to :session, AuxApi.Session
 

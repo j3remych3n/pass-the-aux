@@ -20,7 +20,7 @@ defmodule AuxApi.MixProject do
   def application do
     [
       mod: {AuxApi.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:spotify_ex, :logger, :runtime_tools]
     ]
   end
 
@@ -42,7 +42,8 @@ defmodule AuxApi.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:spotify_ex, "~> 2.0.9"}
     ]
   end
 

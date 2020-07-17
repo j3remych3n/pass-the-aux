@@ -12,44 +12,38 @@ class RoundedActionButton extends StatelessWidget {
   final Color borderColor;
   final bool bordered;
 
-  const RoundedActionButton(
-    {
-      this.height = 0,
-      this.width,
-      this.onPressed,
-      this.color = auxAccent,
-      this.bordered = true,
-      this.borderColor = Colors.transparent,
-      this.text = 'done',
-      this.textStyle = auxPrimaryButton,
-    }
-  );
+  const RoundedActionButton({
+    this.height = 0,
+    this.width,
+    this.onPressed,
+    this.color = auxAccent,
+    this.bordered = true,
+    this.borderColor = Colors.transparent,
+    this.text = 'done',
+    this.textStyle = auxPrimaryButton,
+  });
 
-  const RoundedActionButton.back(
-    {
-      this.height = 0,
-      this.width,
-      this.onPressed,
-      this.text = 'back',
-      this.textStyle = auxTertiaryButton,
-      this.color = Colors.black,
-      this.bordered = true,
-      this.borderColor = auxDGrey,
-    }
-  );
+  const RoundedActionButton.back({
+    this.height = 0,
+    this.width,
+    this.onPressed,
+    this.text = 'back',
+    this.textStyle = auxTertiaryButton,
+    this.color = Colors.black,
+    this.bordered = true,
+    this.borderColor = auxDGrey,
+  });
 
-  const RoundedActionButton.delete(
-    {
-      this.height = 0,
-      this.width,
-      this.onPressed,
-      this.text = 'delete',
-      this.textStyle = auxPrimaryButton,
-      this.color = Colors.red,
-      this.bordered = false,
-      this.borderColor = Colors.red,
-    }
-  );
+  const RoundedActionButton.delete({
+    this.height = 0,
+    this.width,
+    this.onPressed,
+    this.text = 'delete',
+    this.textStyle = auxPrimaryButton,
+    this.color = Colors.red,
+    this.bordered = false,
+    this.borderColor = Colors.red,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -60,24 +54,19 @@ class RoundedActionButton extends StatelessWidget {
       child: FlatButton(
         onPressed: onPressed,
         color: color,
-        splashColor: (color == Colors.black) ? 
-          auxDDGrey : 
-          Colors.black26,
-        shape: (bordered) ? 
-          StadiumBorder(
-            side: BorderSide(
-              color: borderColor,
-              width: 3,
-            ),
-          ) : 
-          StadiumBorder(),
+        splashColor: (color == Colors.black) ? auxDDGrey : Colors.black26,
+        shape: (bordered)
+            ? StadiumBorder(
+                side: BorderSide(
+                  color: borderColor,
+                  width: 3,
+                ),
+              )
+            : StadiumBorder(),
         child: Text(
-          text, 
-          style: textStyle, 
-          strutStyle: StrutStyle(
-            fontSize: 17, 
-            height: 1.2
-          ),
+          text,
+          style: textStyle,
+          strutStyle: StrutStyle(fontSize: 17, height: 1.2),
         ),
       ),
     );

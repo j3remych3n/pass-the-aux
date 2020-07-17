@@ -3,7 +3,7 @@ defmodule AuxApi.Repo.Migrations.SessionReferences do
 
   def change do
     alter table(:sessions) do
-      add :member_id, references(:members)
+      add :host_id, references(:members)
     end
   end
 end
