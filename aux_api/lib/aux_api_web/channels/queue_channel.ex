@@ -32,7 +32,8 @@ defmodule AuxApiWeb.QueueChannel do
         "add_song",
         %{"member_id" => member_id, "session_id" => session_id, "song_id" => song_id},
         socket
-      ) do
+			) do
+		# TODO: send back to host that this member id has added a song
     {prev_qentry_id, _} = find_last_qentry(member_id, session_id)
 
     qentry = %AuxApi.Qentry{
@@ -115,14 +116,18 @@ defmodule AuxApiWeb.QueueChannel do
   end
 
   # TODO -> REFACTOR -> member_id from presence / auth ; session_id from subtopic
-  def handle_in("next", %{"member_id" => member_id, "session_id" => session_id}, socket) do
-    {qentry, _} = find_first_qentry(member_id, session_id)
+	def handle_in("next", %{"member_id" => member_id, "session_id" => session_id}, socket) do
+		{qentry, _} = find_first_qentry(member_id, session_id)
 
-    if is_nil(qentry) do
-      {:reply, {:ok, %{info: "no songs in queue"}}, socket}
+		if is_nil(qentry) do
+			push(socket, "next", %{qentry_id: -1, member_id: member_id})
+			# {:reply, {:ok, %{info: "no songs in queue"}}, socket}
+			{:noreply, socket}
     else
-      song_id = mark_played(member_id, session_id, qentry)
-      {:reply, {:ok, %{qentry_id: qentry, song_id: song_id}}, socket}
+			{_, song_id} = mark_played(member_id, session_id, qentry)
+			push(socket, "next", %{qentry_id: qentry, song_id: song_id})
+			# {:reply, {:ok, %{qentry_id: qentry, song_id: song_id}}, socket}
+			{:noreply, socket}
     end
   end
 end

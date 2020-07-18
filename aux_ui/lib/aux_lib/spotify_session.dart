@@ -60,6 +60,7 @@ class SpotifySession {
   }
 
   Future<void> play(String spotifyUri) async {
+    _logger.d("playing the uri $spotifyUri");
     try {
       await SpotifySdk.play(spotifyUri: spotifyUri);
     } on PlatformException catch (e) {
@@ -89,7 +90,7 @@ class SpotifySession {
     }
   }
 
-  Future<void> skipNext() async {
+  Future<void> skipNext() async { // TODO: change
     try {
       await SpotifySdk.skipNext();
     } on PlatformException catch (e) {
@@ -99,7 +100,7 @@ class SpotifySession {
     }
   }
 
-  Future<void> skipPrevious() async {
+  Future<void> skipPrevious() async { // TODO: change
     try {
       await SpotifySdk.skipPrevious();
     } on PlatformException catch (e) {

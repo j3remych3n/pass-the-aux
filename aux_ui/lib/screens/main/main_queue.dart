@@ -15,14 +15,17 @@ import 'package:spotify_sdk/models/player_state.dart';
 import 'package:aux_ui/routing/routing_constants.dart';
 import 'package:phoenix_wings/phoenix_wings.dart';
 import 'package:logger/logger.dart';
+import 'package:spotify_sdk/models/track.dart';
+import 'package:spotify_sdk/spotify_sdk.dart';
 
 final Logger logger = Logger();
 
 class MainQueue extends StatefulWidget {
   final SpotifySession spotifySession;
   final AuxController controller;
+  final bool isHost;
 
-  const MainQueue({Key key, this.spotifySession, this.controller})
+  const MainQueue({Key key, this.spotifySession, this.controller, this.isHost})
       : super(key: key);
 
   _MainQueueState createState() => _MainQueueState();
@@ -50,7 +53,7 @@ class _ExpandQueueButton extends StatelessWidget {
 
 class _MainQueueState extends State<MainQueue> {
   List<Song> yourSongs;
-  List<Song> queueSongs;
+  List<Song> queueSongs; // TODO: implement
 
   @override
   void initState() {
@@ -87,6 +90,23 @@ class _MainQueueState extends State<MainQueue> {
     widget.controller.changePos(qentryId, newPrevId);
   }
 
+  PhoenixMessageCallback _playSongCurry(callback) {
+    return (payload, ref, joinRef) {
+      callback(payload, ref, joinRef).then((song) =>
+      song.qentryId == null
+      // TODO: check for empty queue so no spinning
+          ? print("==========NONE=========")//widget.controller.next(_playSongCurry)
+          : widget.spotifySession.play(song.uri));
+    };
+  }
+
+  int _timeLeft(PlayerState playerState) {
+    Track track = playerState.track;
+    int time = track.duration - playerState.playbackPosition;
+    logger.d("TIME LEFT: $time");
+    return time;
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -96,6 +116,10 @@ class _MainQueueState extends State<MainQueue> {
         builder: (BuildContext context, AsyncSnapshot<PlayerState> snapshot) {
           if (snapshot.data != null && snapshot.data.track != null) {
             var playerState = snapshot.data;
+            if (_timeLeft(playerState) <= 99999999) {
+              // TODO: better threshold than 1/2 second
+              widget.controller.next(_playSongCurry);
+            }
             return MainContainer(
                 title: "too queue for u",
                 header: QueueHeader(),
@@ -126,7 +150,7 @@ class _MainQueueState extends State<MainQueue> {
                 ],
                 footerHeight: SizeConfig.blockSizeVertical * 15,
                 footer: PlaybackControls(
-                  isHost: true,
+                  isHost: widget.isHost,
                   spotifySession: widget.spotifySession,
                   isPaused: playerState.isPaused,
                   addSongAction: () => Navigator.pushNamed(

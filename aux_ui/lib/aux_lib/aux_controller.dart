@@ -15,14 +15,35 @@ final Logger logger = Logger();
 SpotifyApi _webApi =
     SpotifyApi(SpotifyApiCredentials(_CLIENT_ID, _CLIENT_SECRET));
 
+/*
+TODO: presence list of all the members
+ two lists to track queue people (people with and without songs in queue)
+ add song => update host to update two lists (update who has songs)
+ return song object on callback, empty one still needed
+ change header to use returned song object
+ debug stream state issue
+ null spotify return issue
+ figure out controlling for adding/leaving members
+ lazy loading?
+ */
+
 class AuxController {
   int sessionId;
   int memberId;
+  Set<int> memberIds;
+  Set<int> memsInQueue;
+  Set<int> memsEmptyQueue;
+  int currDex;
+  bool isHost;
 
   PhoenixSocket socket;
   PhoenixChannel channel;
 
   AuxController() {
+    memberIds = Set.from([1, 2]);
+    memsInQueue = Set.from([1, 2]);
+    memsEmptyQueue = new Set();
+    currDex = 0;
     socket = new PhoenixSocket("ws://$ipAddress:4000/socket/websocket");
   }
 
@@ -38,7 +59,7 @@ class AuxController {
     var resp = channel.join();
 
     print('successfully connected: ${resp}');
-    this.memberId = 3;
+    this.memberId = 1;
   }
 
   Future<void> changePos(qentryId, newPrevId) async {
@@ -52,6 +73,46 @@ class AuxController {
 
   Future<void> deleteSong(qentryId) async {
     channel.push(event: "delete_song", payload: {"qentry_id": qentryId});
+  }
+
+  Future<Song> nextSong(payload, ref, joinRef) {
+    logger.d("NEXT SONG HAS BEEN CALLED");
+    if (payload["qentry_id"] == -1) { // TODO: make this check more robust
+      logger.d("empty next song for member ${payload["member_id"]}");
+      int emptyMem = payload["member_id"];
+      // this member is out of songs, move to empty songs
+      memsInQueue.remove(emptyMem);
+      memsEmptyQueue.add(emptyMem);
+
+      return new Future<Song>.value(new Song(null, null, null, null));
+    } else {
+      int qentryId = payload["qentry_id"];
+      String trackId = payload["song_id"];
+
+      Qentry curr = Qentry(qentryId, trackId);
+      logger.d("TRACK QUEUED IS: $trackId");
+      Future<Song> song = _songFromQentry(curr);
+      return song;
+    }
+  }
+
+  Future<void> next(curry) async {
+    if (memsInQueue.isEmpty) { // return empty song if no more members in queue
+      curry(new Future<Song>.value(new Song(null, null, null, null)));
+    } else {
+      int currMember = memberIds.elementAt(currDex);
+      currDex = (currDex + 1) % memsInQueue.length;
+
+      logger.d("currMember is $currMember");
+      logger.d("currDex is now $currDex");
+      logger.d("members in queue: $memsInQueue");
+
+      channel.on("next", curry(nextSong));
+      channel.push(
+          event: "next",
+          payload: {"member_id": currMember, "session_id": this.sessionId});
+      _getSongs(); // TODO: wrong => should notify member who added song to get songs
+    }
   }
 
   Future<List<Song>> returnSongs(payload, ref, joinRef) {
@@ -71,6 +132,7 @@ class AuxController {
   }
 
   Future<void> addSong(songId) async {
+    // TODO: notify host song has been added somehow
     channel.push(event: "add_song", payload: {
       "member_id": this.memberId,
       "session_id": this.sessionId,
@@ -83,10 +145,11 @@ class AuxController {
     _getSongs();
   }
 
-  Future<void> _getSongs() async {
+  Future<void> _getSongs([currMemberId]) async {
+    if (currMemberId == null) currMemberId = this.memberId;
     channel.push(
         event: "get_songs",
-        payload: {"member_id": this.memberId, "session_id": this.sessionId});
+        payload: {"member_id": currMemberId, "session_id": this.sessionId});
   }
 
   Future<String> getCover(String trackId) async {

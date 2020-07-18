@@ -8,14 +8,15 @@ class Song implements Comparable<Song> {
   String contributor;
 
   Song(this.name, this.artist, this.coverLink, this.id,
-      {this.contributor, this.qentryId, this.popularity = 0});
+      {this.contributor="Diane", this.qentryId, this.popularity = 0});
+  // TODO: change contributor
 
   void attributeTo(String user) {
     this.contributor = user;
   }
 
   @override
-  bool operator ==(other) {
+  bool operator == (other) {
     if (!(other is Song)) return false;
     return other.id == this.id;
   }

@@ -13,7 +13,6 @@ defmodule AuxApi.DbActions do
   end
 
   def find_song(qentry_id) when is_nil(qentry_id), do: {nil, nil}
-
   def find_song(qentry_id) when not is_nil(qentry_id) do
     query =
       from qentry in "qentries",
