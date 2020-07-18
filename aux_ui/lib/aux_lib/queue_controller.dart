@@ -12,9 +12,4 @@ class QueueController {
     this.controller = controller;
     this.queueOrder = songs.keys;
   }
-
-//  Song next() {
-//    Song
-//  }
-
 }

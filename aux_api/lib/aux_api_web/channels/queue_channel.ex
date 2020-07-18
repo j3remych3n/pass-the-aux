@@ -19,25 +19,6 @@ defmodule AuxApiWeb.QueueChannel do
     {:noreply, socket}
   end
 
-  def handle_in("add_song", payload, socket) do
-    # payload: str: member_id, str: queue_id, str: spotify_uri
-    # generate previous song id by filtering for qentry where next is null (same member and queue id)
-    # insert
-
-    song = %AuxApi.Qentry{
-      member_id: 1, # passed in
-      session_id: 1, # pull from subtopic
-      next_qentry_id: 1, # null
-      prev_qentry_id: 1, # gen by filter
-      has_played: false,
-      is_host: false,
-      song_id: "temp" # passed in
-    }
-
-    {:ok, } = AuxApi.Repo.insert(song)
-    {:reply, {:ok, payload}, socket}
-  end
-
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     # check member_id and spotify_uid pair match in DB
@@ -55,15 +36,16 @@ defmodule AuxApiWeb.QueueChannel do
       ) do
     {prev_qentry_id, _} = find_last_qentry(member_id, session_id)
 
-    qentry = %AuxApi.Qentry{
-      song_id: song_id,
-      session_id: session_id,
-      member_id: member_id,
-      next_qentry_id: nil,
-      prev_qentry_id: prev_qentry_id
-    }
-
-    {:ok, test_qentry} = Repo.insert(qentry)
+    {:ok, test_qentry} =
+      %AuxApi.Qentry{
+        song_id: song_id,
+        session_id: session_id,
+        member_id: member_id,
+        played: false,
+        next_qentry_id: nil,
+        prev_qentry_id: prev_qentry_id
+      }
+      |> Repo.insert()
 
     update_next_qentry(prev_qentry_id, test_qentry.id)
     {:reply, :ok, socket}

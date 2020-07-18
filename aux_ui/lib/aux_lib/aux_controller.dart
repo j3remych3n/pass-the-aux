@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:aux_ui/aux_lib/qentry.dart';
 import 'package:aux_ui/aux_lib/song.dart';
-import 'package:aux_ui/aux_lib/spotify_session.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 import 'package:phoenix_wings/phoenix_wings.dart';
 import 'package:spotify/spotify.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 final String _CLIENT_ID = DotEnv().env['CLIENT_ID'].toString();
 final String _REDIRECT_URL = DotEnv().env['REDIRECT_URL'].toString();
@@ -16,13 +17,16 @@ SpotifyApi _webApi =
     SpotifyApi(SpotifyApiCredentials(_CLIENT_ID, _CLIENT_SECRET));
 
 class AuxController {
-  int sessionId;
-  int memberId;
+  // Client webClient = http.Client();
+  int _sessionId;
+  int _memberId;
+  final String _spotifyUid;
 
   PhoenixSocket socket;
   PhoenixChannel channel;
 
-  AuxController() {
+  //TODO: auth in the future is based on memberId + spotify Username
+  AuxController(this._spotifyUid) {
     socket = new PhoenixSocket("ws://$ipAddress:4000/socket/websocket");
   }
 
@@ -30,28 +34,52 @@ class AuxController {
     logger.d(payload);
   };
 
-  Future<void> connect(sessionId) async {
-    this.sessionId = sessionId;
+  Future<void> login() async {
+    try {
+      var loginResp = await http.post(
+          'https://$ipAddress:4000/api/member/create',
+          body: {"spotify_uid": this._spotifyUid});
+      var body = json.decode(loginResp.body);
+      if (body.containsKey('member_id')) this._memberId = body.member_id;
+    } finally {}
+
     await socket.connect();
+  }
 
-    channel = socket.channel("queue:lobby", {"spotify_uid": "me"});
+  Future<void> createSession() async {
+    try {
+      var createResp = await http.post(
+          'https://$ipAddress:4000/api/session/create',
+          body: {"spotify_uid": this._spotifyUid, "member_id": this._memberId});
+      var body = json.decode(createResp.body);
+      if (body.containsKey('session_id')) this._sessionId = body.session_id;
+    } finally {}
+  }
+
+  Future<void> joinSession(sessionId) async {
+    this._sessionId = sessionId;
+
+    channel = socket.channel("queue:lobby",
+        {"spotify_uid": this._spotifyUid, "member_id": this._memberId});
     var resp = channel.join();
-
     print('successfully connected: ${resp}');
-    this.memberId = 3;
   }
 
   Future<void> changePos(qentryId, newPrevId) async {
     channel.push(event: "change_pos", payload: {
-      "member_id": this.memberId,
-      "session_id": this.sessionId,
+      "member_id": this._memberId,
+      "session_id": this._sessionId,
       "qentry_id": qentryId,
       "new_prev_id": newPrevId
     });
   }
 
   Future<void> deleteSong(qentryId) async {
-    channel.push(event: "delete_song", payload: {"qentry_id": qentryId});
+    channel.push(event: "delete_song", payload: {
+      "qentry_id": qentryId,
+      "member_id": this._memberId,
+      "spotify_uid": this._spotifyUid
+    });
   }
 
   Future<List<Song>> returnSongs(payload, ref, joinRef) {
@@ -72,8 +100,8 @@ class AuxController {
 
   Future<void> addSong(songId) async {
     channel.push(event: "add_song", payload: {
-      "member_id": this.memberId,
-      "session_id": this.sessionId,
+      "member_id": this._memberId,
+      "session_id": this._sessionId,
       "song_id": songId
     });
   }
@@ -86,7 +114,7 @@ class AuxController {
   Future<void> _getSongs() async {
     channel.push(
         event: "get_songs",
-        payload: {"member_id": this.memberId, "session_id": this.sessionId});
+        payload: {"member_id": this._memberId, "session_id": this._sessionId});
   }
 
   Future<String> getCover(String trackId) async {

@@ -1,10 +1,10 @@
 import 'package:flutter/services.dart';
-import 'package:spotify/spotify.dart';
 import 'package:spotify_sdk/models/player_state.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 import 'package:aux_ui/aux_lib/song.dart';
+import 'package:spotify/spotify.dart';
 
 class SpotifySession {
   var _authToken;
@@ -37,11 +37,17 @@ class SpotifySession {
     }
   }
 
+  // SpotifyApi authWebApi() {
+  //   if(this._authToken != null) {
+  //     return SpotifyApi.
+  //   }
+  // }
+
   Future<void> authenticate() async {
     try {
       var authenticationToken = await SpotifySdk.getAuthenticationToken(
           clientId: _CLIENT_ID, redirectUrl: _REDIRECT_URL);
-      _authToken = authenticationToken;
+      this._authToken = authenticationToken;
     } on PlatformException catch (e) {
       setStatus(e.code, message: e.message);
     } on MissingPluginException {

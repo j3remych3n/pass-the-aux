@@ -5,6 +5,8 @@ import 'package:flutter/rendering.dart';
 import 'package:aux_ui/widgets/layout/nux_container.dart';
 import 'package:aux_ui/widgets/buttons/icon_bar_button.dart';
 import 'package:aux_ui/aux_lib/spotify_session.dart';
+import 'package:aux_ui/aux_lib/aux_controller.dart';
+import 'package:aux_ui/routing/routing_constants.dart';
 
 class LinkSpotify extends SequentialWidget {
   final SpotifySession sessionManager;
@@ -18,7 +20,17 @@ class LinkSpotify extends SequentialWidget {
 class _LinkSpotifyState extends State<LinkSpotify> {
   login() async {
     bool authConnected = await widget.sessionManager.login();
-    if (authConnected) widget.next(context);
+
+    if (authConnected) {
+      // TODO - actually get spotify username for "auth"
+      var webController = AuxController('');
+      webController.login();
+
+      if (widget.nextPage == HostInviteRoute)
+        await webController.createSession();
+
+      widget.next(context, arguments: webController);
+    }
   }
 
   @override
@@ -47,7 +59,7 @@ class _LinkSpotifyState extends State<LinkSpotify> {
                           icon: Image.asset('assets/spotify_logo.png',
                               height: 21, width: 21),
                           text: 'link your spotify premium *',
-                          onPressed: () => login(),
+                          onPressed: login,
                         )),
                     Align(
                         alignment: Alignment.topRight,

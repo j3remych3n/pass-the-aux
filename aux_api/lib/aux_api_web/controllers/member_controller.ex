@@ -1,14 +1,15 @@
 import Ecto.Query
 import Ecto.Changeset
 alias AuxApi.Repo
+import AuxApi.DbActions
 
 defmodule AuxApiWeb.MemberController do
   use AuxApiWeb, :controller
 
   def auth_member(conn, %{"spotify_uid" => spotify_uid}) do
-    member_id = find_member(spotify_uid)
-    # New member
-    # Existing member
+    # member_id = find_member(spotify_uid)
+    member_id = nil # TODO TEMPORARY
+
     if is_nil(member_id) do
       {:ok, member} = %AuxApi.Member{spotify_uid: spotify_uid} |> Repo.insert()
       json(conn, %{auth_token: member.id})
@@ -25,20 +26,6 @@ defmodule AuxApiWeb.MemberController do
       conn |> put_status(200) |> json(%{})
     else
       conn |> put_status(403) |> json(%{error: "invalid authentication / member does not exist"})
-    end
-  end
-
-  defp find_member(spotify_uid) do
-    query =
-      from member in "members",
-        where: member.spotify_uid == ^spotify_uid,
-        select: member.id
-
-    member_result = Repo.all(query)
-
-    case length(member_result) do
-      1 -> List.first(member_result)
-      _ -> nil
     end
   end
 end

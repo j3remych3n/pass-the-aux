@@ -12,7 +12,7 @@ import 'package:aux_ui/aux_lib/aux_controller.dart';
 import 'package:flutter/material.dart';
 
 final SpotifySession spotifySession = SpotifySession();
-final AuxController controller = AuxController();
+AuxController controller;
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   Object args = settings.arguments;
@@ -39,24 +39,23 @@ Route<dynamic> generateRoute(RouteSettings settings) {
               nextPage: JoinQueueRoute, sessionManager: spotifySession));
 
     case HostInviteRoute:
-      String queueName = settings.arguments;
+      controller = settings.arguments;
       // TODO temporary hardcoded session; add auth / join specific user-created room later
-      controller.connect(2);
       return MaterialPageRoute(
           builder: (context) => HostInvite(
-                queueName: queueName,
+                queueName: '',
                 nextPage: MainQueueRoute,
                 backPage: NuxIntroRoute,
               ));
 
     case JoinQueueRoute:
+      controller = settings.arguments;
       return MaterialPageRoute(
           builder: (context) =>
               GuestJoinQueue(nextPage: JoinQueueConfirmationRoute));
 
     case JoinQueueConfirmationRoute:
       // TODO temporary hardcoded session; add auth / join specific user-created room later
-      controller.connect(2);
       return MaterialPageRoute(
           builder: (context) => JoinQueueConfirmation(
                 nextPage: MainQueueRoute,

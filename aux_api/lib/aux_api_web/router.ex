@@ -23,16 +23,16 @@ defmodule AuxApiWeb.Router do
   scope "/api", AuxApiWeb do
     pipe_through :api
 
-    # scope "/session" do
-    #   post "/create", SessionController, :create_sess
-    #   delete "/end", SessionController, :end_sess
-    # end
+    scope "/session" do
+      post "/create", SessionController, :create_sess
+      delete "/end", SessionController, :end_sess
+    end
 
-    # scope "/member" do
-    #   post "/auth", MemberController, :auth_member
-    #   post "/create", MemberController, :auth_member
-    #   delete "/delete", MemberController, :delete_member
-    # end
+    scope "/member" do
+      post "/auth", MemberController, :auth_member
+      post "/create", MemberController, :auth_member
+      delete "/delete", MemberController, :delete_member
+    end
 
     scope "/test" do
       get "/find_qentries", TestController, :find_qentry_test
